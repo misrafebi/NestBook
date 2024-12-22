@@ -1,0 +1,57 @@
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+    text-align: center;
+}
+
+.login-form h2 {
+    margin-bottom: 30px;
+}
+
+.social-login {
+    margin-bottom: 20px;
+}
+
+.social-login a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.google-btn {
+    background-color: #d9dde4;
+    border-color: #d9dde4;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.remember {
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.signup-link {
+    margin-top: 15px;
+}

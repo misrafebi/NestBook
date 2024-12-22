@@ -1,0 +1,62 @@
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    max-width: 200px;
+}
+
+.verification-code-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.verification-code-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.verification-code-input {
+    display: flex; /* Apply flexbox for horizontal layout */
+    justify-content: space-between; /* Space inputs evenly */
+    margin-bottom: 20px;
+  }
+
+.verification-code-input input {
+    width: 65px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.otp-input-box {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
