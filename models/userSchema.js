@@ -18,6 +18,7 @@ const userSchema = new Schema({
     googleId:{
         type: String,
         unique: true,
+        default: null,
     },
     password:{
         type: String,
@@ -29,7 +30,7 @@ const userSchema = new Schema({
     },
     isAdmin:{
         type: Boolean,
-        default: false
+        default: true
     },
     cart:{
         type: Schema.Types.ObjectId,

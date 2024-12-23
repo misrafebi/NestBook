@@ -1,3 +1,6 @@
+const User = require('../../models/userSchema');
+// const user = require('../../models/userSchema')
+
 const loadHomePage = async (req,res)=>{
     try {
         return res.render('home')
@@ -26,9 +29,28 @@ const loadSignup = async (req,res) =>{
     }
 }
 
+const signup = async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+    try {
+        console.log(req.body); // Debugging req.body
+        const emailExists = await User.findOne({ email });
+        if (emailExists) {
+            return res.status(400).send('Email already registered.');
+        }
+        const newUser = new User({ firstName, lastName, email, password });
+        await newUser.save();
+        res.redirect('/signup');
+        // res.render('home')
+    } catch (error) {
+        console.error('Error details:', error);
+        res.status(500).send('Internal server error');
+    }
+};
+
 
 module.exports ={
     loadHomePage,
     pageNotFound,
     loadSignup,
+    signup
 }
