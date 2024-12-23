@@ -16,8 +16,19 @@ const pageNotFound = async (req,res)=>{
     }
 }
 
+const loadSignup = async (req,res) =>{
+    try {
+        return res.render('signup')
+    } catch (error) {
+        console.log('Signup page is not Loading');
+        
+        res.redirect('/pageNotFound')
+    }
+}
+
 
 module.exports ={
     loadHomePage,
-    pageNotFound
+    pageNotFound,
+    loadSignup,
 }
