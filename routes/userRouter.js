@@ -21,6 +21,7 @@ router.post('/verify-otp',userController.verifyOtp)
 //     }
 // });
 
+router.post('/resend-otp',userController.resentOtp)
 
 
 module.exports = router

@@ -43,9 +43,25 @@
 let timer = 60; // Global timer variable
 let timerInterval; // Global interval variable
 
+// function startTimer() {
+//     timer = 60; // Reset timer to 60 seconds
+//     document.getElementById('otp').disabled = false; // Ensure OTP input is enabled
+//     timerInterval = setInterval(() => {
+//         timer--;
+//         document.getElementById('timerValue').textContent = timer;
+
+//         if (timer <= 0) {
+//             clearInterval(timerInterval); // Stop the timer
+//             document.getElementById('timerValue').classList.add('expired');
+//             document.getElementById('timerValue').textContent = 'Expired';
+//             document.getElementById('otp').disabled = true; // Disable OTP input
+//         }
+//     }, 1000); // Decrease the value every second
+// }
 function startTimer() {
     timer = 60; // Reset timer to 60 seconds
     document.getElementById('otp').disabled = false; // Ensure OTP input is enabled
+    clearInterval(timerInterval); // Clear any existing timer
     timerInterval = setInterval(() => {
         timer--;
         document.getElementById('timerValue').textContent = timer;
@@ -58,6 +74,7 @@ function startTimer() {
         }
     }, 1000); // Decrease the value every second
 }
+
 
 startTimer();
 
@@ -102,12 +119,47 @@ function validateOTPForm(){
 
 
         
-        document.querySelector('.resend-btn').addEventListener('click', () => {
-    clearInterval(timerInterval); // Clear previous timer
-    startTimer(); // Start a new timer
+//         document.querySelector('.resend-btn').addEventListener('click', () => {
+//     clearInterval(timerInterval); // Clear previous timer
+//     startTimer(); // Start a new timer
+// });
+
+document.querySelector('.resend-btn').addEventListener('click', () => {
+    clearInterval(timerInterval); // Clear the previous timer
+
+    // Send a request to resend OTP
+    $.ajax({
+        type: 'POST',
+        url: '/resend-otp',
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'OTP Resent Successfully',
+                    showConfirmButton: false,
+                    timer: 1500,
+                }).then(() => {
+                    startTimer(); // Restart the timer after OTP is resent
+                    document.getElementById('otp').disabled = false; // Enable OTP input
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message,
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to resend OTP. Please try again.',
+            });
+        },
+    });
 });
 
-    
     </script>
 
 

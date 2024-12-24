@@ -165,10 +165,39 @@ const verifyOtp = async (req, res) => {
     }
 }
 
+const resentOtp = async (req,res) =>{
+    try {
+        const { email } = req.session.userData; // Assuming email is stored in the session
+        const newOtp = generateOtp();
+
+        const emailSent = await sendVerificationEmail(email, newOtp);
+
+        if (!emailSent) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to resend OTP. Please try again.',
+            });
+        }
+
+        req.session.userOtp = newOtp; // Update session with new OTP
+        res.status(200).json({
+            success: true,
+            message: 'OTP resent successfully.',
+        });
+    } catch (error) {
+        console.error('Error resending OTP:', error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred. Please try again later.',
+        });
+    }
+}
+
 module.exports = {
     loadHomePage,
     pageNotFound,
     loadSignup,
     signup,
     verifyOtp,
+    resentOtp,
 }
