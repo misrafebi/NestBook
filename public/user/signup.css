@@ -44,3 +44,9 @@ body {
     background-color: #d9dde4;
 
 }
+
+.signup-error-message {
+    color: red;
+    font-size: 0.75rem;
+    display: none;
+}

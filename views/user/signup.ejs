@@ -2,12 +2,12 @@
 <%- include('../partials/user/header') %>
     <!------------------------>
 
-    <script src="/user/userAuthentication.js"></script>
+    <!-- <script src="/user/userAuthentication.js"></script> -->
     <!-------------->
     <!----- BODY ------->
 
     <div class="container">
-        <form action="/signup" method="post" id="user-login-form">
+        <form action="/signup" method="post" id="user-signup-form">
 
             <div class="signup-form">
                 <h2>Signup</h2>
@@ -23,24 +23,30 @@
                         <div class="col-md-6">
                             <input type="text" class="form-control" placeholder="First Name" id="firstName"
                                 name="firstName">
+                            <div id="first-name-error" class="signup-error-message"></div>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="Last Name" id="lastName" name="lastName">
+                            <input type="text" class="form-control" placeholder="Last Name" id="lastName"
+                                name="lastName">
+                            <div class="signup-error-message" id="last-name-error"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email" id="email" name="email">
+                    <div class="signup-error-message" id="email-error"></div>
                 </div>
 
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Password" id="password" name="password">
+                    <div class="signup-error-message" id="password-error"></div>
                 </div>
 
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword"
                         name="confirmPassword">
+                    <div class="signup-error-message" id="confirm-pfassword-error"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">SIGNUP</button>
@@ -58,3 +64,154 @@
     <!------- FOOTER --------->
     <%- include('../partials/user/footer') %>
         <!------------------------>
+
+
+
+        <script>
+            const email = document.getElementById('email')
+            const password = document.getElementById('password')
+            const lastName = document.getElementById('lastName')
+            const firstName = document.getElementById('firstName')
+            const confirmPassword = document.getElementById('confirmPassword')
+
+            const firstNameError = document.getElementById('first-name-error')
+            const lastNameError = document.getElementById('last-name-error')
+            const emailError = document.getElementById('email-error')
+            const passwordError = document.getElementById('password-error')
+            const confirmPasswordError = document.getElementById('confirm-pfassword-error')
+
+            const signupErrorMessage = document.getElementsByClassName('signup-error-message')
+
+            const signupForm = document.getElementById('user-signup-form')
+
+
+            function firstNameValidateChecking(event) {
+                const firstNamVar = firstName.value
+                const firstNamePattern = /^[A-Za-z\s]+$/;
+                if (firstNamVar.trim() === '') {
+                    firstNameError.style.display = 'block'
+                    firstNameError.innerHTML = 'Enter First Name'
+                } else if (!firstNamePattern.test(firstNamVar)) {
+                    firstNameError.style.display = 'block';
+                    firstNameError.innerHTML = 'Name can only contain alphabets and spaces'
+                } else {
+                    firstNameError.style.display = 'none'
+                    firstNameError.innerHTML = ''
+                }
+            }
+
+
+            function lastNameValidateChecking(event) {
+                const lastNamVar = lastName.value
+                const lastNamePattern = /^[A-Za-z\s]+$/;
+                if (lastNamVar.trim() === '') {
+                    lastNameError.style.display = 'block'
+                    lastNameError.innerHTML = 'Enter First Name'
+                } else if (!lastNamePattern.test(lastNamVar)) {
+                    lastNameError.style.display = 'block';
+                    lastNameError.innerHTML = 'Name can only contain alphabets and spaces'
+                } else {
+                    lastNameError.style.display = 'none'
+                    lastNameError.innerHTML = ''
+                }
+            }
+
+            function emailValidateChecking(event) {
+                const emailVar = email.value
+                const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
+
+                if (!emailPattern.test(emailVar)) {
+                    emailError.style.display = 'block'
+                    emailError.innerHTML = 'Invalid Format'
+                } else {
+                    emailError.style.display = 'none'
+                    emailError.innerHTML = ''
+                }
+
+            }
+
+            function passwordValidateChecking(event) {
+                // const passwordVar = password.value
+                // const confirmPasswordVar = confirmPassword.value
+                const passwordVar = password.value;
+                const confirmPasswordVar = confirmPassword.value;
+
+                // const alpha = /[a-zA-Z]/
+                // const digit = /\d/;
+                const alpha = /[a-zA-Z]/;
+                const digit = /\d/;
+
+                // if (passwordVar.length < 8) {
+                //     passwordError.style.display = 'block'
+                //     passwordError.innerHTML = 'Should contain atleast 8 characters'
+                // } else if (!alpha.test(passwordVar) || !digit.test(passwordVar)) {
+                //     passwordError.style.display = 'block'
+                //     passwordError.innerHTML = 'Should contail numbers and alphabets'
+                // } else {
+                //     passwordError.style.display = 'none'
+                //     passwordError.innerHTML = ''
+                // }
+                if (passwordVar.length < 8) {
+                    passwordError.style.display = 'block';
+                    passwordError.innerHTML = 'Should contain at least 8 characters';
+                } else if (!alpha.test(passwordVar) || !digit.test(passwordVar)) {
+                    passwordError.style.display = 'block';
+                    passwordError.innerHTML = 'Should contain both numbers and alphabets';
+                } else {
+                    passwordError.style.display = 'none';
+                    passwordError.innerHTML = '';
+                }
+
+
+                // if(passwordVar!=confirmPasswordVar){
+                //     confirmPasswordVar.style.display='block'
+                //     confirmPasswordError.innerHTML='Passowrd Do not match'
+                // }else{
+                //     confirmPasswordError.style.display='none'
+                //     confirmPasswordError.innerHTML=''
+                // }
+                if (passwordVar !== confirmPasswordVar) {
+                    confirmPasswordError.style.display = 'block';
+                    confirmPasswordError.innerHTML = 'Passwords do not match';
+                } else {
+                    confirmPasswordError.style.display = 'none';
+                    confirmPasswordError.innerHTML = '';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                signupForm.addEventListener('submit', function (event) {
+
+                    firstNameValidateChecking();
+                    lastNameValidateChecking()
+                    emailValidateChecking()
+                    passwordValidateChecking()
+
+                    if (!firstName ||
+                        !lastName ||
+                        !email ||
+                        !password ||
+                        !firstNameError ||
+                        !lastNameError ||
+                        !emailError ||
+                        !passwordError ||
+                        !confirmPasswordError ||
+                        !signupForm) {
+                        console.log('One or more elements not found!');
+
+                    } if (
+                        firstNameError.innerHTML ||
+                        lastNameError.innerHTML ||
+                        emailError.innerHTML ||
+                        passwordError.innerHTML ||
+                        confirmPasswordError.innerHTML
+                    ) {
+                        event.preventDefault()
+                    }
+
+
+                })
+            })
+
+
+        </script>
