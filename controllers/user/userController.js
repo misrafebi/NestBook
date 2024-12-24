@@ -3,18 +3,19 @@ const User = require('../../models/userSchema');
 // const user = require('../../models/userSchema')
 const nodemailer = require('nodemailer')
 const env = require('dotenv').config()
+const bcrypt = require('bcrypt')
 
-const loadHomePage = async (req,res)=>{
+const loadHomePage = async (req, res) => {
     try {
         return res.render('home')
     } catch (error) {
         console.log('Home Page not found');
         res.status(500).send('Server error')
-        
+
     }
 }
 
-const pageNotFound = async (req,res)=>{
+const pageNotFound = async (req, res) => {
     try {
         res.render('page-404')
     } catch (error) {
@@ -22,12 +23,12 @@ const pageNotFound = async (req,res)=>{
     }
 }
 
-const loadSignup = async (req,res) =>{
+const loadSignup = async (req, res) => {
     try {
         return res.render('signup')
     } catch (error) {
         console.log('Signup page is not Loading');
-        
+
         res.redirect('/pageNotFound')
     }
 }
@@ -50,11 +51,11 @@ const loadSignup = async (req,res) =>{
 //     }
 // };
 
-function generateOtp(){
-    return Math.floor(100000+ Math.random()*900000).toString()
+function generateOtp() {
+    return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
-async function sendVerificationEmail(email, otp){
+async function sendVerificationEmail(email, otp) {
     try {
 
         const transporter = nodemailer.createTransport({
@@ -62,7 +63,7 @@ async function sendVerificationEmail(email, otp){
             port: 587,
             secure: false,
             requireTLS: true,
-            auth:{
+            auth: {
                 user: process.env.NODEMAILER_EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD
             }
@@ -73,53 +74,101 @@ async function sendVerificationEmail(email, otp){
             to: email,
             subject: 'Verify your account',
             text: `Your OTP is &{otp}`,
-            html:`<b> Your OTP :${otp} </b>`
+            html: `<b> Your OTP :${otp} </b>`
         })
 
-        return info.accepted.length>0
+        return info.accepted.length > 0
     } catch (error) {
-        console.error('Error sending email ',error);
-        return false        
+        console.error('Error sending email ', error);
+        return false
     }
 }
 
 const signup = async (req, res) => {
     try {
-        const { confirmPassword, email, password } = req.body;
-        if(password!==confirmPassword){
-            return res.render('signup',{message:"PAssword do not match"})
+        const { firstName, lastName, confirmPassword, email, password } = req.body;
+        if (password !== confirmPassword) {
+            return res.render('signup', { message: "Password do not match" })
         }
 
-        const findUser= await User.findOne({email})
-        if(findUser){
-            return res.render("singup",{message:"User with this email already exists"})
+        const findUser = await User.findOne({ email })
+        if (findUser) {
+            return res.render("singup", { message: "User with this email already exists" })
         }
 
         const otp = generateOtp()
-        
-        const emailSent = await sendVerificationEmail(email,otp);
 
-        if(!emailSent){
+        const emailSent = await sendVerificationEmail(email, otp);
+
+        if (!emailSent) {
             return res.json("email.error")
         }
 
         req.session.userOtp = otp;
-        req.session.userData ={email,password}
+        req.session.userData = { firstName, lastName, email, password }
 
-        // res.render('otp')
+        res.render('otp')
         console.log('OTP send', otp);
-        
-        
+
+
     } catch (error) {
-        console.error('signup error ',error);
+        console.error('signup error ', error);
         res.redirect('/pageNotFound')
     }
 }
 
 
-module.exports ={
+const securePassword = async (password) => {
+    try {
+        const passwordHash = await bcrypt.hash(password, 10)
+        return passwordHash
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        throw error;
+    }
+}
+const verifyOtp = async (req, res) => {
+    try {
+        const { otp } = req.body
+        console.log(otp);
+        if (otp.toString() === req.session.userOtp) {
+            const user = req.session.userData
+            const passwordHash = await securePassword(user.password);
+
+            const saveUserData = new User({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                password: passwordHash
+            })
+
+            await saveUserData.save()
+            req.session.user = saveUserData._id;
+            // return res.json({
+            //     success: true,
+            //     redirect: '/'
+            // })
+            return res.redirect('/');
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid OTP'
+            })
+        }
+    } catch (error) {
+        console.error('Error verifying otp ', error);
+        return res.status(500).json({
+            success: false,
+            message: 'An error occured'
+        })
+
+    }
+}
+
+module.exports = {
     loadHomePage,
     pageNotFound,
     loadSignup,
-    signup
+    signup,
+    verifyOtp,
 }

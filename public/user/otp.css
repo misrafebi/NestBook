@@ -19,10 +19,13 @@ body {
 }
 
 .verification-code-form {
+    text-align: center;
     background-color: #fff;
+    max-width: 400px;
     padding: 30px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: auto;
 }
 
 .verification-code-form h2 {
@@ -33,11 +36,11 @@ body {
 .verification-code-input {
     display: flex; /* Apply flexbox for horizontal layout */
     justify-content: space-between; /* Space inputs evenly */
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
 
 .verification-code-input input {
-    width: 65px;
+    width: 290px;
     height: 40px;
     text-align: center;
     border: 1px solid #ccc;
@@ -59,4 +62,31 @@ body {
     margin-left: 5px;
     margin-right: 5px;
   }
+  .otp-timer {
+    font-size: 16px;
+    color: #333;
+}
+.resend-btn {
+    font-size: 14px;
+    margin-left: 10px;
+}
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
   
