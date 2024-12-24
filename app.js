@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-// const session = require('express-session');
+const session = require('express-session');
 // const nocache = require('nocache');
 // const flash = require('connect-flash');
 const env = require('dotenv').config()
@@ -20,15 +20,16 @@ app.use(express.json());
 // app.use(nocache());
 // app.use(flash());
 
-// app.use(session({
-//     secret: 'secretKey',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         maxAge: 1000 * 60 * 60 * 24,
-//         secure: false // Ensure secure is false for development; set to true in production with HTTPS
-//     }
-// }));
+app.use(session({
+    secret: 'secretKey',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 72 * 60 * 60 * 1000,
+        secure: false, // Ensure secure is false for development; set to true in production with HTTPS
+        httpOnly: true,
+    }
+}));
 
 
 // app.use((req, res, next) => {
