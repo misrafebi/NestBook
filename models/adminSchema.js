@@ -1,15 +1,12 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 
-const userSchema = new Schema({
-    firstName:{
+const adminSchema = new Schema({
+    name:{
         type:String,
         required: true
     },
-    lastName:{
-        type:String,
-        required: true
-    },
+    
     email:{
         type: String,
         required: true,
@@ -26,28 +23,13 @@ const userSchema = new Schema({
     },
     isActive:{
         type: Boolean,
-        default: false
+        default: true
     },
     isAdmin:{
         type: Boolean,
-        default: false,
+        default: true,
     },
-    cart:{
-        type: Schema.Types.ObjectId,
-        ref: 'Cart',
-    },
-    wallet:{
-        type: Number,
-        default:0,
-    },
-    wishlist:{
-        type: Schema.Types.ObjectId,
-        ref: 'Wishlist',
-    },
-    orderHistory:{
-        type: Schema.Types.ObjectId,
-        ref: 'Order',
-    },
+    
     createdAt:{
         type: Date,
         default: Date.now,
@@ -62,6 +44,14 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     }],
+    couponId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Coupon', // Assuming a Coupon model exists
+    },
+    offerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Offer', // Assuming an Offer model exists
+    },
     searchHistory:[{
         category:{
             type:Schema.Types.ObjectId,
@@ -72,9 +62,9 @@ const userSchema = new Schema({
             default: Date.now
         }
     }]
-})
+},{ timestamps: true })
 
 
-const User = mongoose.model('User',userSchema);
+const Admin = mongoose.model('Admin',adminSchema);
 
-module.exports = User;
+module.exports = Admin;

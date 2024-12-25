@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  .sidebar {
+    background-color: #f8f8f8;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .sidebar a:hover {
+    background-color: #707070;
+    border-radius: 5px;
+  }
+
+  #sidebar-logo {
+    width: 200px;
+  }
+</style>
+
+<body>
+
+
+
+
+
+  <div class="col-md-3 sidebar">
+    <!-- <h3 class="text-center">BookNest</h3> -->
+    <img src="/Assets/Images/menu_bar_logo.png" alt="NestBook" id="sidebar-logo">
+    <a href="/admin/dashboard"> <i class="fa-solid fa-bars"></i> &nbsp;&nbsp;Dashboard</a>
+    <a href="/admin/products"><i class="fa-solid fa-layer-group"></i>&nbsp;&nbsp;Products</a>
+    <a href="/admin/category"><i class="fa-solid fa-clipboard-list"></i>&nbsp;&nbsp;Categories</a>
+    <a href="/admin/orders"><i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Orders</a>
+    <a href="/admin/customers"><i class="fa-solid fa-users"></i> &nbsp;&nbsp;Customers</a>
+    <a href="/admin/offers"><i class="fa-solid fa-paperclip"></i>&nbsp;&nbsp;Offers</a>
+    <a href="/admin/coupon"><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;Coupon</a>
+    <a href="/admin/review"><i class="fa-solid fa-comment"></i>&nbsp;&nbsp;Reviews</a>
+    <a href="/admin/changePassword"><i class="fa-solid fa-key"></i>&nbsp;&nbsp;Change Password</a>
+    <a href="/logout"><i class="fa-solid fa-right-from-bracket" style="color: #d50707;"></i>&nbsp;&nbsp;Logout</a>
+  </div>
+
+</body>
+
+</html>

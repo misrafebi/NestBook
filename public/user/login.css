@@ -55,3 +55,10 @@ body {
 .signup-link {
     margin-top: 15px;
 }
+
+
+.login-error-message {
+    color: red;
+    font-size: 0.75rem;
+    display: none;
+}

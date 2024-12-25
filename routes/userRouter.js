@@ -11,16 +11,7 @@ router.post('/signup',userController.signup)
 router.post('/verify-otp',userController.verifyOtp)
 
 
-// router.post('/verify-otp', (req, res) => {
-//     const { otp } = req.body;
-
-//     // Replace this with your actual OTP validation logic
-//     if (otp === '123456') { 
-//         return res.json({ success: true, redirect: '/' });
-//     } else {
-//         return res.json({ success: false, message: 'Invalid OTP' });
-//     }
-// });
+;
 
 router.post('/resend-otp',userController.resentOtp)
 router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}))
@@ -29,6 +20,20 @@ router.get('/auth/google/callback',passport.authenticate('google',{failureRedire
 })
 
 
-router.get('/login',userController)
+router.get('/login',userController.loadLogin)
+router.post('/login',userController.login)
+
+ router.get('/logout',userController.logout)
+
+ router.post('/forgot-password', userController.handleForgotPassword);
+ router.get('/otp', userController.loadOTPPage);
+ router.get('/forgot-password', userController.showForgotPasswordPage);
+
+ // Handle Forgot Password form submission
+ router.post('/verify-otp',userController.verifyForgotPasswordOtp)
+router.post('/resetPassword',userController.resetPassword)
 
 module.exports = router
+
+
+    

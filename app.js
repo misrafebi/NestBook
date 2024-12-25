@@ -6,12 +6,11 @@ const session = require('express-session');
 // const flash = require('connect-flash');
 const env = require('dotenv').config()
 const db = require('./config/db')
-const userRouter = require('./routes/userRouter')
 const passport = require('./config/passport')
 db()
 
-// app.set('views', path.join(__dirname, 'views'));
-app.set('views',[path.join(__dirname,'views/user'),path.join(__dirname,'views/admin')])
+app.set('views', path.join(__dirname, 'views'));
+// app.set('views',[path.join(__dirname,'views/user'),path.join(__dirname,'views/admin')])
 app.set('view engine', 'ejs');
 // app.use(express.static('public'));
 app.use(express.static(path.join(__dirname,'public')))
@@ -49,7 +48,12 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use('/', userRouter);
+
+const userRouter = require('./routes/userRouter')
+const adminRouter = require('./routes/adminRoutes')
+app.use('/user', userRouter);
+app.use('/admin',adminRouter)
+
 
 // connectDB();
 
