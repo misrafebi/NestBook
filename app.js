@@ -7,6 +7,7 @@ const session = require('express-session');
 const env = require('dotenv').config()
 const db = require('./config/db')
 const userRouter = require('./routes/userRouter')
+const passport = require('./config/passport')
 db()
 
 // app.set('views', path.join(__dirname, 'views'));
@@ -45,6 +46,9 @@ app.use(session({
 // const connectDB = require('./db/connectdb');
 
 // app.use('/admin', adminRouter);
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use('/', userRouter);
 
 // connectDB();
