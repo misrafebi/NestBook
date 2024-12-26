@@ -3,11 +3,11 @@ document.getElementById('user-login-form').addEventListener('submit', function (
 
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    const lastName = document.getElementById('lastName').value.trim()
-    const firstName = document.getElementById('firstName').value.trim()
+    const name = document.getElementById('name').value.trim()
+    
     const confirmPassword =  document.getElementById('confirmPassword').value.trim()
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!name || !email || !password) {
         return res.status(400).send('All fields are required.');
     }
     

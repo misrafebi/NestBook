@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest Admin - Add Category</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .add-category-container {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Admin</li>
+            <li class="breadcrumb-item"><a href="/admin/category">Category</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="/admin/addCategory"> Add Category</a></li>
+        </ol>
+    </nav>
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-6 offset-md-3">
+                <div class="add-category-container">
+                    <!-- <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                            <li class="breadcrumb-item"><a href="#">Category</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Category</li>
+                        </ol>
+                    </nav> -->
+
+                    <h3>Add Category</h3>
+
+                    <form>
+                        <div class="form-group">
+                            <label for="categoryName">Category Name</label>
+                            <input type="text" class="form-control" id="categoryName" placeholder="Enter Category Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryDescription">Category Description (Optional)</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3" placeholder="Enter Description"></textarea>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label for="categoryImage">Category Image (Optional)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="categoryImage" placeholder="Image URL" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="button">Browse</button>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label for="parentCategory">Parent Category (Optional)</label>
+                            <select class="form-control" id="parentCategory">
+                                <option value="">Select Parent Category</option>
+                                <option value="1">Fiction</option>
+                                <option value="2">Non-Fiction</option>
+                                </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">SAVE</button>
+                        <button type="reset" class="btn btn-secondary">CLEAR</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

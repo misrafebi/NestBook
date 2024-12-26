@@ -14,7 +14,7 @@
         body {
             background-color: #f8f9fa;
         }
-        
+
         .content {
             margin-left: 250px;
             /* Adjust for sidebar width */
@@ -92,22 +92,23 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action="/admin/customers/add" method="POST">
+                                <form action="/admin/addCustomer" method="POST">
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="customerName">Name</label>
-                                            <input type="text" class="form-control" id="customerName" name="name"
-                                                required>
+                                            <input type="text" class="form-control" id="customerName" name="name">
+                                            <div class="login-error-message text-danger" id="name-error"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="customerEmail">Email</label>
-                                            <input type="email" class="form-control" id="customerEmail" name="email"
-                                                required>
+                                            <input type="email" class="form-control" id="customerEmail" name="email">
+                                            <div class="login-error-message text-danger" id="email-error"></div>
                                         </div>
                                         <div class="form-group">
                                             <label for="customerPassword">Password</label>
                                             <input type="password" class="form-control" id="customerPassword"
-                                                name="password" required>
+                                                name="password">
+                                            <div class="login-error-message text-danger" id="password-error"></div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -120,6 +121,64 @@
                         </div>
                     </div>
 
+                    <script>
+                        document.querySelector('form').addEventListener('submit', function (event) {
+                            // Prevent form submission
+                            event.preventDefault();
+
+                            // Get form elements
+                            const nameInput = document.getElementById('customerName');
+                            const emailInput = document.getElementById('customerEmail');
+                            const passwordInput = document.getElementById('customerPassword');
+
+                            // Get error message elements
+                            const nameError = document.getElementById('name-error');
+                            const emailError = document.getElementById('email-error');
+                            const passwordError = document.getElementById('password-error');
+
+                            // Clear existing error messages
+                            nameError.textContent = '';
+                            emailError.textContent = '';
+                            passwordError.textContent = '';
+
+                            // Define validation patterns
+                            const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
+                            const alpha = /[a-zA-Z]/;
+                            const digit = /\d/;
+
+                            let isValid = true;
+
+                            // Validate Name
+                            if (!nameInput.value.trim()) {
+                                nameError.textContent = 'Name is required.';
+                                isValid = false;
+                            }
+
+                            // Validate Email
+                            if (!emailInput.value.trim()) {
+                                emailError.textContent = 'Email is required.';
+                                isValid = false;
+                            } else if (!emailPattern.test(emailInput.value)) {
+                                emailError.textContent = 'Invalid email format.';
+                                isValid = false;
+                            }
+
+                            // Validate Password
+                            if (!passwordInput.value.trim()) {
+                                passwordError.textContent = 'Password is required.';
+                                isValid = false;
+                            } else if (!alpha.test(passwordInput.value) || !digit.test(passwordInput.value)) {
+                                passwordError.textContent = 'Password must contain at least one letter and one digit.';
+                                isValid = false;
+                            }
+
+                            // If valid, submit the form
+                            if (isValid) {
+                                this.submit();
+                            }
+                        });
+                    </script>
+
                     <!---------------------->
 
 
@@ -131,14 +190,70 @@
                                 Sort
                             </button>
                             <div class="dropdown-menu sort-dropdown" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">A-Z</a>
-                                <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">Recent</a>
+                                <a class="dropdown-item" href="#" id="sortAZ">Name: A-Z</a>
+                                <a class="dropdown-item" href="#" id="sortZA">Name: Z-A</a>
+                                <a class="dropdown-item" href="#" id="sortRecent">Recently Added</a>
+                                <a class="dropdown-item" href="#" id="sortOld">Oldest Added</a>
                             </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const sortAZ = document.getElementById('sortAZ');
+                                    const sortZA = document.getElementById('sortZA');
+                                    const sortRecent = document.getElementById('sortRecent');
+                                    const sortOld = document.getElementById('sortOld');
+                            
+                                    sortAZ.addEventListener('click', function () {
+                                        sortTable('name', 'asc');
+                                    });
+                            
+                                    sortZA.addEventListener('click', function () {
+                                        sortTable('name', 'desc');
+                                    });
+                            
+                                    sortRecent.addEventListener('click', function () {
+                                        sortTable('createdAt', 'desc');
+                                    });
+                            
+                                    sortOld.addEventListener('click', function () {
+                                        sortTable('createdAt', 'asc');
+                                    });
+                            
+                                    function sortTable(field, order) {
+                                        fetch(`/admin/customers/sort?field=${field}&order=${order}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                updateTable(data);
+                                            })
+                                            .catch(error => console.error('Error:', error));
+                                    }
+                            
+                                    function updateTable(customers) {
+                                        const tbody = document.querySelector('#userTable tbody');
+                                        tbody.innerHTML = '';
+                                        customers.forEach((customer, index) => {
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${index + 1}</td>
+                                                <td>${customer.name}</td>
+                                                <td>${customer.email}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm ${customer.isActive ? 'btn-success' : 'btn-danger'}">${customer.isActive ? 'Active' : 'Blocked'}</button>
+                                                    <button type="button" class="btn btn-sm btn-primary edit-btn" data-id="${customer._id}">Edit</button>
+                                                </td>
+                                            `;
+                                            tbody.appendChild(row);
+                                        });
+                                    }
+                                });
+                            </script>
+                            
+
+
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Item">
+                                <input type="text" class="form-control" placeholder="Search Item" id="searchInput"
+                                    onkeyup="searchUsers()">
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button">
                                         <i class="fas fa-search"></i>
@@ -146,9 +261,31 @@
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                            function searchUsers() {
+                                const input = document.getElementById('searchInput');
+                                const filter = input.value.toLowerCase();
+                                const table = document.getElementById('userTable');
+                                const rows = table.getElementsByTagName('tr');
+
+                                for (let i = 0; i < rows.length; i++) {
+                                    const usernameCell = rows[i].getElementsByTagName('td')[1];
+                                    if (usernameCell) {
+                                        const username = usernameCell.textContent || usernameCell.innerText;
+                                        if (username.toLowerCase().indexOf(filter) > -1) {
+                                            rows[i].style.display = '';
+                                        } else {
+                                            rows[i].style.display = 'none';
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+
                     </div>
 
-                    <table class="table">
+                    <table class="table" id="userTable">
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
@@ -158,30 +295,129 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Rahul</td>
-                                <td>rahul@gmail.com</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-danger">Blocked</button>
-                                    <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Anil</td>
-                                <td>anil@gmail.com</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-success">Active</button>
-                                    <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
-                                </td>
-                            </tr>
+                            <% customers.forEach((customer, index)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= customer.name %>
+                                    </td>
+                                    <td>
+                                        <%= customer.email %>
+                                    </td>
+                                    <td>
+                                        <% if (customer.isActive) { %>
+                                            <button type="button" class="btn btn-sm btn-success">Active</button>
+                                            <% } else { %>
+                                                <button type="button" class="btn btn-sm btn-danger">Blocked</button>
+                                                <% } %>
+                                                    <button type="button" class="btn btn-sm btn-primary edit-btn"
+                                                        data-id="<%= customer._id %>">Edit</button>
+                                    </td>
+                                </tr>
+                                <% }); %>
                         </tbody>
                     </table>
 
+                    <!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="mb-3">
+                        <label for="editUserName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editUserName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editUserEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editUserEmail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editUserPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="editUserPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editUserActive" class="form-label">Status</label>
+                        <select class="form-control" id="editUserActive">
+                            <option value="true">Active</option>
+                            <option value="false">Blocked</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editButtons = document.querySelectorAll('.edit-btn');
+        const editUserForm = document.getElementById('editUserForm');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const userId = button.getAttribute('data-id');
+
+                // Fetch user details and populate the modal
+                fetch(`/admin/customers/${userId}`)
+                    .then(response => response.json())
+                    .then(user => {
+                        document.getElementById('editUserId').value = user._id;
+                        document.getElementById('editUserName').value = user.name;
+                        document.getElementById('editUserEmail').value = user.email;
+                        document.getElementById('editUserPassword').value = ''; // Leave password empty
+                        document.getElementById('editUserActive').value = user.isActive;
+                        const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                        modal.show();
+                    })
+                    .catch(error => console.error('Error fetching user:', error));
+            });
+        });
+
+        // Handle form submission
+        editUserForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const userId = document.getElementById('editUserId').value;
+            const data = {
+                name: document.getElementById('editUserName').value,
+                email: document.getElementById('editUserEmail').value,
+                password: document.getElementById('editUserPassword').value || undefined, // Send password only if provided
+                isActive: document.getElementById('editUserActive').value === 'true',
+            };
+
+            fetch(`/admin/customers/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'User updated successfully') {
+                        location.reload(); // Reload page to show updated list
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => console.error('Error updating user:', error));
+        });
+    });
+</script>
+
 
                     <!-- Add the Edit Customer Modal -->
-                    <div class="modal fade" id="editCustomerModal" tabindex="-1"
+                    <!-- <div class="modal fade" id="editCustomerModal" tabindex="-1"
                         aria-labelledby="editCustomerModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -216,7 +452,39 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+                    <!-- 
+
+                    <script>
+                        document.getElementById('saveChanges').addEventListener('click', async () => {
+                            const form = document.getElementById('editCustomerForm');
+                            const formData = new FormData(form);
+                            const customerData = Object.fromEntries(formData.entries());
+                    
+                            try {
+                                const response = await fetch('/api/addCustomer', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(customerData),
+                                });
+                    
+                                if (response.ok) {
+                                    alert('Customer added successfully!');
+                                    $('#editCustomerModal').modal('hide');
+                                    form.reset();
+                                    // Optionally refresh the customer list here
+                                } else {
+                                    const error = await response.json();
+                                    alert('Error: ' + error.message);
+                                }
+                            } catch (err) {
+                                console.error('Failed to add customer:', err);
+                                alert('Failed to add customer. Please try again.');
+                            }
+                        });
+                    </script> -->
 
                     <!--------------------------->
                     <script>

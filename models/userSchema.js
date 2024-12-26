@@ -2,31 +2,29 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 
 const userSchema = new Schema({
-    firstName:{
+    name:{
         type:String,
         required: true
     },
-    lastName:{
-        type:String,
-        required: true
-    },
+    
     email:{
         type: String,
         required: true,
         unique: true
     },
-    googleId:{
-        type: String,
-        // unique: true,
-        default: null,
-    },
+    // googleId:{
+    //     type: String,
+    //     unique: true,
+    //     sparse: true,
+    //     default: null,
+    // },
     password:{
         type: String,
         required: false,
     },
     isActive:{
         type: Boolean,
-        default: false
+        default: true
     },
     isAdmin:{
         type: Boolean,
