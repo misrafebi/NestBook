@@ -10,7 +10,7 @@ const categorySchema = new mongoose.Schema({
     },
     description:{
         type: String,
-        required: true
+        
     },
     isListed: {
         type: Boolean,
@@ -23,6 +23,9 @@ const categorySchema = new mongoose.Schema({
     creatAt:{
         type: Date,
         default: Date.now
+    },
+    parentCategory:{
+        type: String,
     }
 })
 

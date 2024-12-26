@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer')
 const env = require('dotenv').config()
 const bcrypt = require('bcrypt');
 const User = require('../../models/userSchema')
+const Category = require('../../models/categorySchema')
 // const Admin = require('../../models/adminSchema');
 
 
@@ -51,13 +52,19 @@ const loadDashboard = (req, res) => {
 };
 
 const loadCustomers = async (req, res) => {
+    const { sort, order } = req.query;
+    const sortField = sort || 'name';
+    const sortOrder = order === 'desc' ? -1 : 1;
     try {
+        // const customers = await Customer.find().sort({ [sortField]: sortOrder });
+        // res.json(customers);
+
         if (req.session.admin) {
             // Fetch customers from the database
             const customers = await User.find();
             res.render('admin/customers', { customers });
         } else {
-            res.redirect('/login');
+            res.redirect('/admin/login');
         }
     } catch (err) {
         console.error(err);
@@ -75,11 +82,11 @@ const addCustomer = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-         // Check if the email already exists
-         const existingUser = await User.findOne({ email });
-         if (existingUser) {
-             return res.status(400).json({ message: 'Customer already exists' });
-         }
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Customer already exists' });
+        }
 
         // Add to database
         const newUser = new User({
@@ -98,14 +105,17 @@ const addCustomer = async (req, res) => {
     }
 }
 
-// const User = require('../models/userModel');
 
 // Fetch user details
 const getUserDetails = async (req, res) => {
     try {
-        
-        const user = await User.findById(req.params.id);
-        res.status(200).json(user);
+
+        const { id } = req.params;
+        const customer = await User.findById(id);
+        res.json(customer);
+
+        // const user = await User.findById(req.params.id);
+        // res.status(200).json(user);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error fetching user details', error: err.message });
@@ -132,18 +142,21 @@ const updateUserDetails = async (req, res) => {
 
 const getSortedCustomers = async (req, res) => {
     try {
-        const { field, order } = req.query; // field: 'name' or 'createdAt', order: 'asc' or 'desc'
-        const sortOrder = order === 'asc' ? 1 : -1; // MongoDB sorting order
-        const customers = await User.find()
-            .sort({ [field]: sortOrder }) // Sort by dynamic field
-            .exec();
-        
+        const { field = 'name', order = 'asc' } = req.query;
+        const validFields = ['name', 'createdAt'];
+        if (!validFields.includes(field)) {
+            return res.status(400).json({ message: 'Invalid sort field' });
+        }
+        const sortOrder = order === 'asc' ? 1 : -1;
+
+        const customers = await User.find().sort({ [field]: sortOrder });
         res.status(200).json(customers);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error fetching sorted customers', error: err.message });
     }
 };
+
 
 
 
@@ -155,13 +168,44 @@ const loadCategory = (req, res) => {
     }
 }
 
-const loadAddCategory = (req, res) => {
+// const loadAddCategory = (req, res) => {
+//     if (req.session.admin) {
+//         res.render('admin/addCategory')
+//     } else {
+//         res.redirect('/login');
+//     }
+// }
+const loadAddCategory = async (req, res) => {
     if (req.session.admin) {
-        res.render('admin/addCategory')
+        try {
+            const categories = await Category.find({}, 'name'); // Retrieve only names
+            res.render('admin/addCategory', { categories });
+        } catch (error) {
+            console.log(error);
+            res.redirect('/error');
+        }
     } else {
         res.redirect('/login');
     }
-}
+};
+
+const saveCategory = async (req, res) => {
+    try {
+        const { name, description, parentCategory } = req.body;
+
+        const newCategory = new Category({
+            name,
+            description,
+            parentCategory: parentCategory || null, // Handle optional parentCategory
+        });
+
+        await newCategory.save();
+        res.redirect('/admin/category'); // Redirect to category listing
+    } catch (error) {
+        console.log(error);
+        res.redirect('/error');
+    }
+};
 
 const loadEditCategory = (req, res) => {
     if (req.session.admin) {
@@ -170,6 +214,8 @@ const loadEditCategory = (req, res) => {
         res.redirect('/login');
     }
 }
+
+
 
 const loadProducts = (req, res) => {
     if (req.session.admin) {
@@ -209,4 +255,6 @@ module.exports = {
     getUserDetails,
     updateUserDetails,
     getSortedCustomers,
+    saveCategory,
+
 }
