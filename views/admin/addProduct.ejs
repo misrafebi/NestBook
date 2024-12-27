@@ -57,20 +57,12 @@
                     <h2>Add Products</h2>
 
 
-                    <form>
-                        <div class="row">
-                            <!-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="productPhoto">Photo</label>
-                                    <div class="image-preview">
-                                        <img src="https://via.placeholder.com/100x100" alt="Product Image">
-                                    </div>
-                                    <button type="button" class="btn btn-secondary">Browse</button>
-                                </div>
-                            </div> -->
+                    <form action="/admin/addProduct" method="post" id="addProductForm">
 
+                        <div class="row">
+                            
                             <div class="form-group">
-                                <label for="categoryImage">Category Image (Optional)</label>
+                                <label for="categoryImage">Product Image </label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="categoryImage" placeholder="Image URL" readonly>
                                     <div class="input-group-append">
@@ -85,62 +77,70 @@
                                 <div class="form-group">
                                     <label for="productPrice">Price</label>
                                     <input type="number" class="form-control" id="productPrice"
-                                        placeholder="Enter Price">
+                                        placeholder="Enter Price" name="price">
+                                        <div class="login-error-message text-danger" id="price-error"></div>
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="productName">Book Name</label>
-                            <input type="text" class="form-control" id="productName" placeholder="Enter Book Name">
+                            <input type="text" name="name" class="form-control" id="productName" placeholder="Enter Book Name">
+                            <div class="login-error-message text-danger" id="name-error"></div>
+
                         </div>
 
                         <div class="form-group">
                             <label for="productAuthor">Author Name (Optional)</label>
-                            <input type="text" class="form-control" id="productAuthor" placeholder="Enter Author Name">
+                            <input name="authorName" type="text" class="form-control" id="productAuthor" placeholder="Enter Author Name">
                         </div>
 
                         <div class="form-group">
                             <label for="productOffer">Offer (Optional)</label>
-                            <input type="number" class="form-control" id="productOffer" placeholder="Enter Offer">
+                            <input type="number" name="offer" class="form-control" id="productOffer" placeholder="Enter Offer">
                         </div>
 
                         <div class="form-group">
-                            <label for="productCategory">Category (Optional)</label>
-                            <select class="form-control" id="productCategory">
+                            <label for="productCategory">Category</label>
+                            <select class="form-control" name="category" id="productCategory">
                                 <option value="">Select Category</option>
-                                <option value="Fiction">Fiction</option>
-                                <option value="Non-Fiction">Non-Fiction</option>
-                                <option value="Science">Science</option>
+                                <% categories.forEach(category => { %>
+                                <option value="<%= category._id %>" ><%= category.name %></option>
+                                <% }); %>
                             </select>
+                            <div class="login-error-message text-danger" id="category-error"></div>
+
                         </div>
 
                         <div class="form-group">
                             <label for="productPages">No-of Pages (Optional)</label>
-                            <input type="number" class="form-control" id="productPages" placeholder="Enter No-of Pages">
+                            <input type="number" name="numOfPage" class="form-control" id="productPages" placeholder="Enter No-of Pages">
                         </div>
 
                         <div class="form-group">
                             <label for="productStock">Stock</label>
-                            <select class="form-control" id="productStock">
+                            <input type="number" name="stock" class="form-control" id="stock" placeholder="Enter No-of Quantity Available">
+                            <div class="login-error-message text-danger" id="stock-error"></div>
+                            <!-- <select name="stock" class="form-control" id="productStock">
                                 <option value="Available">Available</option>
                                 <option value="Unavailable">Unavailable</option>
-                            </select>
+                            </select> -->
                         </div>
 
                         <div class="form-group">
                             <label for="productPublishedDate">Published Date (Optional)</label>
-                            <input type="date" class="form-control" id="productPublishedDate">
+                            <input name="publishDate" type="date" class="form-control" id="productPublishedDate">
                         </div>
 
                         <div class="form-group">
                             <label for="productPublisher">Publisher (Optional)</label>
-                            <input type="text" class="form-control" id="productPublisher" placeholder="Enter Publisher">
+                            <input type="text" name="publisher" class="form-control" id="productPublisher" placeholder="Enter Publisher">
                         </div>
 
                         <div class="form-group">
                             <label for="productDescription">Description (Optional)</label>
-                            <textarea class="form-control" id="productDescription" rows="5"
+                            <textarea name="description" class="form-control" id="productDescription" rows="5"
                                 placeholder="Enter Description"></textarea>
                         </div>
 
@@ -151,6 +151,73 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('addProductForm').addEventListener('submit', function (event) {
+          let isValid = true;
+      
+          // Get form values
+          const productName = document.getElementById('productName').value.trim();
+          const productPrice = document.getElementById('productPrice').value.trim();
+          const productPages = document.getElementById('productPages').value.trim();
+          const stock = document.getElementById('stock').value.trim();   
+          
+          const productCategory = document.getElementById('productCategory').value.trim();   
+
+          const productPublishedDate = document.getElementById('productPublishedDate').value;
+      
+          // Clear previous error messages
+          document.getElementById('name-error').textContent = '';
+          document.getElementById('price-error').textContent = '';
+          document.getElementById('stock-error').textContent = '';
+          document.getElementById('category-error').textContent = '';
+
+          
+
+          
+      
+          // Validate Book Name
+          if (productName === '') {
+            document.getElementById('name-error').textContent = 'Book Name is required.';
+            isValid = false;
+          }
+      
+          if (productCategory === '') {
+            document.getElementById('category-errorr').textContent = 'Category is required.';
+            isValid = false;
+          }
+
+          // Validate Price
+          if (productPrice === '' || isNaN(productPrice) || Number(productPrice) <= 0) {
+            document.getElementById('price-error').textContent = 'Price must be a valid number greater than zero.';
+            isValid = false;
+          }
+      
+          // Validate Stock
+          if (stock === '' || isNaN(productPrice) ) {
+            document.getElementById('stock-error').textContent = 'Number of Quantity is required.';
+            isValid = false;
+          }
+
+          // Validate Number of Pages (if provided)
+          if (productPages !== '' && (isNaN(productPages) || Number(productPages) <= 0)) {
+            alert('Number of pages must be a valid positive number.');
+            isValid = false;
+          }
+      
+          // Validate Published Date (if provided)
+          if (productPublishedDate !== '' && isNaN(Date.parse(productPublishedDate))) {
+            alert('Published Date must be a valid date.');
+            isValid = false;
+          }
+      
+          // Prevent form submission if validation fails
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+      </script>
+      
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

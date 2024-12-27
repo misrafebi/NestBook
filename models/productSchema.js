@@ -9,7 +9,7 @@ const productSchema = new Schema ({
     },
     description:{
         type: String,
-        required: true,
+        // required: true,
     },
     category:{
         type: Schema.Types.ObjectId,
@@ -34,33 +34,33 @@ const productSchema = new Schema ({
     },
     productImage:{
         type: [String],
-        required: true
+        // required: true
     },
     isBlocked:{
         type: Boolean,
         default: false
     },
-    status:{
-        type: String,
-        enum: ['Available', 'Out of Stock'],
-        required: true,
-        default: 'Available'
-    },
+    // status:{
+    //     type: String,
+    //     enum: ['Available', 'Out of Stock'],
+    //     // required: true,
+    //     default: 'Available'
+    // },
     authorName:{
         type: String,
-        required: true,
+        // required: true,
     },
     numberOfPage:{
         type: Number,
-        required: true
+        // required: true
     },
     publisher:{
         type: String,
-        required: true
+        // required: true
     },
     publishDate:{
         type: String,
-        required: true
+        // required: true
     }
 },{timestamps: true})
 
