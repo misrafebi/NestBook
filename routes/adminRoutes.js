@@ -18,6 +18,8 @@ router.get('/category',adminContoller.loadCategory)
 router.get('/addCategory', adminContoller.loadAddCategory) 
 router.post('/addCategory', adminContoller.saveCategory);
 router.patch('/updateCategory', adminContoller.updateCategory);
+router.delete('/deleteCategory/:id', adminContoller.deleteCategory);
+
 
 // router.get('/editCategory', adminContoller.loadEditCategory)
 

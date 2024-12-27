@@ -105,9 +105,49 @@
 
 
 
-                                            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="<%= category._id %>">Delete</button>
 
                                         </td>
+
+
+                                        <!--------Delete category-------->
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', () => {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const id = button.getAttribute('data-id'); // Get the category ID
+
+            // Confirm the delete action
+            const isConfirmed = confirm('Are you sure you want to delete this category?');
+            if (!isConfirmed) return;
+
+            try {
+                // Send a DELETE request to the server
+                const response = await fetch(`/admin/deleteCategory/${id}`, {
+                    method: 'DELETE', // Use DELETE method
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting category:', error);
+            }
+        });
+    });
+});
+
+                                        </script>
 
                                     </tr>
                                     <% }); %>
@@ -183,10 +223,21 @@
                         <input type="text" class="form-control" id="editCategoryName" name="name" required>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="editParentCategory" class="form-label">Parent Category</label>
                         <input type="text" class="form-control" id="editParentCategory" name="parentCategory">
+                    </div> -->
+
+                    <div class="mb-3">
+                        <label for="editParentCategory" class="form-label">Parent Category</label>
+                        <select class="form-control" id="editParentCategory" name="parentCategory">
+                            <option value="">Select Parent Category</option>
+                            <% categories.forEach(category => { %>
+                                <option value="<%= category.name %>"><%= category.name %></option>
+                            <% }); %>
+                        </select>
                     </div>
+                    
 
                     <div class="mb-3">
                         <label for="editCategoryDescription" class="form-label">Category Description</label>
