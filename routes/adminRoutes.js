@@ -17,7 +17,9 @@ router.get('/customers/sort', adminContoller.getSortedCustomers);
 router.get('/category',adminContoller.loadCategory)
 router.get('/addCategory', adminContoller.loadAddCategory) 
 router.post('/addCategory', adminContoller.saveCategory);
-router.get('/editCategory', adminContoller.loadEditCategory)
+router.patch('/updateCategory', adminContoller.updateCategory);
+
+// router.get('/editCategory', adminContoller.loadEditCategory)
 
 
 router.get('/products',adminContoller.loadProducts)

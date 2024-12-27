@@ -36,7 +36,7 @@
 
                     <h3>Edit Category</h3>
 <br>
-                    <form>
+                    <!-- <form>
                         <div class="form-group">
                             <label for="categoryName">Category Name</label>
                             <input type="text" class="form-control" id="categoryName" placeholder="Enter Category Name" value="Thriller">
@@ -54,7 +54,33 @@
 
                         <button type="submit" class="btn btn-primary">SAVE</button>
                         <button type="reset" class="btn btn-secondary">CLEAR</button>
+                    </form> -->
+
+                    <form action="/admin/updateCategory/<%= category._id %>" method="POST">
+                        <div class="form-group">
+                            <label for="categoryName">Category Name</label>
+                            <input type="text" class="form-control" id="categoryName" name="name" 
+                                   placeholder="Enter Category Name" value="<%= category.name %>">
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="categoryDescription">Category Description</label>
+                            <textarea class="form-control" id="categoryDescription" name="description" rows="3" 
+                                      placeholder="Enter Description"><%= category.description %></textarea>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="parentCategory">Parent Category Name</label>
+                            <input type="text" class="form-control" id="parentCategory" name="parentCategory" 
+                                   placeholder="Enter Parent Category" value="<%= category.parentCategory %>">
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary">SAVE</button>
+                        <button type="reset" class="btn btn-secondary">CLEAR</button>
                     </form>
+                    
+
+
                 </div>
             </div>
         </div>
