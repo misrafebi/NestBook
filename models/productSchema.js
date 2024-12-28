@@ -34,7 +34,7 @@ const productSchema = new Schema ({
     },
     productImage:{
         type: [String],
-        // required: true
+        required: true
     },
     isBlocked:{
         type: Boolean,

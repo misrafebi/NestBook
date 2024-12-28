@@ -91,19 +91,7 @@
             <%- include('../partials/admin/sidebar') %>
                 <!--------------------->
 
-                <!-- <div class="col-md-3 sidebar">
-                <h3 class="text-center">BookNest</h3>
-                <a href="#">Dashboard</a>
-                <a href="#">Products</a>
-                <a href="#">Categories</a>
-                <a href="#">Orders</a>
-                <a href="#">Customers</a>
-                <a href="#">Offers</a>
-                <a href="#">Coupon</a>
-                <a href="#">Reviews</a>
-                <a href="#">Change Password</a>
-                <a href="#">Logout</a>
-            </div> -->
+                
 
                 <div class="col-md-9 content">
                     <nav aria-label="breadcrumb">
@@ -145,66 +133,31 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>Will</h5>
-                            <p>₹870</p>
-                            <a href="/admin/editProduct" class="btn btn-sm btn-primary">EDIT</a>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>Elon Musk</h5>
-                            <p>₹560</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>The power of habit</h5>
-                            <p>₹940</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>Power of your Mind</h5>
-                            <p>₹770</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                    </div>
+                    
 
                     <div class="row">
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>The little prince</h5>
-                            <p>₹299</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>1984</h5>
-                            <p>₹540</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>Rich dad poor dad</h5>
-                            <p>₹540</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
-                        <div class="col-md-3 product-card">
-                            <img src="https://via.placeholder.com/300x400" alt="Product Image">
-                            <h5>Harry</h5>
-                            <p>₹770</p>
-                            <button type="button" class="btn btn-sm btn-primary">EDIT</button>
-                            <button type="button" class="btn btn-sm btn-danger">DELETE</button>
-                        </div>
+                        <% products.forEach(product => { %>
+                            <div class="col-md-3 product-card mb-4">
+                                <img src="<%= product.productImage[0] %>" alt="Product Image">
+                                <h5><%= product.productName %></h5>
+                                <p>₹<%= product.salePrice %></p>
+                                <div class="d-flex">
+                                    <a href="/admin/editProduct/<%= product._id %>" class="btn btn-sm btn-outline-primary mr-2">Edit</a>
+                                    <!-- <form action="/admin/deleteProduct/<%= product._id %>" method="POST"> -->
+
+                                        <div class="mt-2">
+                                            <% if (product.isBlocked) { %>
+                                                <button class="btn btn-sm btn-outline-success toggle-btn" data-id="<%= product._id %>">List</button>
+                                            <% } else { %>
+                                                <button class="btn btn-sm btn-outline-warning toggle-btn" data-id="<%= product._id %>">Unlist</button>
+                                            <% } %>
+                                        </div>
+                                        
+                                    <!-- </form> -->
+                                </div>
+                                
+                            </div>
+                        <% }) %>
                     </div>
                 </div>
         </div>
@@ -214,6 +167,37 @@
     <%- include('../partials/admin/pagination') %>
         <!------------------------->
 
+        <script>
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const productId = this.dataset.id;
+                    fetch(`/admin/toggleProduct/${productId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update button text and class dynamically
+                                if (data.isBlocked) {
+                                    this.textContent = 'List';
+                                    this.classList.remove('btn-outline-warning');
+                                    this.classList.add('btn-outline-success');
+                                } else {
+                                    this.textContent = 'Unlist';
+                                    this.classList.remove('btn-outline-success');
+                                    this.classList.add('btn-outline-warning');
+                                }
+                            } else {
+                                alert('Error toggling product status.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        </script>
+        
 </body>
 
 </html>

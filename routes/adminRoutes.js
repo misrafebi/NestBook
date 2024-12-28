@@ -7,6 +7,8 @@ const categoryController = require('../controllers/admin/categoryController')
 const productController = require('../controllers/admin/productController')
 
 const passport = require('passport')
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 router.get('/login', adminController.loadLogin);
 router.post('/login', adminController.login);
@@ -30,6 +32,10 @@ router.delete('/deleteCategory/:id', categoryController.deleteCategory);
 
 router.get('/products',productController.loadProducts)
 router.get('/addProduct',productController.loadAddProducts)
-router.post('/addProduct', productController.addProduct);
+// router.post('/addProduct', productController.addProduct);
+router.post('/addProduct', upload.array('images', 4), productController.addProduct);
+router.get('/listProduct/:id',productController.listProduct)
+router.get('/unlistProduct/:id',productController.unlistProduct)
+router.post('/toggleProduct/:id', productController.toggleProduct)
 router.get('/editProduct',productController.loadEditProduct) 
 module.exports = router

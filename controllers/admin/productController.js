@@ -8,13 +8,23 @@ const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
 
-const loadProducts = (req, res) => {
-    if (req.session.admin) {
-        res.render('admin/products')
-    } else {
-        res.redirect('/login');
+// const loadProducts = (req, res) => {
+//     // if (req.session.admin) {
+//         res.render('admin/products')
+//     // } else {
+//         // res.redirect('/login');
+//     // }
+// }
+
+const loadProducts = async (req, res) => {
+    try {
+        const products = await Product.find({}).sort({ createdAt: -1 }); // Fetch products sorted by insertion order
+        res.render('admin/products', { products }); // Pass products to the EJS template
+    } catch (error) {
+        console.error("Error loading products:", error);
+        res.status(500).send("Internal Server Error");
     }
-}
+};
 
 const loadAddProducts = async (req, res) => {
 
@@ -25,6 +35,61 @@ const loadAddProducts = async (req, res) => {
         res.redirect('/admin/login');
     }
 }
+
+const listProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        await Product.findByIdAndUpdate(productId, { isBlocked: false });
+        res.redirect('/admin/products'); // Redirect back to the products page
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const unlistProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        await Product.findByIdAndUpdate(productId, { isBlocked: true });
+        res.redirect('/admin/products'); // Redirect back to the products page
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+const toggleProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        product.isBlocked = !product.isBlocked; // Toggle the status
+        await product.save();
+        res.json({ success: true, isBlocked: product.isBlocked });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+}
+
+// const toggleProduct = async (req, res) => {
+//     try {
+//         const productId = req.params.id;
+
+//         const product = await Product.findById(productId);
+//         if (!product) {
+//             return res.status(404).send('Product not found');
+//         }
+
+//         // Toggle the status
+//         product.status = product.status === 'Listed' ? 'Unlisted' : 'Listed';
+//         await product.save();
+
+//         res.redirect('/admin/products');
+//     } catch (error) {
+//         console.error('Error toggling product status:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
 
 
 // const addProduct = async (req, res) => {
@@ -123,6 +188,46 @@ const addProduct = async (req, res) => {
     }
 };
 
+// const addProduct = async (req, res) => {
+//     try {
+//         const { name, price, offer, category, numOfPage, stock, publishDate, publisher, description, authorName } = req.body;
+
+//         const regularPrice = parseFloat(price);
+//         const productOffer = parseFloat(offer) || 0;
+//         const salePrice = regularPrice - productOffer;
+
+//         const existingProduct = await Product.findOne({ productName: name });
+
+//         if (existingProduct) {
+//             return res.status(400).send('Product with this name already exists. Please use a different name.');
+//         }
+
+//         const productData = {
+//             productName: name.trim(),
+//             regularPrice,
+//             salePrice,
+//             productOffer,
+//             category,
+//             quantity: parseInt(stock),
+//             numberOfPage: numOfPage ? parseInt(numOfPage) : undefined,
+//             publishDate,
+//             publisher,
+//             description,
+//             authorName,
+//             status: 'Listed', // Default status
+//         };
+
+//         const product = new Product(productData);
+//         await product.save();
+
+//         res.redirect('/admin/products');
+//     } catch (error) {
+//         console.error('Error adding product:', error);
+//         res.redirect('/admin/addProduct');
+//     }
+// };
+
+
 const loadEditProduct = (req, res) => {
     if (req.session.admin) {
         res.render('admin/editProduct')
@@ -135,5 +240,8 @@ module.exports = {
     loadProducts,
     loadEditProduct,
     loadAddProducts,
-    addProduct
+    addProduct,
+    listProduct,
+    unlistProduct,
+    toggleProduct
 }
