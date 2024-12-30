@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Atomic Habits</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .product-image {
+            max-width: 300px;
+            margin-right: 20px;
+        }
+
+        .wishlist-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .wishlist-button i {
+            color: #333;
+        }
+
+        .product-details {
+            margin-top: 20px;
+        }
+
+        .product-details h3 {
+            margin-bottom: 10px;
+        }
+
+        .product-details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .product-details table td,
+        .product-details table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .product-details table th {
+            background-color: #f2f2f2;
+        }
+
+        .suggestions {
+            margin-top: 30px;
+        }
+
+        .suggestion-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .suggestion-item img {
+            max-width: 100px;
+        }
+        .mb-3, .my-3 {
+    width: 190px;
+    margin-bottom: 1rem !important;
+}
+    </style>
+</head>
+<body>
+<!------- HEADER --------->
+<%- include('../partials/user/header') %>
+    <!------------------------>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="product-image">
+                    <img src="" alt="product">
+                    <button class="wishlist-button"><i class="fas fa-heart"></i></button>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="product-details">
+                    <h3><%=product.productName%></h3>
+                    <!-- <p>Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones by James Clear</p> -->
+                    <div class="d-flex align-items-center">
+                        <p class="mr-2">Rating:</p>
+                        <span class="text-primary">4.5/5</span>
+                        <span class="text-muted">(100+ reviews)</span>
+                    </div>
+                    <p>Stock:
+                        <% if (product.quantity > 0) { %>
+                            In Stock
+                          <% } else { %>
+                            Out of Stock
+                          <% } %>
+                    </p>
+                    <p>Price: ₹ <%=product.salePrice%></p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Add to Cart</button>
+                    <button class="btn btn-outline-primary">Buy Now</button>
+                    <hr>
+                    <button class="btn btn-link">Details</button>
+                    <button class="btn btn-link">Reviews</button>
+                </div>
+                <div class="product-details">
+                    <h4>Product Details</h4>
+                    <!-- <p>No matter your goals, Atomic Habits offers a proven framework for improving every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.</p> -->
+                    <p><%=product.description%></p>
+                    <table>
+                        <tr>
+                            <th>Book Name</th>
+                            <td><%=product.productName%></td>
+                        </tr>
+                        <tr>
+                            <th>Author Name</th>
+                            <td><%=product.authorName%></td>
+                        </tr>
+                        <tr>
+                            <th>No-of Pages</th>
+                            <td><%=product.numberOfPage%></td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td><%=product.category%></td>
+                        </tr>
+                        <tr>
+                            <th>Offer</th>
+                            <td>₹<%=product.productOffer%></td>
+                        </tr>
+                        <tr>
+                            <th>Available Quantity</th>
+                            <td><%=product.quantity%></td>
+                        </tr>
+                        <tr>
+                            <th>Publisher</th>
+                            <td><%=product.publisher%></td>
+                        </tr>
+                        <tr>
+                            <th>Publish Date</th>
+                            <td><%=product.publishDate%></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="mt-5">You might also like</h4>
+                <div class="suggestions">
+                    <div class="suggestion-item">
+                        <img src="elon-musk-book-cover.jpg" alt="Elon Musk">
+                    </div>
+                    <div class="suggestion-item">
+                        <img src="the-power-of-habit-book-cover.jpg" alt="The Power of Habit">
+                    </div>
+                    <div class="suggestion-item">
+                        <img src="the-power-of-your-subconscious-mind-book-cover.jpg" alt="The Power of Your Subconscious Mind">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+
+
+    <!------- FOOTER --------->
+    <%- include('../partials/user/loginFooter')%>
+
+    <!-- -------------------- -->
+
+
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -13,7 +13,7 @@ const productSchema = new Schema ({
     },
     category:{
         type: Schema.Types.ObjectId,
-        ref: 'category',
+        ref: 'Category',
         required: true
     },
     regularPrice:{
@@ -38,7 +38,7 @@ const productSchema = new Schema ({
     },
     isBlocked:{
         type: Boolean,
-        default: false
+        default: true
     },
     // status:{
     //     type: String,

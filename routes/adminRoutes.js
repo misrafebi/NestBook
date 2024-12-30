@@ -5,14 +5,16 @@ const adminController = require('../controllers/admin/adminContoller')
 const customerController = require('../controllers/admin/customerController')
 const categoryController = require('../controllers/admin/categoryController')
 const productController = require('../controllers/admin/productController')
+const adminAuth = require('../middlewares/adminauthMiddleware')
+
 
 const passport = require('passport')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-router.get('/login', adminController.loadLogin);
+router.get('/login', adminController.loadLogin, adminAuth.isLoggedIn);
 router.post('/login', adminController.login);
-router.get('/',adminController.loadDashboard)
+router.get('/dashboard',adminController.loadDashboard, adminAuth.isLoggedIn)
 
 router.get('/customers',customerController.loadCustomers)
 router.post('/addCustomer', customerController.addCustomer);
@@ -27,7 +29,7 @@ router.patch('/updateCategory', categoryController.updateCategory);
 router.delete('/deleteCategory/:id', categoryController.deleteCategory);
 
 
-// router.get('/editCategory', adminContoller.loadEditCategory)
+
 
 
 router.get('/products',productController.loadProducts)
@@ -38,4 +40,12 @@ router.get('/listProduct/:id',productController.listProduct)
 router.get('/unlistProduct/:id',productController.unlistProduct)
 router.post('/toggleProduct/:id', productController.toggleProduct)
 router.get('/editProduct',productController.loadEditProduct) 
+router.get('/search',productController.searchProduct)
+router.get('/products/:id', productController.getProductDetails);
+router.post('/editProduct/:id',upload.array('images',4),productController.editProduct)
+// router.patch('/editProduct/', productController.updateProduct);
+router.post('/deleteImage',productController.deleteSingleImage)
+
+
+router.get('/logout',adminController.logout,adminAuth.isLoggedIn)
 module.exports = router

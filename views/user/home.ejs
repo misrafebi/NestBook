@@ -93,8 +93,9 @@
         </div> -->
 
 
-        <div class="container mt-5">
+        <!-- <div class="container mt-5">
             <div class="row">
+               
                 <div class="col-md-4">
                     <img src="/Assets/Images/image1.jpg" alt="Image 1" class="img-fluid full-width-image">
                 </div>
@@ -105,56 +106,45 @@
                     <img src="/Assets/Images/image3.jpg" alt="Image 3" class="img-fluid full-width-image">
                 </div>
             </div>
-        </div>
+        </div> -->
 
-
-
+        
 
         <!------------->
         <br><br><br><br>
-        <div class="row">
-            <h4>You might also like</h4>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="path_to_image" class="card-img-top" alt="Book 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Title 1</h5>
-                        <p class="card-text">Brief description of the book.</p>
-                        <a href="#" class="btn btn-primary">Buy Now</a>
+        <div class="container my-4">
+            <h4 class="text-center mb-4">Latest</h4>
+            <div class="row">
+                <% for (let i = 0; i < products.length; ++i) { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="product-cart-wrap mb-30">
+                        <div class="product-img-action-wrap">
+                            <div class="product-img product-img-zoom">
+                                
+                                   
+                                
+                                <a href="/user/productDetails?id=<%= products[i]._id %>">
+                                    <img class="default-img" src="/uploads/re-image/<%=products[i].productImage[0]%>" alt="<%= products[i].productName %>">
+                                </a>
+                            </div>
+                            <a href="" class="wishlist-btn">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                        </div>
+                        <div class="product-action-1">
+                            <a href="/addToWishlist?id=<%=products[i]._id%>" aria-label="Add to wishlist" class="action-btn hover-up"></a>
+                        </div>
+                        <div class="product-content-wrap">
+                            <h6><%=products[i].productName%></h6>
+                            <h5><%=products[i].salePrice%></h5>
+                            <a href="/addToCart?id=<%=products[i]._id%>">Add to cart</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="path_to_image" class="card-img-top" alt="Book 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Title 2</h5>
-                        <p class="card-text">Brief description of the book.</p>
-                        <a href="#" class="btn btn-primary">Buy Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="path_to_image" class="card-img-top" alt="Book 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Title 3</h5>
-                        <p class="card-text">Brief description of the book.</p>
-                        <a href="#" class="btn btn-primary">Buy Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="path_to_image" class="card-img-top" alt="Book 4">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Title 3</h5>
-                        <p class="card-text">Brief description of the book.</p>
-                        <a href="#" class="btn btn-primary">Buy Now</a>
-                    </div>
-                </div>
+                <% } %>
             </div>
         </div>
+        
     </main>
 
     <!---------------->

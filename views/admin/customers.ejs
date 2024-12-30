@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* Custom CSS for styling */
         body {
             background-color: #f8f9fa;
         }
@@ -123,38 +122,31 @@
 
                     <script>
                         document.querySelector('form').addEventListener('submit', function (event) {
-                            // Prevent form submission
                             event.preventDefault();
 
-                            // Get form elements
                             const nameInput = document.getElementById('customerName');
                             const emailInput = document.getElementById('customerEmail');
                             const passwordInput = document.getElementById('customerPassword');
 
-                            // Get error message elements
                             const nameError = document.getElementById('name-error');
                             const emailError = document.getElementById('email-error');
                             const passwordError = document.getElementById('password-error');
 
-                            // Clear existing error messages
                             nameError.textContent = '';
                             emailError.textContent = '';
                             passwordError.textContent = '';
 
-                            // Define validation patterns
                             const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
                             const alpha = /[a-zA-Z]/;
                             const digit = /\d/;
 
                             let isValid = true;
 
-                            // Validate Name
                             if (!nameInput.value.trim()) {
                                 nameError.textContent = 'Name is required.';
                                 isValid = false;
                             }
 
-                            // Validate Email
                             if (!emailInput.value.trim()) {
                                 emailError.textContent = 'Email is required.';
                                 isValid = false;
@@ -163,7 +155,6 @@
                                 isValid = false;
                             }
 
-                            // Validate Password
                             if (!passwordInput.value.trim()) {
                                 passwordError.textContent = 'Password is required.';
                                 isValid = false;
@@ -172,7 +163,6 @@
                                 isValid = false;
                             }
 
-                            // If valid, submit the form
                             if (isValid) {
                                 this.submit();
                             }
@@ -260,39 +250,7 @@
             <%- include('../partials/admin/search') %>
                 <!--------------------->
 
-                        <!-- <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Item" id="searchInput"
-                                    onkeyup="searchUsers()">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="button">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script>
-                            function searchUsers() {
-                                const input = document.getElementById('searchInput');
-                                const filter = input.value.toLowerCase();
-                                const table = document.getElementById('userTable');
-                                const rows = table.getElementsByTagName('tr');
-
-                                for (let i = 0; i < rows.length; i++) {
-                                    const usernameCell = rows[i].getElementsByTagName('td')[1];
-                                    if (usernameCell) {
-                                        const username = usernameCell.textContent || usernameCell.innerText;
-                                        if (username.toLowerCase().indexOf(filter) > -1) {
-                                            rows[i].style.display = '';
-                                        } else {
-                                            rows[i].style.display = 'none';
-                                        }
-                                    }
-                                }
-                            }
-                        </script> -->
-
+                       
                     </div>
 
                     <table class="table" id="userTable">
@@ -380,7 +338,6 @@
                                 button.addEventListener('click', () => {
                                     const userId = button.getAttribute('data-id');
 
-                                    // Fetch user details and populate the modal
                                     fetch(`/admin/customers/${userId}`)
                                         .then(response => response.json())
                                         .then(user => {
@@ -396,7 +353,6 @@
                                 });
                             });
 
-                            // Handle form submission
                             editUserForm.addEventListener('submit', (e) => {
                                 e.preventDefault();
 
@@ -404,7 +360,7 @@
                                 const data = {
                                     name: document.getElementById('editUserName').value,
                                     email: document.getElementById('editUserEmail').value,
-                                    password: document.getElementById('editUserPassword').value || undefined, // Send password only if provided
+                                    password: document.getElementById('editUserPassword').value || undefined, 
                                     isActive: document.getElementById('editUserActive').value === 'true',
                                 };
 
@@ -418,7 +374,7 @@
                                     .then(response => response.json())
                                     .then(result => {
                                         if (result.message === 'User updated successfully') {
-                                            location.reload(); // Reload page to show updated list
+                                            location.reload(); 
                                         } else {
                                             alert(result.message);
                                         }
@@ -426,111 +382,37 @@
                                     .catch(error => console.error('Error updating user:', error));
                             });
                         });
-                    </script>
+                   
+                   </script>
 
 
-                    <!-- Add the Edit Customer Modal -->
-                    <!-- <div class="modal fade" id="editCustomerModal" tabindex="-1"
-                        aria-labelledby="editCustomerModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="editCustomerForm">
-                                        <div class="form-group">
-                                            <label for="customerName">Name</label>
-                                            <input type="text" class="form-control" id="customerName" name="name"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="customerEmail">Email</label>
-                                            <input type="email" class="form-control" id="customerEmail" name="email"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="customerPassword">Password</label>
-                                            <input type="password" class="form-control" id="customerPassword"
-                                                name="password">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary" id="saveChanges">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <!-- 
-
-                    <script>
-                        document.getElementById('saveChanges').addEventListener('click', async () => {
-                            const form = document.getElementById('editCustomerForm');
-                            const formData = new FormData(form);
-                            const customerData = Object.fromEntries(formData.entries());
-                    
-                            try {
-                                const response = await fetch('/api/addCustomer', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(customerData),
-                                });
-                    
-                                if (response.ok) {
-                                    alert('Customer added successfully!');
-                                    $('#editCustomerModal').modal('hide');
-                                    form.reset();
-                                    // Optionally refresh the customer list here
-                                } else {
-                                    const error = await response.json();
-                                    alert('Error: ' + error.message);
-                                }
-                            } catch (err) {
-                                console.error('Failed to add customer:', err);
-                                alert('Failed to add customer. Please try again.');
-                            }
-                        });
-                    </script> -->
+                   
 
                     <!--------------------------->
                     <script>
                         $(document).ready(function () {
-                            // Handle Edit Button Click
                             $('.edit-btn').on('click', function () {
-                                // Get existing data from the button's data attributes
                                 const name = $(this).data('name');
                                 const email = $(this).data('email');
 
-                                // Populate the modal fields with the existing data
                                 $('#editCustomerModal #customerName').val(name);
                                 $('#editCustomerModal #customerEmail').val(email);
-                                $('#editCustomerModal #customerPassword').val(''); // Password is optional, clear for security reasons
+                                $('#editCustomerModal #customerPassword').val(''); 
 
-                                // Show the modal
                                 $('#editCustomerModal').modal('show');
                             });
 
-                            // Handle Save Changes Button
                             $('#saveChanges').on('click', function () {
                                 const updatedName = $('#editCustomerModal #customerName').val();
                                 const updatedEmail = $('#editCustomerModal #customerEmail').val();
                                 const updatedPassword = $('#editCustomerModal #customerPassword').val();
 
-                                // Log updated values (you can replace this with an AJAX call to save the data to the server)
                                 console.log({
                                     name: updatedName,
                                     email: updatedEmail,
                                     password: updatedPassword
                                 });
 
-                                // Close the modal
                                 $('#editCustomerModal').modal('hide');
                             });
                         });
@@ -539,7 +421,7 @@
 
                     <!------------------------->
                     <!--PAGINATION-->
-                    <%- include('../partials/admin/pagination') %>
+                    <!-- <%- include('../partials/admin/pagination') %> -->
                         <!------------------------->
 
                 </div>
@@ -556,6 +438,18 @@
             });
         });
     </script>
+ <% if (errorMessage) { %>
+    <script>
+        alert('<%= errorMessage %>');
+    </script>
+    <% } %>
+
+        <% if (successMessage) { %>
+            <script>
+                alert('<%= successMessage %>');
+            </script>
+            <% } %>
+
 
 </body>
 

@@ -1,3 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+</head>
+<body>
+
+
+
+
 <!------- HEADER --------->
 <%- include('../partials/user/header') %>
     <!------------------------>
@@ -8,13 +20,13 @@
     <link rel="stylesheet" href="/user/signup.css">
 
     <div class="container">
-        <form action="/signup" method="post" id="user-signup-form">
+        <form action="/user/signup" method="post" id="user-signup-form">
 
             <div class="signup-form">
                 <h2>Signup</h2>
 
                 <div class="form-group">
-                    <a href="/auth/google" class="btn  btn-block google-btn"><i class="fab fa-google"></i> CONTINUE WITH
+                    <a href="/user/auth/google" class="btn  btn-block google-btn"><i class="fab fa-google"></i> CONTINUE WITH
                         GOOGLE </a>
                 </div>
 
@@ -43,7 +55,7 @@
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword"
                         name="confirmPassword">
-                    <div class="signup-error-message" id="confirm-pfassword-error"></div>
+                    <div class="signup-error-message" id="confirm-password-error"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">SIGNUP</button>
@@ -73,7 +85,7 @@
             const fnameError = document.getElementById('name-error')
             const emailError = document.getElementById('email-error')
             const passwordError = document.getElementById('password-error')
-            const confirmPasswordError = document.getElementById('confirm-pfassword-error')
+            const confirmPasswordError = document.getElementById('confirm-password-error')
 
             const signupErrorMessage = document.getElementsByClassName('signup-error-message')
 
@@ -191,3 +203,12 @@
 
 
         </script>
+
+
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    
+</body>
+</html>
