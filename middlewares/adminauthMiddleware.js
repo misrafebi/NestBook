@@ -1,17 +1,26 @@
-// Middleware to redirect logged-in users from the login page
-function preventLoggedInAccess(req, res, next) {
+
+
+const checkSession = (req, res, next) => {
     if (req.session.admin) {
-        return res.redirect('/admin/dashboard'); // Redirect to dashboard if already logged in
+        next()
+    } else {
+        res.redirect('/admin/login')
     }
-    next(); // Continue to the requested page if not logged in
 }
 
-// Middleware to protect dashboard and other admin routes
-function isLoggedIn(req, res, next) {
-    if (!req.session.admin) {
-        return res.redirect('/login'); // Redirect to login if not logged in
+const isLogin = (req, res, next) => {
+    if (req.session.admin) {
+        res.redirect('/admin/dashboard')
+    } else {
+        next()
     }
-    next(); // Continue to the requested page if logged in
 }
+const noCache = (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '-1');
+    next();
+};
 
-module.exports = { preventLoggedInAccess, isLoggedIn };
+
+module.exports = { checkSession, isLogin,noCache }

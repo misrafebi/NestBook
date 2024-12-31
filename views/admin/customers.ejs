@@ -221,7 +221,7 @@
                                     }
 
                                     function updateTable(customers) {
-                                        const tbody = document.querySelector('#userTable tbody');
+                                        const tbody = document.querySelector('#list-table tbody');
                                         tbody.innerHTML = '';
                                         customers.forEach((customer, index) => {
                                             const row = document.createElement('tr');
@@ -245,15 +245,15 @@
                         </div>
 
 
-<!---------------------->
-            <!--SEARCH-->
-            <%- include('../partials/admin/search') %>
-                <!--------------------->
+                        <!---------------------->
+                        <!--SEARCH-->
+                        <%- include('../partials/admin/customerSearch') %>
+                            <!--------------------->
 
-                       
+
                     </div>
 
-                    <table class="table" id="userTable">
+                    <table class="table" id="list-table">
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
@@ -309,10 +309,12 @@
                                         <div class="mb-3">
                                             <label for="editUserEmail" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="editUserEmail">
+                                            <div class="edit-error-message text-danger" id="email-error"></div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="editUserPassword" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="editUserPassword">
+                                            <div class="edit-error-message text-danger" id="password"></div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="editUserActive" class="form-label">Status</label>
@@ -328,12 +330,13 @@
                         </div>
                     </div>
 
-
+<!-- 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {
                             const editButtons = document.querySelectorAll('.edit-btn');
                             const editUserForm = document.getElementById('editUserForm');
 
+                            
                             editButtons.forEach(button => {
                                 button.addEventListener('click', () => {
                                     const userId = button.getAttribute('data-id');
@@ -360,7 +363,7 @@
                                 const data = {
                                     name: document.getElementById('editUserName').value,
                                     email: document.getElementById('editUserEmail').value,
-                                    password: document.getElementById('editUserPassword').value || undefined, 
+                                    password: document.getElementById('editUserPassword').value || undefined,
                                     isActive: document.getElementById('editUserActive').value === 'true',
                                 };
 
@@ -374,7 +377,7 @@
                                     .then(response => response.json())
                                     .then(result => {
                                         if (result.message === 'User updated successfully') {
-                                            location.reload(); 
+                                            location.reload();
                                         } else {
                                             alert(result.message);
                                         }
@@ -382,11 +385,269 @@
                                     .catch(error => console.error('Error updating user:', error));
                             });
                         });
-                   
-                   </script>
+
+                    </script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    const editUserForm = document.getElementById('editUserForm');
+
+    // Regular expression for basic email validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+    // Function to validate email
+    const validateEmail = (email) => {
+        return emailRegex.test(email);
+    };
+
+    // Function to validate password
+    const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(password);
+};
 
 
-                   
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const userId = button.getAttribute('data-id'); // Get the user ID
+
+            fetch(`/admin/customers/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const customer = data.customer; // Extract the customer data
+
+                    // Populate the input fields with the fetched data
+                    document.getElementById('editUserId').value = customer._id;
+                    document.getElementById('editUserName').value = customer.name;
+                    document.getElementById('editUserEmail').value = customer.email;
+                    document.getElementById('editUserPassword').value = ''; // Leave password empty
+                    document.getElementById('editUserActive').value = customer.isActive;
+
+                    // Show the modal
+                    const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                    modal.show();
+                })
+                .catch(error => console.error('Error fetching user:', error));
+        });
+    });
+
+    // Handle the form submission
+    editUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('editUserEmail').value;
+        const password = document.getElementById('editUserPassword').value;
+
+        // Validate email
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Validate password
+        if (password && !validatePassword(password)) {
+            alert('Password must be at least 8 characters long, and include at least one alphabet and one number.');
+            return;
+        }
+
+        // Collect the form data
+        const userId = document.getElementById('editUserId').value;
+        const data = {
+            name: document.getElementById('editUserName').value,
+            email: email,
+            password: password || undefined,  // If no password, it will be undefined
+            isActive: document.getElementById('editUserActive').value === 'true',
+        };
+
+        // Send the update request
+        fetch(`/admin/customers/${userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.message === 'User updated successfully') {
+                alert(result.message)
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => console.error('Error updating user:', error));
+    });
+});
+
+</script>
+
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    const editUserForm = document.getElementById('editUserForm');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const userId = button.getAttribute('data-id'); // Get the user ID
+
+            fetch(`/admin/customers/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const customer = data.customer; // Extract the customer data
+
+                    // Populate the input fields with the fetched data
+                    document.getElementById('editUserId').value = customer._id;
+                    document.getElementById('editUserName').value = customer.name;
+                    document.getElementById('editUserEmail').value = customer.email;
+                    document.getElementById('editUserPassword').value = ''; // Leave password empty
+                    document.getElementById('editUserActive').value = customer.isActive;
+
+                    // Show the modal
+                    const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                    modal.show();
+                })
+                .catch(error => console.error('Error fetching user:', error));
+        });
+    });
+
+    // Handle the form submission
+    editUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const userId = document.getElementById('editUserId').value;
+        const data = {
+            name: document.getElementById('editUserName').value,
+            email: document.getElementById('editUserEmail').value,
+            password: document.getElementById('editUserPassword').value || undefined,
+            isActive: document.getElementById('editUserActive').value === 'true',
+        };
+
+        fetch(`/admin/customers/${userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.message === 'User updated successfully') {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch(error => console.error('Error updating user:', error));
+    });
+});
+
+
+
+
+
+</script> -->
+
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    const editUserForm = document.getElementById('editUserForm');
+    const emailInput = document.getElementById('editUserEmail');
+    const passwordInput = document.getElementById('editUserPassword');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password');
+
+    // Function to validate email format
+    function validateEmail(email) {
+        const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
+        return emailPattern.test(email);
+    }
+
+    // Function to validate password
+    function validatePassword(password) {
+        const alpha = /[a-zA-Z]/;
+        const digit = /\d/;
+        return alpha.test(password) && digit.test(password) && password.length >= 8;
+    }
+
+    // Clear validation messages
+    function clearErrors() {
+        emailError.textContent = '';
+        passwordError.textContent = '';
+    }
+
+    // Handle form submission
+    editUserForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent form submission
+        clearErrors(); // Clear previous errors
+
+        let isValid = true;
+
+        // Validate email
+        if (!validateEmail(emailInput.value)) {
+            emailError.textContent = 'Invalid email format.';
+            isValid = false;
+        }
+
+        // Validate password (if entered)
+        if (passwordInput.value && !validatePassword(passwordInput.value)) {
+            passwordError.textContent = 'Password must be at least 8 characters long and contain at least one letter and one digit.';
+            isValid = false;
+        }
+
+        // If valid, proceed with form submission
+        if (isValid) {
+            const userId = document.getElementById('editUserId').value;
+            const data = {
+                name: document.getElementById('editUserName').value,
+                email: emailInput.value,
+                password: passwordInput.value || undefined,
+                isActive: document.getElementById('editUserActive').value === 'true',
+            };
+
+            fetch(`/admin/customers/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'User updated successfully') {
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                })
+                .catch(error => console.error('Error updating user:', error));
+        }
+    });
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const userId = button.getAttribute('data-id');
+
+            fetch(`/admin/customers/${userId}`)
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('editUserId').value = user._id;
+                    document.getElementById('editUserName').value = user.name;
+                    emailInput.value = user.email;
+                    passwordInput.value = ''; // Leave password empty
+                    document.getElementById('editUserActive').value = user.isActive;
+                    const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                    modal.show();
+                })
+                .catch(error => console.error('Error fetching user:', error));
+        });
+    });
+});
+
+</script> -->
 
                     <!--------------------------->
                     <script>
@@ -397,7 +658,7 @@
 
                                 $('#editCustomerModal #customerName').val(name);
                                 $('#editCustomerModal #customerEmail').val(email);
-                                $('#editCustomerModal #customerPassword').val(''); 
+                                $('#editCustomerModal #customerPassword').val('');
 
                                 $('#editCustomerModal').modal('show');
                             });
@@ -422,7 +683,7 @@
                     <!------------------------->
                     <!--PAGINATION-->
                     <!-- <%- include('../partials/admin/pagination') %> -->
-                        <!------------------------->
+                    <!------------------------->
 
                 </div>
         </div>
@@ -438,17 +699,17 @@
             });
         });
     </script>
- <% if (errorMessage) { %>
-    <script>
-        alert('<%= errorMessage %>');
-    </script>
-    <% } %>
+    <% if (errorMessage) { %>
+        <script>
+            alert('<%= errorMessage %>');
+        </script>
+        <% } %>
 
-        <% if (successMessage) { %>
-            <script>
-                alert('<%= successMessage %>');
-            </script>
-            <% } %>
+            <% if (successMessage) { %>
+                <script>
+                    alert('<%= successMessage %>');
+                </script>
+                <% } %>
 
 
 </body>

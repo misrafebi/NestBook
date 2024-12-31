@@ -4,10 +4,12 @@ const nodemailer = require('nodemailer')
 const env = require('dotenv').config()
 const bcrypt = require('bcrypt');
 const Category = require('../../models/categorySchema')
+const Usere = require('../../models/userSchema')
 
 const loadLogin = (req, res) => {
     console.log('Rendering admin login page...');
     res.render('admin/login', { errorMessage: '' })
+
 }
 
 
@@ -36,20 +38,9 @@ const login = async (req, res) => {
 
 
 const loadDashboard = (req, res) => {
-
-    try {
-        const admin = req.session.admin;
-        if (admin) {
-            res.render('admin/dashboard');
-        } else {
-            res.redirect('/admin/login')
-        }
-
-    } catch (error) {
-
-    }
-
+    res.render('admin/dashboard');
 };
+
 
 const logout = (req, res) => {
     req.session.destroy((err) => {

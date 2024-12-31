@@ -78,6 +78,9 @@
         .sort-dropdown a:hover {
             background-color: #f0f0f0;
         }
+        .edit-link{
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -129,38 +132,13 @@
                         </div>
 
 
-                        <div class="col-md-6">
-                            <form action="/admin/search" method="GET">
-                                <div class="input-group">
-                                    <input id="searchInput" type="text" name="query" class="form-control"
-                                        placeholder="Search Item " onkeyup="searchProduct()">
-                                    <div class="input-group-append">
 
-                                        <button class="btn btn-secondary" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+<!---------------------->
+            <!--SEARCH-->
+            <%- include('../partials/admin/productSearch') %>
+            <!--------------------->
 
-                        <script>
-                            function searchProduct() {
-                                const input = document.getElementById('searchInput').value.toLowerCase();
-                                const rows = document.querySelectorAll('#books .product-card');
-
-                                rows.forEach(row => {
-                                    const productName = row.querySelector('#productName').innerText.toLowerCase();
-                                    if (productName.includes(input)) {
-                                        row.style.display = '';
-                                    } else {
-                                        row.style.display = 'none';
-                                    }
-                                });
-                            }
-
-                        </script>
-
+                       
                     </div>
 
 
@@ -168,51 +146,65 @@
 
 
                     <div class="right mt-5">
-                        <% if (data.length === 0) { %>
+                        <% if (data.length===0) { %>
                             <div class="col-md-12">
                                 <p>No products found.</p>
                             </div>
-                        <% } else { %>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"><b>Product name</b></th>
-                                        <th scope="col"><b>Category</b></th>
-                                        <th scope="col"><b>Sale Price</b></th>
-                                        <th scope="col"><b>Offer Price</b></th>
-                                        <th scope="col"><b>Quantity</b></th>
-                                        <th scope="col"><b>Action</b></th>
-                                        <th scope="col"><b>Edit</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for(let i=data.length-1; i > 0; --i) { %> 
+                            <% } else { %>
+                                <table class="table " id="list-table">
+                                    <thead>
                                         <tr>
-                                            <td id="product-name"><%= data[i].productName %></td>
-                                            <td id="category"><%= data[i].category.name %></td>
-                                            <td id="sale-price"><%= data[i].salePrice %></td>
-                                            <td id="offer"><%= data[i].productOffer %></td>
-                                            <td id="Quantity"><%= data[i].quantity %></td>
-                                            <td>
-                                                <% if (data[i].isBlocked) { %>
-                                                    <button class="btn btn-sm btn-outline-success toggle-btn" data-id="<%= data[i]._id %>">
-                                                        List
-                                                    </button>
-                                                <% } else { %>
-                                                    <button class="btn btn-sm btn-outline-warning toggle-btn" data-id="<%= data[i]._id %>">
-                                                        Unlist
-                                                    </button>
-                                                <% } %>
-                                            </td>
-                                            <td><button class="btn btn-info">
-                                                <a href="/admin/editProduct?id=<%=data[i]._id%>" class="text-white">Edit</a></button></td>
+                                            <th scope="col"><b>Product name</b></th>
+                                            <th scope="col"><b>Category</b></th>
+                                            <th scope="col"><b>Sale Price</b></th>
+                                            <th scope="col"><b>Offer Price</b></th>
+                                            <th scope="col"><b>Quantity</b></th>
+                                            <th scope="col"><b>Action</b></th>
+                                            <th scope="col"><b>Edit</b></th>
                                         </tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                        <% } %>
+                                    </thead>
+                                    <tbody>
+                                        <% for(let i=data.length-1; i> 0; --i) { %>
+                                            <tr>
+                                                <td id="product-name">
+                                                    <%= data[i].productName %>
+                                                </td>
+                                                <td id="category">
+                                                    <%= data[i].category ? data[i].category.name : 'Uncategorized' %>
+                                                </td>
+                                                
+                                                <td id="sale-price">
+                                                    <%= data[i].salePrice %>
+                                                </td>
+                                                <td id="offer">
+                                                    <%= data[i].productOffer %>
+                                                </td>
+                                                <td id="Quantity">
+                                                    <%= data[i].quantity %>
+                                                </td>
+                                                <td>
+                                                    <% if (data[i].isBlocked) { %>
+                                                        <button class="btn btn-sm btn-outline-success toggle-btn"
+                                                            data-id="<%= data[i]._id %>">
+                                                            List
+                                                        </button>
+                                                        <% } else { %>
+                                                            <button class="btn btn-sm btn-outline-warning toggle-btn"
+                                                                data-id="<%= data[i]._id %>">
+                                                                Unlist
+                                                            </button>
+                                                            <% } %>
+                                                </td>
+                                                <td><button class="btn btn-info">
+                                                        <a href="/admin/editProduct?id=<%=data[i]._id%>"
+                                                            class="text-white edit-link">Edit</a></button></td>
+                                            </tr>
+                                            <% } %>
+                                    </tbody>
+                                </table>
+                                <% } %>
                     </div>
-                    
+
 
 
 
@@ -222,38 +214,38 @@
     <!------------------------->
     <!--PAGINATION-->
     <!-- <%- include('../partials/admin/pagination') %> -->
-        <!------------------------->
+    <!------------------------->
 
-        <script>
-            document.querySelectorAll('.toggle-btn').forEach(button => {
-                button.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const productId = this.dataset.id;
-                    fetch(`/admin/toggleProduct/${productId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Update button text and class dynamically
-                                if (data.isBlocked) {
-                                    this.textContent = 'List';
-                                    this.classList.remove('btn-outline-warning');
-                                    this.classList.add('btn-outline-success');
-                                } else {
-                                    this.textContent = 'Unlist';
-                                    this.classList.remove('btn-outline-success');
-                                    this.classList.add('btn-outline-warning');
-                                }
+    <script>
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const productId = this.dataset.id;
+                fetch(`/admin/toggleProduct/${productId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update button text and class dynamically
+                            if (data.isBlocked) {
+                                this.textContent = 'List';
+                                this.classList.remove('btn-outline-warning');
+                                this.classList.add('btn-outline-success');
                             } else {
-                                alert('Error toggling product status.');
+                                this.textContent = 'Unlist';
+                                this.classList.remove('btn-outline-success');
+                                this.classList.add('btn-outline-warning');
                             }
-                        })
-                        .catch(error => console.error('Error:', error));
-                });
+                        } else {
+                            alert('Error toggling product status.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             });
-        </script>
+        });
+    </script>
 
 
 

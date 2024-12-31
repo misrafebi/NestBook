@@ -9,29 +9,38 @@ const category = require('../../models/categorySchema');
 const Product = require('../../models/productSchema');
 
 const loadHomePage = async (req, res) => {
+
     try {
-        const user = req.session.user;
-        
-        const categories = await category.find();
-        
-        const productData = await Product.find({
-            isBlocked: false,
-            category: { $in: categories.map(category => category._id) },
-            quantity: { $gt: 0 }
-        });
-
-        const sortedProductData = productData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4);
-
-        if (user) {
-            const userData = await User.findOne({ _id: user._id });
-            return res.render('user/home', { user: userData, products: sortedProductData });
-        } else {
-            return res.render('user/home', { products: sortedProductData });
-        }
+        const products = await Product.find({})
+        res.render('user/home',{products})
     } catch (error) {
-        console.log('Home Page not found', error);
-        res.status(500).send('Server error');
+        
     }
+    // try {
+    //     const user = req.session.user;
+        
+    //     const categories = await category.find();
+
+
+        
+    //     const productData = await Product.find({
+    //         isBlocked: false,
+    //         category: { $in: categories.map(category => category._id) },
+    //         quantity: { $gt: 0 }
+    //     });
+
+    //     const sortedProductData = productData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4);
+
+    //     if (user) {
+    //         const userData = await User.findOne({ _id: user._id });
+    //         return res.render('user/home', { user: userData, products: sortedProductData });
+    //     } else {
+    //         return res.render('user/home', { products: sortedProductData });
+    //     }
+    // } catch (error) {
+    //     console.log('Home Page not found', error);
+    //     res.status(500).send('Server error');
+    // }
 };
 
 
@@ -383,7 +392,7 @@ const logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.error('Error destroying session:', err);
-            return res.redirect('/user/');
+            return res.redirect('/user/home');
         }
         res.render('user/login')
     });

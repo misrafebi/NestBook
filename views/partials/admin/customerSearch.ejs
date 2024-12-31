@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Customer Search</title>
 </head>
 <body>
     <div class="col-md-6">
@@ -22,7 +22,7 @@
         function searchUsers() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase();
-            const table = document.getElementById('userTable');
+            const table = document.getElementById('list-table');
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

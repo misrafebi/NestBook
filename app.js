@@ -1,7 +1,9 @@
 const express = require('express');
-const app = express();
+
 const path = require('path');
 const session = require('express-session');
+const nocache = require('nocache')
+const app = express();
 
 const env = require('dotenv').config()
 const db = require('./config/db')
@@ -26,6 +28,7 @@ app.use(session({
         httpOnly: true,
     }
 }));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 

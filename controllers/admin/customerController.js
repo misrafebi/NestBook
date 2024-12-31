@@ -11,7 +11,7 @@ const loadCustomers = async (req, res) => {
 
     try {
 
-        if (req.session.admin) {
+        // if (req.session.admin) {
             const customers = await User.find({}).sort({ createdAt: -1 });
             res.render('admin/customers', {
                 customers,
@@ -19,9 +19,9 @@ const loadCustomers = async (req, res) => {
                 successMessage: ''
             });
 
-        } else {
-            res.redirect('/admin/login');
-        }
+        // } else {
+        //     res.redirect('/admin/login');
+        // }
 
     } catch (err) {
         console.error(err);
@@ -90,7 +90,9 @@ const getUserDetails = async (req, res) => {
 
         const { id } = req.params;
         const customer = await User.findById(id);
-        res.json(customer);
+        res.json({customer});
+        console.log(customer);
+        
 
     } catch (err) {
         console.error(err);
@@ -110,12 +112,15 @@ const updateUserDetails = async (req, res) => {
         }
 
         const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
-        res.status(200).json({ message: 'User updated successfully', user });
+        res.status(200).json({
+            success: true,
+             message: 'User updated successfully',
+              user });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error updating user', error: err.message });
     }
-};
+}; 
 
 const getSortedCustomers = async (req, res) => {
     try {

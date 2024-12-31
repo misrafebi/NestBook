@@ -7,45 +7,55 @@ const env = require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
+const mongoose = require('mongoose')
+
+
 
 
 const loadProducts = async (req, res) => {
     try {
-        if (req.session.admin) {
-            const search = req.query.search || ''
-            const page = req.query.page || 1
-            const limit = 4
 
-            const productData = await Product.find({
-                $or: [
-                    { productName: { $regex: new RegExp('.*' + search + '.*', 'i') } },
+        // const search = req.query.search || ''
+        // const page = req.query.page || 1
+        // const limit = 4
 
-                ],
-            }).limit(limit * 1).skip((page - 1) * limit).populate('category').exec()
+        // const productData = await Product.find({
+        //     $or: [
+        //         { productName: { $regex: new RegExp('.*' + search + '.*', 'i') } },
 
-            const count = await Product.find({
-                $or: [
-                    { productName: { $regex: new RegExp('.*' + search + '.*', 'i') } },
-                ],
-            }).countDocuments()
+        //     ],
+        // }).limit(limit * 1).skip((page - 1) * limit).populate('category').exec()
 
-            const categories = await Category.find({ isListed: true })
+        // const count = await Product.find({
+        //     $or: [
+        //         { productName: { $regex: new RegExp('.*' + search + '.*', 'i') } },
+        //     ],
+        // }).countDocuments()
 
-            if (categories) {
-                res.render('admin/products', {
-                    data: productData,
-                    currentPage: page,
-                    totalPages: page,
-                    totalPages: Math.ceil(count / limit),
-                    cat: categories,
+        // const categories = await Category.find({ isListed: true })
 
-                })
-            }
+        // if (categories) {
+        //     res.render('admin/products', {
+        //         data: productData,
+        //         currentPage: page,
+        //         totalPages: page,
+        //         totalPages: Math.ceil(count / limit),
+        //         cat: categories,
 
+        //     })
+        // }
+        
+        const productData = await Product.find({}).populate('category');
+        const categories = await Category.find({ isListed: true })
+        // console.log(categories);
+        const invalidProducts = await Product.find({ category: { $exists: true, $eq: null } });
+        console.log('Invalid Products:', invalidProducts);
+       
+        res.render('admin/products', {
+            data: productData,
+            cat: categories,
+        })
 
-        } else {
-            res.redirect('/admin/login');
-        }
     } catch (error) {
         console.error("Error loading products:", error);
 
@@ -113,7 +123,8 @@ const addProduct = async (req, res) => {
 
         const { name, price, offer, category, numOfPage, stock, publishDate, publisher, description, authorName } = req.body;
 
-        const existingProduct = await Product.findOne({ productName: name.trim() });
+        // Perform a case-insensitive check for existing product name
+        const existingProduct = await Product.findOne({ productName: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
         if (existingProduct) {
             return res.render('admin/addProduct', {
                 categories,
@@ -146,13 +157,31 @@ const addProduct = async (req, res) => {
 
             images.push(file.filename);
         }
+        const productImages = req.files.map(file => file.path); // Array of image file paths
 
         const regularPrice = parseFloat(price);
-        const productOffer = parseFloat(offer) || 0; 
+        const productOffer = parseFloat(offer) || 0;
         const salePrice = regularPrice - productOffer;
 
-        const productData = {
-            productName: name.trim(),
+        // const productData = {
+        //     productName: name.trim(),
+        //     regularPrice,
+        //     salePrice,
+        //     productOffer,
+        //     category: category,
+        //     quantity: parseInt(stock),
+        //     numberOfPage: numOfPage ? parseInt(numOfPage) : undefined,
+        //     publishDate,
+        //     publisher,
+        //     description,
+        //     authorName,
+        //     productImage: images,
+        // };
+
+        // const product = new Product(productData);
+        const newProduct = new Product({
+            productName: req.body.name,
+            productImage: productImages,
             regularPrice,
             salePrice,
             productOffer,
@@ -163,11 +192,10 @@ const addProduct = async (req, res) => {
             publisher,
             description,
             authorName,
-            productImage: images,
-        };
 
-        const product = new Product(productData);
-        await product.save();
+            // other product fields
+        });
+        await newProduct.save();
 
         console.log('Product added successfully!');
         res.render('admin/addProduct', {
@@ -223,77 +251,198 @@ const loadEditProduct = async (req, res) => {
     } catch (error) {
         res.redirect('/admin/login');
     }
-  
+
 }
 
 
-const editProduct = async(req,res)=>{
+// const editProduct = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const product = await Product.findById(id);  // Correct way to find a product by ID
+
+//         if (!product) {
+//             return res.status(404).render('admin/editProduct', { message: 'Product not found' });
+//         }
+
+//         const data = req.body;
+
+//         // Check for product name case-sensitively
+//         const existingProduct = await Product.find({
+//             productName: { $regex: `^${data.productName}$`, $options: '' }
+//         });
+
+//         if (existingProduct.length > 0) {
+//             return res.render('admin/editProduct', { message: 'Product with this name already exists. Please try with another name' });
+//         }
+
+//         // Proceed to update the product if no duplicates are found
+//         const updateProduct = {
+//             productName: data.productName,
+//             description: data.description,
+//             authorName: data.authorName,
+//             category: data.category,
+//             regularPrice: data.regularPrice,
+//             salePrice: data.salePrice,
+//             quantity: data.quantity,
+//             productOffer: data.offer,
+//             numberOfPage: data.numOfPage,
+//             stock: data.quantity,
+//             publishDate: data.publishDate,
+//             publisher: data.publisher,
+//         };
+
+//         await Product.findByIdAndUpdate(id, { $set: updateProduct });
+
+//         // After update, redirect to the products page
+//         res.redirect('/admin/products');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('An error occurred while updating the product');
+//     }
+// };
+
+
+
+
+// const editProduct = async (req, res) => {
+//     try {
+//         const id = req.params.id
+//         const product = await Product.find({ _id: id })
+//         const data = req.body
+//         const existingProduct = await Product.findOne({
+//             productName: data.productName,
+//             _id: { $ne: id }
+//         })
+
+//         if (existingProduct) {
+//             return res.status(400).json({ error: 'Product with this name already exists. Please try with another name' })
+
+//         }
+//         console.log(data);
+
+//         const images = []
+//         if (req.files && req.files.length > 0) {
+//             for (let i = 0; i < req.files.length; i++) {
+//                 images.push(req.files[i].filename)
+//             }
+//         }
+
+//         let categoryId;
+//         if (req.body.productCategory) {
+//             categoryId = new mongoose.Types.ObjectId(req.body.productCategory);
+//         }
+
+//         // const updateFields = {
+//         //     productName: data.productName,
+//         //     description: data.description,
+//         //     authorName: data.authorName,
+//         //     category: data.category,
+//         //     regularPrice: data.regularPrice,
+//         //     salePrice: data.salePrice,
+//         //     quantity: data.quantity,
+//         //     productOffer: data.offer,
+//         //     numberOfPage: data.numOfPage,
+//         //     stock: data.quantity,
+//         //     publishDate: data.publishDate,
+//         //     publisher: data.publisher,
+//         // };
+//         const updateFields = {
+//             productName: req.body.productName,
+//             description: req.body.productDescription,
+//             authorName: req.body.productAuthor,
+//             category: categoryId,
+//             regularPrice: req.body.productPrice,
+//             salePrice: req.body.salePrice,
+//             quantity: req.body.productStock,
+//             productOffer: req.body.productOffer,
+//             numberOfPage: req.body.productPages,
+//             // stock: req.body.productStock, // Optional if used
+//             publishDate: req.body.productPublishedDate,
+//             publisher: req.body.productPublisher,
+//         };
+//         if (req.files && req.files.length > 0) {
+//             const images = req.files.map(file => file.filename);
+//             updateFields.$push = { productImage: { $each: images } };
+//         }
+
+//         await Product.findByIdAndUpdate(id,  { $set: updateFields })
+//         res.redirect('/admin/products')
+
+//     } catch (error) {
+//         console.error(error);
+
+
+//     }
+// }
+
+
+
+//////////////////////////////
+
+
+const editProduct = async (req, res) => {
     try {
-        const id = req.params.id
-        const product = await Product.find({_id:id})
-        const data = req.body
+        const id = req.params.id;
+
+        // Check if a product with the same name exists (excluding the current product)
         const existingProduct = await Product.findOne({
-            productName:data.productName,
-            _id:{$ne:id}
-        })
+            productName: req.body.productName,
+            _id: { $ne: id }
+        });
 
-        if(existingProduct){
-            return res.status(400).json({error:'Product with this name already exists. Please try with another name'})
-
+        if (existingProduct) {
+            return res.status(400).json({ error: 'Product with this name already exists. Please try with another name' });
         }
-        console.log(data);
+        const category = await Category.find()
 
-        const images =[]
-        if(req.files && req.files.length >0){
-            for(let i=0; i<req.files.length; i++){
-                images.push(req.files[i].filename)
-            }
-        }
-
+        // Map incoming request body to schema fields
         const updateFields = {
-            productName: data.productName,
-            description: data.description,
-            authorName: data.authorName,
-            category: data.category, 
-            regularPrice: data.regularPrice,
-            salePrice: data.salePrice, 
-            quantity: data.quantity,
-            productOffer: data.offer, 
-            numberOfPage: data.numOfPage, 
-            stock: data.quantity, 
-            publishDate: data.publishDate,
-            publisher: data.publisher,
+            productName: req.body.productName,
+            description: req.body.productDescription,
+            authorName: req.body.productAuthor,
+            category: req.body.category,
+            regularPrice: req.body.productPrice,
+            salePrice: req.body.salePrice,
+            quantity: req.body.productStock,
+            productOffer: req.body.productOffer,
+            numberOfPage: req.body.productPages,
+            stock: req.body.productStock, // Optional if used
+            publishDate: req.body.productPublishedDate,
+            publisher: req.body.productPublisher,
         };
+
+        // Handle uploaded images
         if (req.files && req.files.length > 0) {
             const images = req.files.map(file => file.filename);
-            updateFields.$push = { productImage: { $each: images } }; 
+            updateFields.productImage = images; // Overwrite existing images
         }
 
-        await Product.findByIdAndUpdate(id,updateFields)
-        res.redirect('/admin/products')
- 
+        // Update the product in the database
+        await Product.findByIdAndUpdate(id, { $set: updateFields });
+
+        // Redirect to the product list page
+        res.redirect('/admin/products');
     } catch (error) {
-        console.error(error);
-
-        
+        console.error("Error editing product:", error);
+        res.status(500).send("Internal Server Error");
     }
-}
+};
 
 
-const deleteSingleImage = async(req,res)=>{
+const deleteSingleImage = async (req, res) => {
     try {
-        const {imageNameToServer, productIdToServer} = req.body
-        const product= await Product.findByIdAndUpdate(productIdToServer,{$pull:{productImage:imageNameToServer}})
-        const imagePath = path.join('public','uploads','re-image','imageNameToServer')
-        if(fs.existsSync(imagePath)){
+        const { imageNameToServer, productIdToServer } = req.body
+        const product = await Product.findByIdAndUpdate(productIdToServer, { $pull: { productImage: imageNameToServer } })
+        const imagePath = path.join('public', 'uploads', 're-image', 'imageNameToServer')
+        if (fs.existsSync(imagePath)) {
             await fs.unlinkSync(imagePath)
             console.log(`Image ${imageNameToServer} deleted successfully`);
-        }else{
+        } else {
             console.log(`Image ${imageNameToServer} not found`);
-            
+
         }
-        res.send({status:true})
-        
+        res.send({ status: true })
+
     } catch (error) {
         res.redirect('')
     }
