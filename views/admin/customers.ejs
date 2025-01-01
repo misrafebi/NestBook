@@ -173,6 +173,11 @@
 
 
                     <div class="d-flex justify-content-between mb-3">
+                        <% if (customers.length===0) { %>
+                            <div class="col-md-12">
+                                <p>No customers found.</p>
+                            </div>
+                            <% } else { %>
 
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -254,6 +259,7 @@
                     </div>
 
                     <table class="table" id="list-table">
+                        
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
@@ -286,6 +292,7 @@
                                 </tr>
                                 <% }); %>
                         </tbody>
+                        <% } %>
                     </table>
 
                     <!-- Edit User Modal -->
@@ -460,7 +467,7 @@
             isActive: document.getElementById('editUserActive').value === 'true',
         };
 
-        // Send the update request
+        //  Send the update request
         fetch(`/admin/customers/${userId}`, {
             method: 'PATCH',
             headers: {

@@ -7,41 +7,83 @@ const env = require('dotenv').config();
 const bcrypt = require('bcrypt');
 const category = require('../../models/categorySchema');
 const Product = require('../../models/productSchema');
+const Category = require('../../models/categorySchema');
 
+// const loadHomePage = async (req, res) => {
+
+//     try {
+//         const user = req.session.user
+//         const categories = await Category.find({ isListed: true })
+//         let products = await Product.find({
+//             isBlocked: false,
+//             category: { $in: categories.map(category => category._id) },
+//             quantity: { $gt: 0 }
+//         })
+
+//         products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+//         products = products.slice(0, 4)
+
+//         console.log(products);
+//         products.forEach(product => console.log(product.productImage));
+
+//         res.render('user/home', { products:products })
+//     } catch (error) {
+
+//     }
+
+// }
+ 
 const loadHomePage = async (req, res) => {
-
     try {
-        const products = await Product.find({})
-        res.render('user/home',{products})
+        const user = req.session.user;
+        const categories = await Category.find({ isListed: true });
+        let products = await Product.find({
+            isBlocked: true,
+            category: { $in: categories.map(category => category._id) },
+            quantity: { $gt: 0 }
+        });
+
+        products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        products = products.slice(0, 4);
+
+        
+        // console.log("Product images:", products.map(product => product.productImage));
+        // console.log("Image paths:", products.map(product => `/uploads/re-image/${product.productImage[0]}`));
+
+
+        res.render('user/home', { products });
     } catch (error) {
-        
+        console.error("Error loading home page:", error);
+        res.status(500).send("Internal Server Error");
     }
-    // try {
-    //     const user = req.session.user;
-        
-    //     const categories = await category.find();
-
-
-        
-    //     const productData = await Product.find({
-    //         isBlocked: false,
-    //         category: { $in: categories.map(category => category._id) },
-    //         quantity: { $gt: 0 }
-    //     });
-
-    //     const sortedProductData = productData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4);
-
-    //     if (user) {
-    //         const userData = await User.findOne({ _id: user._id });
-    //         return res.render('user/home', { user: userData, products: sortedProductData });
-    //     } else {
-    //         return res.render('user/home', { products: sortedProductData });
-    //     }
-    // } catch (error) {
-    //     console.log('Home Page not found', error);
-    //     res.status(500).send('Server error');
-    // }
 };
+
+// try {
+//     const user = req.session.user;
+
+//     const categories = await category.find();
+
+
+
+//     const productData = await Product.find({
+//         isBlocked: false,
+//         category: { $in: categories.map(category => category._id) },
+//         quantity: { $gt: 0 }
+//     });
+
+//     const sortedProductData = productData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 4);
+
+//     if (user) {
+//         const userData = await User.findOne({ _id: user._id });
+//         return res.render('user/home', { user: userData, products: sortedProductData });
+//     } else {
+//         return res.render('user/home', { products: sortedProductData });
+//     }
+// } catch (error) {
+//     console.log('Home Page not found', error);
+//     res.status(500).send('Server error');
+// }
+// };
 
 
 
@@ -179,7 +221,7 @@ const verifyOtp = async (req, res) => {
 
 const resentOtp = async (req, res) => {
     try {
-        const { email } = req.session.userData; 
+        const { email } = req.session.userData;
         const newOtp = generateOtp();
 
         const emailSent = await sendVerificationEmail(email, newOtp);
@@ -191,7 +233,7 @@ const resentOtp = async (req, res) => {
             });
         }
 
-        req.session.userOtp = newOtp; 
+        req.session.userOtp = newOtp;
         res.status(200).json({
             success: true,
             message: 'OTP resent successfully.',
@@ -345,13 +387,13 @@ const resetPassword = async (req, res) => {
         if (!user) {
             return res.status(404).send('User not found');
         }
-     
-        const hashedPassword = await bcrypt.hash(newPassword, 10);      
-        user.password = hashedPassword;       
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
         await user.save();
-       
+
         req.session.destroy();
-        res.redirect('/user/home'); 
+        res.redirect('/user/home');
     } catch (error) {
         console.error('Error resetting password:', error);
         res.status(500).send('Server error');
@@ -361,7 +403,7 @@ const resetPassword = async (req, res) => {
 
 const resentForgotOtp = async (req, res) => {
     try {
-        const { email } = req.session.userData; 
+        const { email } = req.session.userData;
         const newOtp = generateOtp();
 
         const emailSent = await sendVerificationEmail(email, newOtp);
@@ -373,7 +415,7 @@ const resentForgotOtp = async (req, res) => {
             });
         }
 
-        req.session.userOtp = newOtp; 
+        req.session.userOtp = newOtp;
         res.status(200).json({
             success: true,
             message: 'OTP resent successfully.',
@@ -398,23 +440,6 @@ const logout = (req, res) => {
     });
 };
 
-const productDetails = async (req, res) => {
-    try {
-        const id = req.query.id; 
-        const product = await Product.findOne({ _id: id }) 
-        const categories = await category.find(); 
-        if (!product) {
-            return res.status(404).send('Product not found');
-        }
-
-        res.render('user/productDetail', { product,categories }); 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-
 
 module.exports = {
     loadHomePage,
@@ -434,5 +459,5 @@ module.exports = {
     loadResetPassword,
     resetPassword,
     resentForgotOtp,
-    productDetails
+    // productDetails
 }

@@ -1,3 +1,69 @@
+<style>
+    .product-img img {
+        width: 203px;
+        height: 337px;
+    object-fit: cover; /* Crop the image to fit while maintaining aspect ratio */
+    border-radius: 5px; /* Optional: Add rounded corners */
+}
+/* Wishlist Icon Styling */
+.wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 50%;
+    z-index: 2;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.2);
+    background: #ff6f61;
+    color: white;
+}
+
+/* Book Title Styling */
+.book-title {
+    font-weight: bold;
+    font-size: 1.05rem;
+    margin: 10px 0;
+    /* text-align: center; */
+    text-transform: uppercase;
+}
+
+/* Add to Cart Button Styling */
+.add-to-cart-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgb(87, 87, 87);
+    color: #333;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background: #686565;
+    color: white;
+}
+
+/* Image Styling for Consistent Size */
+/* .product-img img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    position: relative;
+} */
+
+</style>
+
 <!------- HEADER --------->
 <%- include('../partials/user/header') %>
     <!------------------------>
@@ -112,10 +178,13 @@
 
         <!------------->
         <br><br><br><br>
-        <div class="container my-4">
-            <h4 class="text-center mb-4">Latest</h4>
+        <!-- <div class="container my-4">
+            <h4 class="text-center mb-4">New Arrivals</h4>
             <div class="row">
-                <% for (let i = 0; i < products.length; ++i) { %>
+                <% if (products.length > 0) { %>
+                
+                <% for (let i = 0; i < products.length; i++) { %>
+                   
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                     <div class="product-cart-wrap mb-30">
                         <div class="product-img-action-wrap">
@@ -124,7 +193,8 @@
                                    
                                 
                                 <a href="/user/productDetails?id=<%= products[i]._id %>">
-                                    <img class="default-img" src="/uploads/re-image/<%=products[i].productImage[0]%>" alt="<%= products[i].productName %>">
+                                    <img class="default-img" src="/<%= products[i].productImage[0] %>" alt="<%= products[i].productName %>">
+
                                 </a>
                             </div>
                             <a href="" class="wishlist-btn">
@@ -136,15 +206,86 @@
                         </div>
                         <div class="product-content-wrap">
                             <h6><%=products[i].productName%></h6>
-                            <h5><%=products[i].salePrice%></h5>
+                            <h5>₹<%=products[i].salePrice%></h5>
                             <a href="/addToCart?id=<%=products[i]._id%>">Add to cart</a>
                         </div>
                     </div>
                 </div>
                 <% } %>
+                <% } else { %>
+                    <p>No products available</p>
+                <% } %>
+            </div>
+        </div> -->
+        
+        <div class="container my-4">
+            <h4 class="text-center mb-4">New Arrivals</h4>
+            <div class="row">
+                <% if (products.length > 0) { %>
+                <% for (let i = 0; i < products.length; i++) { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="product-cart-wrap mb-30">
+                        <div class="product-img-action-wrap">
+                            <div class="product-img product-img-zoom">
+                                <a href="/user/productDetails?id=<%= products[i]._id %>">
+                                    <img class="default-img" src="/<%= products[i].productImage[0] %>" alt="<%= products[i].productName %>">
+                                </a>
+                                <!-- Wishlist Icon -->
+                                <a href="/addToWishlist?id=<%=products[i]._id%>" class="wishlist-btn">
+                                    <i class="fas fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-content-wrap">
+                            <h6 class="book-title"><%=products[i].productName%></h6>
+                            <h5>₹<%=products[i].salePrice%></h5>
+                            <!-- Add to Cart Button -->
+                            <a href="/addToCart?id=<%=products[i]._id%>" class="btn add-to-cart-btn">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <% } else { %>
+                <p>No products available</p>
+                <% } %>
             </div>
         </div>
         
+
+        <!-- <div class="container my-4">
+            <h4 class="text-center mb-4">New Arrivals</h4>
+            <div class="row">
+                <% if (products.length > 0) { %>
+                    <% for (let i = 0; i < products.length; i++) { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="/user/productDetails?id=<%= products[i]._id %>">
+                                            <img class="default-img" src="/<%= products[i].productImage[0] %>" alt="<%= products[i].productName %>">
+                                        </a>
+                                    </div>
+                                    <a href="" class="wishlist-btn">
+                                        <i class="fas fa-heart"></i> 
+                                    </a>
+                                </div>
+                                <div class="product-action-1">
+                                    <a href="/addToWishlist?id=<%=products[i]._id%>" aria-label="Add to wishlist" class="action-btn hover-up"></a>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <h6>**<%= products[i].productName %>**</h6> 
+                                    <h5>₹<%= products[i].salePrice %></h5>
+                                    <button class="btn btn-light">Add to cart</button> 
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <p>No products available</p>
+                <% } %>
+            </div>
+        </div> -->
+
     </main>
 
     <!---------------->

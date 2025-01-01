@@ -76,18 +76,21 @@ router.delete('/deleteCategory/:id',adminAuth.noCache, adminAuth.checkSession, c
 
 
 router.get('/products', adminAuth.noCache, adminAuth.checkSession, productController.loadProducts)
-router.get('/addProduct', adminAuth.checkSession, productController.loadAddProducts)
-// router.post('/addProduct', productController.addProduct);
-router.post('/addProduct', adminAuth.checkSession, upload.array('images', 4), productController.addProduct);
-router.get('/listProduct/:id',adminAuth.checkSession, productController.listProduct)
-router.get('/unlistProduct/:id',adminAuth.checkSession, productController.unlistProduct)
-router.post('/toggleProduct/:id',adminAuth.checkSession, productController.toggleProduct)
-router.get('/editProduct',adminAuth.checkSession, productController.loadEditProduct) 
-router.get('/search',adminAuth.checkSession, productController.searchProduct)
-router.get('/products/:id',adminAuth.checkSession, productController.getProductDetails);
-router.post('/editProduct/:id',adminAuth.checkSession, upload.array('images',4),productController.editProduct)
-// router.patch('/editProduct/', productController.updateProduct);
-router.post('/deleteImage',adminAuth.checkSession, productController.deleteSingleImage)
+router.get('/addProduct', adminAuth.noCache, adminAuth.checkSession, productController.loadAddProducts)
+router.post('/addProduct', adminAuth.noCache, adminAuth.checkSession, upload.array('images', 4), productController.addProduct);
+router.get('/listProduct/:id', adminAuth.noCache, adminAuth.checkSession, productController.listProduct)
+router.get('/unlistProduct/:id', adminAuth.noCache, adminAuth.checkSession, productController.unlistProduct)
+router.post('/toggleProduct/:id', adminAuth.noCache, adminAuth.checkSession, productController.toggleProduct)
+router.get('/editProduct', adminAuth.noCache, adminAuth.checkSession, productController.loadEditProduct) 
+router.get('/search', adminAuth.noCache, adminAuth.checkSession, productController.searchProduct)
+router.get('/products/:id', adminAuth.noCache, adminAuth.checkSession, productController.getProductDetails);
+router.post('/editProduct/:id', adminAuth.noCache, adminAuth.checkSession, upload.array('images',4),productController.editProduct)
+router.post('/deleteImage', adminAuth.noCache, adminAuth.checkSession, productController.deleteSingleImage)
+
+
+
+
+/////////////////
 
 
 module.exports = router

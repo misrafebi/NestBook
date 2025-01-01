@@ -3,6 +3,10 @@ const router = express.Router()
 
 const userController = require('../controllers/user/userController')
 const passport = require('passport')
+const userAuth = require('../middlewares/userAuth')
+const productDetails = require('../controllers/user/productsDetails')
+
+
 
 router.get('/home',userController.loadHomePage)
 router.get('/pageNotFound',userController.pageNotFound)
@@ -37,7 +41,18 @@ router.post('/reset-password',userController.resetPassword)
 router.post('/resend-forgot-otp',userController.resentForgotOtp)
 
 
-router.get('/productDetails:id',userController.productDetails)
+router.get('/productDetails',productDetails.productDetails)
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router
 

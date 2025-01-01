@@ -1,24 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNest - Atomic Habits</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .product-image {
-            max-width: 300px;
-            margin-right: 20px;
+        .product-detail-page {
+            margin-top: 20px;
         }
 
-        .wishlist-button {
+        /* .product-title {
+    font-weight: bold;
+    font-size: 24px;
+    text-transform: uppercase;
+} */
+
+        /* .product-price {
+    color: #e63946;
+    font-size: 20px;
+    margin-top: 10px;
+} */
+
+        .product-size {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        /* .carousel-inner img {
+    max-height: 400px;
+    object-fit: cover;
+} */
+        .carousel-item img {
+            width: 296px !important;
+            /* Set fixed width */
+            height: 490px !important;
+            /* Set fixed height */
+            object-fit: cover;
+            /* Crop the image while maintaining aspect ratio */
+            border-radius: 5px;
+            /* Optional: Add rounded corners */
+        }
+
+        .img {
+            /* width: 296px !important;
+            height: 490px !important; */
+            object-fit: cover;
+            /* Crop the image to fit while maintaining aspect ratio */
+            border-radius: 5px;
+            /* Optional: Add rounded corners */
+        }
+
+        .wishlist-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #f0f0f0;
-            border: none;
+            background: rgba(20, 2, 2, 0.8);
             padding: 5px;
             border-radius: 50%;
+            z-index: 2;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.2);
+            background: #ff6f61;
+            color: white;
         }
 
         .wishlist-button i {
@@ -62,101 +113,256 @@
         .suggestion-item img {
             max-width: 100px;
         }
-        .mb-3, .my-3 {
-    width: 190px;
-    margin-bottom: 1rem !important;
+
+        #img-size {
+            height: 490px;
+            position: relative;
+            width: 297px;
+            overflow: hidden;
+        }
+
+        #productCarousel {
+            height: 490px;
+            width: 297px;
+        }
+
+        .mb-3,
+        .my-3 {
+           
+            width: 190px;
+            margin-bottom: 1rem !important;
+        }
+
+        #cart-btn {
+    background-color: #FF9F00;  /* Corrected color code */
+    border-color: #FF9F00;
+    width: 145px;
 }
+#cart-btn:hover{
+    color: #ab8b57;
+    color: #ddd;
+}
+#buy-btn{
+    background-color: #FB641B;
+    border-color: #FB641B;
+    color: #ddd;
+    width: 145px;
+}
+#buy-btn:hover{
+    color: #eb9164;
+    color: #ddd;
+}
+
+.quantity-form{
+    width: 100px;
+   border: none;
+   background-color: rgb(230, 230, 230);
+}
+.quality-btn{
+    border: none;
+    /* border-radius: 5px; */
+
+}
+.quality-div {
+    background-color: rgb(230, 230, 230);
+    border-radius: 5px;
+
+}
+
+
     </style>
 </head>
-<body>
-<!------- HEADER --------->
-<%- include('../partials/user/header') %>
-    <!------------------------>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="product-image">
-                    <img src="" alt="product">
-                    <button class="wishlist-button"><i class="fas fa-heart"></i></button>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="product-details">
-                    <h3><%=product.productName%></h3>
-                    <!-- <p>Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones by James Clear</p> -->
-                    <div class="d-flex align-items-center">
-                        <p class="mr-2">Rating:</p>
-                        <span class="text-primary">4.5/5</span>
-                        <span class="text-muted">(100+ reviews)</span>
-                    </div>
-                    <p>Stock:
-                        <% if (product.quantity > 0) { %>
-                            In Stock
-                          <% } else { %>
-                            Out of Stock
-                          <% } %>
-                    </p>
-                    <p>Price: ₹ <%=product.salePrice%></p>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" type="button">-</button>
+<body>
+    <!------- HEADER --------->
+    <%- include('../partials/user/header') %>
+        <!------------------------>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <div class="container product-detail-page">
+                        <div class="row">
+                            <!-- Product Images Carousel -->
+                            <div class="col-md-6">
+                                <div>
+                                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner" id="img-size">
+                                        <% for (let i=0; i < product.productImage.length; i++) { %>
+                                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                                <img src="/<%= product.productImage[i] %>" class="d-block w-100"
+                                                    alt="Product Image <%= i + 1 %>" />
+                                                <a href="/addToWishlist?id=<%=product._id%>" class="wishlist-btn">
+                                                    <i class="fas fa-heart" style="color: #ddd;"></i>
+                                                </a>
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                    <br>
+                                    <!-- Carousel Controls -->
+                                    <button class="btn btn-primary" id="cart-btn">Add to Cart</button>
+                                    <button class="btn btn-outline-primary" id="buy-btn">Buy Now</button>
+                                   
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- Product Details -->
+                            <!-- <div class="col-md-6">
+                            <h2 class="product-title"><%= product.productName %></h2>
+                            <p class="product-price">₹<%= product.salePrice %></p>
+                            <p class="product-size">Size: <%= product.size %></p>
+                            <button class="btn btn-light">Add to Wishlist</button>
+                            <button class="btn btn-primary">Add to Cart</button>
+                        </div> -->
                         </div>
-                        <input type="text" class="form-control text-center" value="1">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">+</button>
-                        </div>
                     </div>
-                    <button class="btn btn-primary">Add to Cart</button>
-                    <button class="btn btn-outline-primary">Buy Now</button>
-                    <hr>
-                    <button class="btn btn-link">Details</button>
-                    <button class="btn btn-link">Reviews</button>
+
+
+                    <!-- <div class="product-image">
+                    <img class="default-img img" src="/<%= product.productImage[0] %>" alt="<%= product.productName %>">
+                    <a href="/addToWishlist?id=<%=product._id%>" class="wishlist-btn">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                </div> -->
                 </div>
-                <div class="product-details">
-                    <h4>Product Details</h4>
-                    <!-- <p>No matter your goals, Atomic Habits offers a proven framework for improving every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.</p> -->
-                    <p><%=product.description%></p>
-                    <table>
-                        <tr>
-                            <th>Book Name</th>
-                            <td><%=product.productName%></td>
-                        </tr>
-                        <tr>
-                            <th>Author Name</th>
-                            <td><%=product.authorName%></td>
-                        </tr>
-                        <tr>
-                            <th>No-of Pages</th>
-                            <td><%=product.numberOfPage%></td>
-                        </tr>
-                        <tr>
-                            <th>Category</th>
-                            <td><%=product.category%></td>
-                        </tr>
-                        <tr>
-                            <th>Offer</th>
-                            <td>₹<%=product.productOffer%></td>
-                        </tr>
-                        <tr>
-                            <th>Available Quantity</th>
-                            <td><%=product.quantity%></td>
-                        </tr>
-                        <tr>
-                            <th>Publisher</th>
-                            <td><%=product.publisher%></td>
-                        </tr>
-                        <tr>
-                            <th>Publish Date</th>
-                            <td><%=product.publishDate%></td>
-                        </tr>
-                    </table>
+               
+                <div class="col-md-8">
+                    <br>
+                    <div class="product-details">
+                        <h3>
+                            <%=product.productName%>
+                        </h3>
+                        <!-- <p>Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones by James Clear</p> -->
+                        <div class="d-flex align-items-center">
+                            <p class="mr-2">Rating:</p>
+                            <span class="text-primary">4.5/5</span>
+                            <span class="text-muted">(100+ reviews)</span>
+                        </div>
+                        <p>Stock:
+                            <% if (product.quantity> 0) { %>
+                                In Stock
+                                <% } else { %>
+                                    Out of Stock
+                                    <% } %>
+                        </p>
+                        <p>Price: ₹ <%=product.salePrice%>
+                        </p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend quality-div ">
+                                <button class="btn  quality-btn" type="button">-</button>
+                            </div>
+                            <input type="text" id="form-control" class=" text-center quantity-form" value="1" >
+                            <div class="input-group-append quality-div ">
+                                <button class="btn  quality-btn" type="button">+</button>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- <button class="btn btn-primary" id="cart-btn">Add to Cart</button>
+                        <button class="btn btn-outline-primary" id="buy-btn">Buy Now</button> -->
+                        <hr>
+                        <br>
+                        <button class="btn btn-outline-light">Details</button>
+                        <button class="btn btn-light">Reviews</button>
+                        <br><br>
+                    </div>
+                    <div class="product-details">
+                        <h4>Product Details</h4>
+                        <!-- <p>No matter your goals, Atomic Habits offers a proven framework for improving every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.</p> -->
+                        <p>
+                            <%=product.description%>
+                        </p>
+                        <br>
+                        <table>
+                            <% if(product.productName){%>
+                            <tr>
+                                <th>Book Name</th>
+                                <td>
+                                    <%=product.productName%>
+                                </td>
+                            </tr>
+                            <%}%>
+                            
+                            <% if(product.authorName){%>
+                            <tr>
+                                <th>Author Name</th>
+                                <td>
+                                    <%=product.authorName%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.numberOfPage){%>
+                            <tr>
+                                <th>No-of Pages</th>
+                                <td>
+                                    <%=product.numberOfPage%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.category.name){%>
+                            <tr>
+                                <th>Category</th>
+                                <td>
+                                    <%=product.category.name%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.productOffer){%>
+                            <tr>
+                                <th>Offer</th>
+                                <td>₹<%=product.productOffer%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.quantity){%>
+                            <tr>
+                                <th>Available Quantity</th>
+                                <td>
+                                    <%=product.quantity%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.publisher){%>
+                            <tr>
+                                <th>Publisher</th>
+                                <td>
+                                    <%=product.publisher%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                            <% if(product.publishDate){%>
+                            <tr>
+                                <th>Publish Date</th>
+                                <td>
+                                    <%=product.publishDate%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- <div class="container">
+        <!-- <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <h4 class="mt-5">You might also like</h4>
@@ -178,16 +384,18 @@
 
 
 
-    <!------- FOOTER --------->
-    <%- include('../partials/user/loginFooter')%>
+        <!------- FOOTER --------->
+        <%- include('../partials/user/loginFooter')%>
 
-    <!-- -------------------- -->
+            <!-- -------------------- -->
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
