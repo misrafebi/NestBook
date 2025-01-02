@@ -171,24 +171,67 @@ const saveCategory = async (req, res) => {
 // };
 
 ////////////////////////
+// const updateCategory = async (req, res) => {
+//     try {
+//         const { id, name, description, parentCategory } = req.body;
+
+//         console.log('Request Body:', req.body);
+//         const existingCategory = await Category.findOne({ name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
+
+//         // Check if the category name already exists, excluding the current category
+//         // const existingCategory = await Category.findOne({ name, _id: { $ne: id } });
+
+//         if (existingCategory) {
+//             return res.json({
+//                 success: false,
+//                 errorMessage: 'Category name already exists',
+//             });
+//         }
+
+//         // Update the category if no name conflict
+//         await Category.findByIdAndUpdate(id, {
+//             name,
+//             description,
+//             parentCategory,
+//         });
+
+//         // Send success message
+//         return res.json({
+//             success: true,
+//             successMessage: 'Category updated successfully',
+//         });
+//     } catch (error) {
+//         console.error('Error updating category:', error);
+
+//         // Send error response
+//         return res.json({
+//             success: false,
+//             errorMessage: 'An error occurred while updating the category.',
+//         });
+//     }
+// };
 const updateCategory = async (req, res) => {
     try {
         const { id, name, description, parentCategory } = req.body;
 
         console.log('Request Body:', req.body);
-        const existingCategory = await Category.findOne({ name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
 
-        // Check if the category name already exists, excluding the current category
-        // const existingCategory = await Category.findOne({ name, _id: { $ne: id } });
+        // Fetch the existing category by ID
+        const existingCategory = await Category.findById(id);
 
-        if (existingCategory) {
-            return res.json({
-                success: false,
-                errorMessage: 'Category name already exists',
-            });
+        // If the name has been changed, check for duplicates
+        if (existingCategory.name !== name) {
+            const duplicateCategory = await Category.findOne({ name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
+
+            if (duplicateCategory) {
+                return res.json({
+                    success: false,
+                    errorMessage: 'Category name already exists',
+                });
+            }
         }
 
-        // Update the category if no name conflict
+        // Update the category with the new values
         await Category.findByIdAndUpdate(id, {
             name,
             description,

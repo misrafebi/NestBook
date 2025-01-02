@@ -793,25 +793,44 @@ const editProduct = async (req, res) => {
 //     }
 // };
 
-
 const deleteSingleImage = async (req, res) => {
     try {
-        const { imageNameToServer, productIdToServer } = req.body
-        const product = await Product.findByIdAndUpdate(productIdToServer, { $pull: { productImage: imageNameToServer } })
-        const imagePath = path.join('public', 'uploads', 'imageNameToServer')
+        const { imageNameToServer, productIdToServer } = req.body;
+
+        console.log(imageNameToServer);
+        console.log(productIdToServer);
+        
+        
+
+        // Update the product document by removing the image from the product's productImage array
+        const product = await Product.findByIdAndUpdate(productIdToServer, {
+            $pull: { productImage: imageNameToServer }
+        });
+
+        if (!product) {
+            return res.status(404).send({ status: false, message: "Product not found" });
+        }
+
+        // Construct the path to the image file
+        const imagePath = path.join('public', 'uploads', imageNameToServer);
+
+        // Check if the image exists and delete it
         if (fs.existsSync(imagePath)) {
-            await fs.unlinkSync(imagePath)
+            await fs.unlinkSync(imagePath);
             console.log(`Image ${imageNameToServer} deleted successfully`);
         } else {
             console.log(`Image ${imageNameToServer} not found`);
-
         }
-        res.send({ status: true })
+
+        // Send a response back to the client indicating success
+        res.send({ status: true });
 
     } catch (error) {
-        res.redirect('')
+        console.error("Error deleting image:", error);
+        res.status(500).send({ status: false, message: "Server error" });
     }
-}
+};
+
 
 
 const getProductDetails = async (req, res) => {

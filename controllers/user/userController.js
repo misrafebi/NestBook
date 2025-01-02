@@ -50,6 +50,7 @@ const loadHomePage = async (req, res) => {
         // console.log("Product images:", products.map(product => product.productImage));
         // console.log("Image paths:", products.map(product => `/uploads/re-image/${product.productImage[0]}`));
 
+console.log(products);
 
         res.render('user/home', { products });
     } catch (error) {
@@ -57,6 +58,7 @@ const loadHomePage = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 // try {
 //     const user = req.session.user;
@@ -97,7 +99,8 @@ const pageNotFound = async (req, res) => {
 
 const loadSignup = async (req, res) => {
     try {
-        return res.render('user/signup')
+        const categories = await Category.find()
+        return res.render('user/signup',{categories})
     } catch (error) {
         console.log('Signup page is not Loading');
 
@@ -141,9 +144,11 @@ async function sendVerificationEmail(email, otp) {
 
 const signup = async (req, res) => {
     try {
+        const categories = await Category.find()
+
         const { name, confirmPassword, email, password } = req.body;
         if (password !== confirmPassword) {
-            return res.render('user/signup', { message: "Password do not match" })
+            return res.render('user/signup', { message: "Password do not match",categories })
         }
         console.log(req.body);
 
@@ -186,6 +191,7 @@ const securePassword = async (password) => {
 }
 const verifyOtp = async (req, res) => {
     try {
+
         const { otp } = req.body
         console.log(otp);
         if (otp.toString() === req.session.userOtp) {
@@ -247,15 +253,22 @@ const resentOtp = async (req, res) => {
     }
 }
 
-const loadOTPPage = (req, res) => {
-    const { email } = req.query;
-    res.render('user/otp', { email });
+const loadOTPPage = async(req, res) => {
+    try {
+        const categories = await Category.find()
+        const { email } = req.query;
+        res.render('user/otp', { email,categories });
+    } catch (error) {
+        
+    }
+   
 };
 
 
 
-const loadLogin = (req, res) => {
-    res.render('user/login')
+const loadLogin = async(req, res) => {
+    const categories = await Category.find()
+    res.render('user/login',{categories})
 }
 
 const login = async (req, res) => {
@@ -294,7 +307,8 @@ const login = async (req, res) => {
 
 
 const loadForgottPassword = async (req, res) => {
-    res.render('user/forgott-password')
+    const categories = await Category.find()
+    res.render('user/forgott-password',{categories})
 }
 
 const forgottPassword = async (req, res) => {
@@ -333,7 +347,8 @@ const forgottPassword = async (req, res) => {
 }
 
 const loadOTPForgot = async (req, res) => {
-    res.render('user/otp-forgot')
+    const categories = await Category.find()
+    res.render('user/otp-forgot',{categories})
 }
 
 
@@ -360,8 +375,9 @@ const verifyForgotOtp = async (req, res) => {
     }
 }
 
-const loadResetPassword = (req, res) => {
-    res.render('user/reset-password')
+const loadResetPassword = async(req, res) => {
+    const categories = await Category.find()
+    res.render('user/reset-password',{categories})
 }
 
 const resetPassword = async (req, res) => {
@@ -403,6 +419,7 @@ const resetPassword = async (req, res) => {
 
 const resentForgotOtp = async (req, res) => {
     try {
+        
         const { email } = req.session.userData;
         const newOtp = generateOtp();
 
@@ -441,6 +458,8 @@ const logout = (req, res) => {
 };
 
 
+
+
 module.exports = {
     loadHomePage,
     pageNotFound,
@@ -459,5 +478,6 @@ module.exports = {
     loadResetPassword,
     resetPassword,
     resentForgotOtp,
+    // categories
     // productDetails
 }

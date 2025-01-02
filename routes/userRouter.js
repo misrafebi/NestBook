@@ -45,7 +45,7 @@ router.get('/productDetails',productDetails.productDetails)
 
 
 
-
+// router.get('/',userController.categories)
 
 
 

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNest Admin - Edit Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <style>
         .edit-product-container {
             margin-top: 50px;
@@ -37,6 +39,20 @@
             height: 100%;
             object-fit: cover;
         }
+        /* Custom styles for the cross icon */
+.position-relative {
+    position: relative;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+}
+
     </style>
 </head>
 
@@ -270,27 +286,21 @@
                                 <div class="card-header">
                                     <h4>Choose images</h4>
                                 </div>
-                                <% for(let i=0; i<product.productImage.length; i++) {%>
+                                <% for (let i = 0; i < product.productImage.length; i++) { %>
                                     <div class="col-md-12">
-                                        <div class="mb-4">
+                                        <div class="mb-4 position-relative">
                                             <div class="col-12">
-                                                <td>
-                                                    <input type="hidden" value="<%= product.productImage[i]%>"
-                                                        id="imageDatas">
-                                                        <img src="/<%= product.productImage[i] %>" class="d-block w-100" alt="Product Image <%= i + 1 %>" />
-
-                                                    <!-- <img class="rounded" style="width: 50px; height: 60px;"
-                                                        src="/uploads/<%=product.productImage[i]%>" alt="Product Image"> -->
-                                                    <i onclick="deleteSingleImage('<%=product.productImage[i]%>','<%= product._id %> ')"
-                                                        style="position: absolute; margin-left: .5rem; cursor: pointer;"
-                                                        class="fa-thin fa-x"></i>
-                                                </td>
+                                                <input type="hidden" value="<%= product.productImage[i] %>" id="imageDatas">
+                                                <img src="/<%= product.productImage[i] %>" class="d-block rounded" alt="Product Image <%= i + 1 %>" style="width: 50px; height: 60px;" />
+                                                
+                                                <!-- Cross Icon -->
+                                                <i onclick="deleteSingleImage('<%= product.productImage[i] %>', '<%= product._id %>')" class="fa fa-times-circle delete-icon"></i>
                                             </div>
-
                                         </div>
                                     </div>
-
-                                    <%}%>
+                                <% } %>
+                                
+                                
 
 
                                         <div class="card-body">
@@ -545,17 +555,32 @@
         };
 
         function deleteSingleImage(imageId, productId) {
-            $.ajax({
-                url: '/admin/deleteImage',
-                method: 'post',
-                data: { imageNameToServer: imageId, productIdToServer: productId },
-                success: ((response) => {
-                    if (response.status === true) {
-                        window.location.reload()
-                    }
-                })
-            })
+    $.ajax({
+        url: '/admin/deleteImage',
+        method: 'POST',
+        data: { 
+            imageNameToServer: imageId, 
+            productIdToServer: productId 
+        },
+        success: function(response) {
+            if (response.status === true) {
+                // Remove the image from the page after it's deleted
+                const imageElement = document.querySelector(`img[src='/${imageId}']`);
+                if (imageElement) {
+                    imageElement.parentElement.remove();  // Removes the whole div with the image and icon
+                }
+            } else {
+                alert("Error deleting the image");
+            }
+        },
+        error: function(err) {
+            console.error("Error:", err);
+            alert("An error occurred. Please try again.");
         }
+    });
+}
+
+
 
     </script>
 

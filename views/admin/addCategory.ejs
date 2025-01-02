@@ -51,15 +51,7 @@
 
                        
 
-                        <div class="form-group">
-                            <label for="parentCategory">Parent Category (Optional)</label>
-                            <select class="form-control" id="parentCategory" name="parentCategory">
-                                <option value="">Select Parent Category</option>
-                                <% categories.forEach(category => { %>
-                                    <option value="<%= category.name %>"><%= category.name %></option>
-                                <% }); %>
-                            </select>
-                        </div>
+                        
                         
                         <button type="submit" class="btn btn-primary category-btn mx-2">SAVE</button>
                         <button type="reset" class="btn btn-secondary category-btn  mx-2">CLEAR</button>

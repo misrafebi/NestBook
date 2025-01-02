@@ -52,6 +52,9 @@
     background: #686565;
     color: white;
 }
+#orginal-price{
+    color: #9e9d9d;
+}
 
 /* Image Styling for Consistent Size */
 /* .product-img img {
@@ -65,8 +68,7 @@
 </style>
 
 <!------- HEADER --------->
-<%- include('../partials/user/header') %>
-    <!------------------------>
+<%- include('../partials/user/header') %>        <!------------------------>
 
     <!--  BODY -->
     <link rel="stylesheet" href="/user/home.css">
@@ -222,6 +224,7 @@
             <h4 class="text-center mb-4">New Arrivals</h4>
             <div class="row">
                 <% if (products.length > 0) { %>
+                    
                 <% for (let i = 0; i < products.length; i++) { %>
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                     <div class="product-cart-wrap mb-30">
@@ -238,7 +241,7 @@
                         </div>
                         <div class="product-content-wrap">
                             <h6 class="book-title"><%=products[i].productName%></h6>
-                            <h5>₹<%=products[i].salePrice%></h5>
+                            <h6>₹<%= products[i].salePrice %> <del id="orginal-price">₹<%= products[i].regularPrice %></del></h6>
                             <!-- Add to Cart Button -->
                             <a href="/addToCart?id=<%=products[i]._id%>" class="btn add-to-cart-btn">Add to cart</a>
                         </div>

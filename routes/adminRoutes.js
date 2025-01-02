@@ -85,7 +85,8 @@ router.get('/editProduct', adminAuth.noCache, adminAuth.checkSession, productCon
 router.get('/search', adminAuth.noCache, adminAuth.checkSession, productController.searchProduct)
 router.get('/products/:id', adminAuth.noCache, adminAuth.checkSession, productController.getProductDetails);
 router.post('/editProduct/:id', adminAuth.noCache, adminAuth.checkSession, upload.array('images',4),productController.editProduct)
-router.post('/deleteImage', adminAuth.noCache, adminAuth.checkSession, productController.deleteSingleImage)
+// Route for deleting the image
+router.post('/deleteImage', adminAuth.noCache, adminAuth.checkSession, productController.deleteSingleImage);
 
 
 
