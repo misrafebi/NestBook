@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+
+        .form-group img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .form-group .remove-image {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;
+        }
+        .form-container {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+    </style>
+</head>
+
+<body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
+        </ol>
+    </nav>
+    <div class="container">
+        <h4>Add Product</h4>
+       <br>
+        <div class="form-container">
+            <form>
+                <div class="form-group">
+                    <label for="bookImage">Photo</label>
+                    <div class="position-relative">
+                        <img src="book-cover.jpg" alt="Book Cover" id="bookImage">
+                        <button type="button" class="remove-image">&times;</button>
+                    </div>
+                    <input type="file" class="form-control-file" id="bookImageUpload">
+                </div>
+                <div class="form-group">
+                    <label for="bookName">Book Name</label>
+                    <input type="text" class="form-control" id="bookName" >
+                </div>
+                <div class="form-group">
+                    <label for="authorName">Author Name</label>
+                    <input type="text" class="form-control" id="authorName" >
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" >
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <select class="form-control" id="stock">
+                        <option>Available</option>
+                        <option>Unavailable</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="publishedDate">Published Date</label>
+                    <input type="date" class="form-control" id="publishedDate">
+                </div>
+                <div class="form-group">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" class="form-control" id="publisher" >
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" class="form-control" id="price" >
+                </div>
+                <div class="form-group">
+                    <label for="offer">Offer</label>
+                    <input type="text" class="form-control" id="offer" ]>
+                </div>
+                <div class="form-group">
+                    <label for="noOfPages">No-of Pages</label>
+                    <input type="text" class="form-control" id="noOfPages">
+                </div>
+                <div class="form-group">
+                    <label for="availableQuantity">Available Quantity</label>
+                    <input type="number" class="form-control" id="availableQuantity" >
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description"
+                        rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Save</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </form>
+        </div>
+        <br><br>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .order-card {
+            position: relative;
+            /* border: 1px solid #ddd; */
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .order-card img {
+            width: 80px;
+            height: auto;
+        }
+        .order-card .order-details {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        .order-card h5 {
+            margin: 0 0 10px;
+        }
+        .order-status.processing {
+            color: #ffc107;
+        }
+        .order-status.completed {
+            color: #28a745;
+        }
+        .order-status.cancelled {
+            color: #dc3545;
+        }
+        .order-buttons button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#">Profile</a>
+    <a href="#">Login</a>
+    <a href="#">Signup</a>
+    <a href="#">Orders</a>
+    <a href="#">Cart</a>
+    <a href="#">Wishlist</a>
+    <a href="#">Logout</a>
+</div>
+<br>
+<div class="content">
+    <h3>Orders</h3>
+    <br>
+    <div class="order-card">
+        <img src="https://via.placeholder.com/80" alt="Product Image">
+        <div class="order-details">
+            <h5>Product Name</h5>
+            <p>₹500</p>
+            <p class="order-status processing">Processing</p>
+        </div>
+        <div class="order-buttons">
+            <button class="btn btn-primary">View</button>
+            <button class="btn btn-warning">Return</button>
+            <button class="btn btn-danger">Cancel</button>
+        </div>
+    </div>
+    <div class="order-card">
+        <img src="https://via.placeholder.com/80" alt="Product Image">
+        <div class="order-details">
+            <h5>Product Name</h5>
+            <p>₹600</p>
+            <p class="order-status completed">Completed</p>
+        </div>
+        <div class="order-buttons">
+            <button class="btn btn-primary">View</button>
+            <button class="btn btn-warning">Return</button>
+            <button class="btn btn-danger">Cancel</button>
+        </div>
+    </div>
+    <div class="order-card">
+        <img src="https://via.placeholder.com/80" alt="Product Image">
+        <div class="order-details">
+            <h5>Product Name</h5>
+            <p>₹700</p>
+            <p class="order-status cancelled">Cancelled</p>
+        </div>
+        <div class="order-buttons">
+            <button class="btn btn-primary">View</button>
+            <button class="btn btn-warning">Return</button>
+            <button class="btn btn-danger">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Products</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        .product-img {
+            width: 50px;
+            height: auto;
+        }
+        #search-btn{
+            border-radius: 0px 5px 5px 0px;
+            border-color: #d6d1d1;
+        }
+        .sort-box{
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>BookNest</h2>
+        </div>
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Categories</a>
+        <a href="#">Orders</a>
+        <a href="#">Customers</a>
+        <a href="#">Offers</a>
+        <a href="#">Coupon</a>
+        <a href="#">Reviews</a>
+        <a href="#">Change Password</a>
+        <a href="#">Logout</a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h4>Products</h4>
+            <button class="btn btn-dark">+ Add Product</button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="input-group  w-25">
+                <input type="text" class="form-control  w-25" placeholder="Search Coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" id="search-btn" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
+              </div>
+
+            <!-- <input type="text" class="form-control w-25" placeholder="Search Coupon "><span><i class="fa-solid fa-magnifying-glass"></i></span> -->
+            <select class="form-control sort-box">
+                <option>Sort by</option>
+                <option>Code</option>
+                <option>Discount</option>
+                <option>Status</option>
+            </select>
+        </div>
+        <br>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Edit</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="book1.jpg" alt="Will" class="product-img"></td>
+                    <td>Will</td>
+                    <td>₹870</td>
+                    <td><button class="btn btn-primary ">Edit</button></td>
+                    <td><button class="btn btn-success">Unblock</button></td>
+                </tr>
+                
+                
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

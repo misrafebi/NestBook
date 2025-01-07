@@ -29,7 +29,7 @@
             <div class="col-md-6">
                 <div class="login-container p-5">
                     <h2>Login</h2>
-                    <form action="/admin/login" method="post" id="admin-login-form">
+                    <form method="post" id="admin-login-form">
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" >
@@ -58,73 +58,9 @@
 
 
 
-<script>
-
-const email = document.getElementById('email');
-const password = document.getElementById('password');
-
-const emailError = document.getElementById('email-error');
-    const passwordError = document.getElementById('password-error');
-
-    const loginForm = document.getElementById('admin-login-form');
-
-    function emailValidateChecking() {
-        const emailVar = email.value;
-        const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
- 
-        if (!emailVar) {
-            emailError.style.display = 'block';
-            emailError.innerHTML = 'Email cannot be empty';
-        } else if (!emailPattern.test(emailVar)) {
-            emailError.style.display = 'block';
-            emailError.innerHTML = 'Invalid email format';
-        } else {
-            emailError.style.display = 'none';
-            emailError.innerHTML = '';
-        }
-    }
-
-    function passwordValidateChecking() {
-        const passVar = password.value;
-        const alpha = /[a-zA-Z]/;
-        const digit = /\d/;
-
-        if (!passVar) {
-            passwordError.style.display = 'block';
-            passwordError.innerHTML = 'Password cannot be empty';
-        } else if (passVar.length < 8) {
-            passwordError.style.display = 'block';
-            passwordError.innerHTML = 'Password should contain at least 8 characters';
-        } else if (!alpha.test(passVar) || !digit.test(passVar)) {
-            passwordError.style.display = 'block';
-            passwordError.innerHTML = 'Password should contain both numbers and alphabets';
-        } else {
-            passwordError.style.display = 'none';
-            passwordError.innerHTML = '';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        loginForm.addEventListener('submit', function (event) {
-            emailError.style.display = 'none';
-            passwordError.style.display = 'none';
-
-            emailValidateChecking();
-            passwordValidateChecking();
-
-            if (emailError.innerHTML || passwordError.innerHTML) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
 
 
-<% if (errorMessage) { %>
-     <script>
-        alert('<%= errorMessage %>')
-     </script>
-<% } %>
+
 
 </body>
 </html>

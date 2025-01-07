@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Categories</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            margin-left: 20px;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="sidebar">
+        <div class="logo">
+            <h4>BookNest</h4>
+        </div>
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#" class="active">Categories</a>
+        <a href="#">Orders</a>
+        <a href="#">Customers</a>
+        <a href="#">Offers</a>
+        <a href="#">Coupon</a>
+        <a href="#">Reviews</a>
+        <a href="#">Change Password</a>
+        <a href="#">Logout</a>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h4>Categories</h4>
+            <button class="btn btn-dark">+ Add Category</button>
+        </div>
+        <br>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fiction</td>
+                    <td><button class="btn btn-secondary">Edit</button></td>
+                    <td><button class="btn btn-danger">Delete</button></td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

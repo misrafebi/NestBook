@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .book-card {
+            position: relative;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .book-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .book-card .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#">Profile</a>
+    <a href="#">Login</a>
+    <a href="#">Signup</a>
+    <a href="#">Orders</a>
+    <a href="#">Cart</a>
+    <a href="#">Wishlist</a>
+    <a href="#">Wallet</a>
+    <a href="#">Logout</a>
+</div>
+<br>
+<div class="content">
+    <h4>Wishlist</h4>
+    <div class="row">
+       
+        <div class="col-md-3">
+            <div class="book-card">
+                <button class="close-btn">&times;</button>
+                <img src="https://via.placeholder.com/150" alt="Rich Dad Poor Dad">
+                <br><br>
+                <h6>Rich Dad Poor Dad</h6>
+                <p>₹540</p>
+                <button class="btn btn-outline-warning btn-block">Move to Cart</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

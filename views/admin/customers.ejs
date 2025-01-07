@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Customers</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .status-active {
+            color: green;
+        }
+
+        .status-blocked {
+            color: red;
+        }
+
+        #search-btn {
+            border-radius: 0px 5px 5px 0px;
+            border-color: #d6d1d1;
+        }
+
+        .sort-box {
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="text-center mb-4">
+            <h2>BookNest</h2>
+        </div>
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Categories</a>
+        <a href="#">Orders</a>
+        <a href="#" class="active">Customers</a>
+        <a href="#">Offers</a>
+        <a href="#">Coupon</a>
+        <a href="#">Reviews</a>
+        <a href="#">Change Password</a>
+        <a href="#">Logout</a>
+    </div>
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>Customers</h4>
+            <button class="btn btn-dark">+ Add Customer</button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="input-group  w-25">
+                <input type="text" class="form-control  w-25" placeholder="Search Coupon"
+                    aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" id="search-btn" type="button" id="button-addon2"><i
+                        class="fa-solid fa-magnifying-glass"></i></button>
+            </div> 
+            <select class="form-control sort-box">
+                <option>Sort by</option>
+                <option>Code</option>
+                <option>Discount</option>
+                <option>Status</option>
+            </select>
+        </div>
+        <br>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Rahul</td>
+                    <td>rahul@gmail.com</td>
+                    <td class="status-blocked">Blocked</td>
+                    <td><button class="btn btn-primary">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Anil</td>
+                    <td>anil@gmail.com</td>
+                    <td class="status-active">Active</td>
+                    <td><button class="btn btn-primary">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Alan</td>
+                    <td>alan@gmail.com</td>
+                    <td class="status-active">Active</td>
+                    <td><button class="btn btn-primary">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Vishnu</td>
+                    <td>vishnu@gmail.com</td>
+                    <td class="status-active">Active</td>
+                    <td><button class="btn btn-primary">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Jasmin</td>
+                    <td>jasmin@gmail.com</td>
+                    <td class="status-active">Active</td>
+                    <td><button class="btn btn-primary">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

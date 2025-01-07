@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page - Atomic Habits</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-page {
+            padding: 20px;
+        }
+        .product-image-container {
+            position: relative;
+        }
+        .heart-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+        }
+        .heart-button i {
+            font-size: 24px;
+            color: red;
+        }
+        .product-details {
+            margin-top: 20px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .quantity-controls input {
+            width: 60px;
+            text-align: center;
+        }
+        .suggestions {
+            margin-top: 40px;
+        }
+        .suggestions img {
+            max-width: 100%;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+
+        #quantity-input {
+            width: 60px;
+            border: none;
+            background-color: #e3e3e3;
+        }
+
+        .decrement-btn {
+            border: none;
+            background-color: #e3e3e3;
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        .increment-btn {
+            border: none;
+            background-color: #e3e3e3;
+            border-radius: 0px 5px 5px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container product-page">
+        <div class="row">
+            <div class="col-md-4 product-image-container">
+                <img src="atomic-habits.jpg" alt="Atomic Habits" class="img-fluid">
+                <button class="heart-button"><i class="fas fa-heart"></i></button>
+                <div class="mt-3">
+                    <button class="btn btn-warning ">Add to Cart</button>
+                    <button class="btn btn-danger ">Buy Now</button>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <br><br>
+                <h4>ATOMIC HABITS</h4>
+                <p>4.2 - 72 Ratings | INSTOCK</p>
+                <p>₹766</p>
+
+                <div class="quantity-control">
+                    <div class="quantity-control-div">
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
+                            <input type="text" class="form-control " placeholder="1" id="quantity-input"
+                                aria-label="Example text with two button addons">
+                            <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
+                        </div>
+                   </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button class="btn btn-secondary disabled">Details</button>
+                    <button class="btn btn-secondary">Reviews</button>
+                </div>
+                <div class="product-details mt-4">
+                    <h5>Product Details</h5>
+                    <p>Atomic Habits: An Easy and Proven Way to Build Good Habits by James Clear</p>
+                    <table class="table border ">
+                        <tr>
+                            <th>Book Name</th>
+                            <td>Atomic Habits</td>
+                        </tr>
+                        <tr>
+                            <th>Author Name</th>
+                            <td>James Clear</td>
+                        </tr>
+                        <tr>
+                            <th>No-of Page</th>
+                            <td>320 Pages</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>Nonfiction</td>
+                        </tr>
+                        <tr>
+                            <th>Offer</th>
+                            <td>₹130</td>
+                        </tr>
+                        <tr>
+                            <th>Available Quantity</th>
+                            <td>14</td>
+                        </tr>
+                        <tr>
+                            <th>Publisher</th>
+                            <td>Avery (an imprint of Penguin Random House)</td>
+                        </tr>
+                        <tr>
+                            <th>Publish Date</th>
+                            <td>16-10-2018</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="suggestions mt-5">
+            <h3>You Might Also Like</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="suggestion1.jpg" alt="Suggestion 1" class="img-fluid">
+                </div>
+                <div class="col-md-2">
+                    <img src="suggestion2.jpg" alt="Suggestion 2" class="img-fluid">
+                </div>
+                <div class="col-md-2">
+                    <img src="suggestion3.jpg" alt="Suggestion 3" class="img-fluid">
+                </div>
+                <div class="col-md-2">
+                    <img src="suggestion4.jpg" alt="Suggestion 4" class="img-fluid">
+                </div>
+                <div class="col-md-2">
+                    <img src="suggestion5.jpg" alt="Suggestion 5" class="img-fluid">
+                </div>
+                <div class="col-md-2">
+                    <img src="suggestion6.jpg" alt="Suggestion 6" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

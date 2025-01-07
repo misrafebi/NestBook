@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+        .product-card {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+        .product-card .heart-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: red;
+            cursor: pointer;
+        }
+        .product-card .card-body {
+            text-align: center;
+        }
+        .product-card .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <h5>Filters</h5>
+                <div class="mb-4">
+                    <h6>Category</h6>
+                    <ul class="list-unstyled">
+                        <li><input type="checkbox"> New Releases</li>
+                        <li><input type="checkbox"> Fiction</li>
+                        <li><input type="checkbox"> Non-Fiction</li>
+                        <li><input type="checkbox"> Children's Books</li>
+                    </ul>
+                </div>
+                <div class="mb-4">
+                    <h6>Price</h6>
+                    <ul class="list-unstyled">
+                        <li><input type="checkbox"> Under ₹500</li>
+                        <li><input type="checkbox"> ₹500 - ₹1000</li>
+                        <li><input type="checkbox"> ₹1000 - ₹2000</li>
+                        <li><input type="checkbox"> Over ₹2000</li>
+                    </ul>
+                </div>
+                <div class="mb-4">
+                    <h6>Discount</h6>
+                    <ul class="list-unstyled">
+                        <li><input type="checkbox"> 10% Off</li>
+                        <li><input type="checkbox"> 20% Off</li>
+                        <li><input type="checkbox"> 30% Off</li>
+                        <li><input type="checkbox"> 40% Off</li>
+                        <li><input type="checkbox"> 50% Off</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-3 product-card">
+                        <img src="https://via.placeholder.com/150" alt="Product Image">
+                        <div class="heart-icon">&hearts;</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Product Name</h5>
+                            <p class="card-text">₹660</p>
+                            <button class="btn btn-outline-warning btn-block">Add to Cart</button>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

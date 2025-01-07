@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .address-box, .payment-method-box, .order-summary-box {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .order-summary-box img {
+            width: 80px;
+            height: auto;
+        }
+        .order-summary-box .details {
+            margin-left: 20px;
+        }
+        .order-summary-box .price-details {
+            margin-top: 20px;
+        }
+        .continue-btn {
+            background-color: #FF3F6C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+
+        .order-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="address-box">
+                    <h5>Select Delivery Address</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="address" id="address1">
+                        <label class="form-check-label" for="address1">
+                            Rahul, 9447822422<br>
+                            Cherumuttam, Valiyaparamba, Pulikkal,<br>
+                            Malappuram, 673638, Kerala
+                        </label>
+                    </div>
+                    <br>
+                    <button class="btn btn-outline-secondary mt-3">Add New Address</button>
+                </div>
+                <br><br>
+                <div class="payment-method-box">
+                    <h5>Payment Method</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="upi">
+                        <label class="form-check-label" for="upi">
+                            UPI
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard">
+                        <label class="form-check-label" for="creditCard">
+                            Credit Card
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
+                        <label class="form-check-label" for="cod">
+                            Cash on Delivery
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="wallet">
+                        <label class="form-check-label" for="wallet">
+                            Wallet
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="order-summary-box d-flex">
+                    <img src="https://via.placeholder.com/80" alt="The Alchemist">
+                    <div class="details order-summary">
+                        <h5>THE ALCHEMIST</h5>
+                        <div class="summary-item">
+                            <span>Price:</span>
+                            <span>₹666</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Delivered by:</span>
+                            <span></span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Total MRP:</span>
+                            <span>₹1430</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Discount:</span>
+                            <span>₹1430</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Shipping Fee:</span>
+                            <span>₹1430</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Total MRP:</span>
+                            <span>₹1430</span>
+                        </div>
+                        
+                        <button class="continue-btn mt-3  btn-block">Continue</button>
+                    </div>
+                   
+                </div>
+               
+            </div>
+        </div>
+        <div class="mt-4">
+            <h5>You might also like</h5>
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="https://via.placeholder.com/150" alt="Suggestion 1" class="img-fluid">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

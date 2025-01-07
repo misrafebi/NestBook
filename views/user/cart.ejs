@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .cart-container {
+            margin-top: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .cart-item .remove-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .cart-item-details h5 {
+            margin: 0;
+        }
+
+        .cart-item-details .price {
+            color: #666;
+        }
+
+        .order-summary {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .order-summary h5 {
+            margin-bottom: 20px;
+        }
+
+        .order-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-summary .total {
+            font-weight: bold;
+        }
+
+        .place-order-btn {
+            background: #ff5a5f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+
+        #quantity-input {
+            width: 60px;
+            border: none;
+            background-color: #e3e3e3;
+        }
+
+        .decrement-btn {
+            border: none;
+            background-color: #e3e3e3;
+            border-radius: 5px 0px 0px 5px;
+        }
+
+        .increment-btn {
+            border: none;
+            background-color: #e3e3e3;
+            border-radius: 0px 5px 5px 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container cart-container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="cart-item">
+                    <div class="position-relative">
+                        <img src="https://via.placeholder.com/100x150" alt="Product Image">
+                        <button class="remove-btn">&times;</button>
+                    </div>
+                    <div class="cart-item-details">
+                        <h5>Product Name</h5>
+                        <p class="price">₹660</p>
+
+                        <div class="quantity-control">
+                            <div class="quantity-control-div">
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
+                                    <input type="text" class="form-control " placeholder="1" id="quantity-input"
+                                        aria-label="Example text with two button addons">
+                                    <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
+                                </div>
+                           </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="order-summary">
+                    <h5>Order Summary</h5>
+                    <div class="summary-item">
+                        <span>MRP:</span>
+                        <span>₹1430</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Discount:</span>
+                        <span>₹50</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping fee:</span>
+                        <span>₹60</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total Amount:</span>
+                        <span>₹1440</span>
+                    </div>
+                    <button class="place-order-btn">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

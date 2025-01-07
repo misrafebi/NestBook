@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .content h3{
+            text-align: center;
+        }
+        .wallet-box, .transactions-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .wallet-box .balance {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .wallet-box .btn {
+            margin-top: 10px;
+        }
+        .transactions-box table {
+            width: 100%;
+        }
+        .transactions-box table th, .transactions-box table td {
+            padding: 10px;
+            text-align: left;
+        }
+        .transactions-box table th {
+            background-color: #f8f9fa;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#">Profile</a>
+    <a href="#">Login</a>
+    <a href="#">Signup</a>
+    <a href="#">Orders</a>
+    <a href="#">Cart</a>
+    <a href="#">Wishlist</a>
+    <a href="#">Wallet</a>
+    <a href="#">Logout</a>
+</div>
+<br><br>
+<div class="content">
+    <h3>Wallet</h3>
+    <div class="wallet-box">
+        <div class="balance">Current Balance: ₹10000.00</div>
+        <button class="btn btn-primary">Add Money</button>
+        <button class="btn btn-danger">Withdraw Money</button>
+    </div>
+    <br>
+    <div class="transactions-box">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>Recent Transactions</h4>
+            <button class="btn btn-link">View All</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Money Added</td>
+                    <td class="text-success">+ ₹5000</td>
+                    <td>Today</td>
+                </tr>
+                <tr>
+                    <td>Money Added</td>
+                    <td class="text-success">+ ₹1400</td>
+                    <td>10-12-2024</td>
+                </tr>
+                <tr>
+                    <td>Bill Payment</td>
+                    <td class="text-danger">- ₹3000</td>
+                    <td>10-12-2024</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
