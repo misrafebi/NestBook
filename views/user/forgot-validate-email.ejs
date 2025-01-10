@@ -41,7 +41,9 @@
     </style>
 </head>
 <body>
-    <br><br><br><br>
+    <%- include('../partials/user/nav-bar')%>
+
+    <br><br><br>
     <div class="container">
         <div class="forgot-password-container">
             <h2>Forgot Password</h2>
@@ -54,10 +56,13 @@
                 <button type="submit" class="btn btn-primary">Continue</button>
             </form>
         </div>
+        <br>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <%- include('../partials/user/footer')%>
+
 </body>
 </html>

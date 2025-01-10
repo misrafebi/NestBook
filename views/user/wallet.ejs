@@ -9,22 +9,7 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            width: 200px;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-        }
-        .sidebar a:hover {
-            background-color: #ddd;
-        }
+        
         .content {
             margin-left: 220px;
             padding: 20px;
@@ -56,28 +41,13 @@
         .transactions-box table th {
             background-color: #f8f9fa;
         }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #f8f9fa;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+     
     </style>
 </head>
 <body>
+    <%- include('../partials/user/nav-bar')%>
 
-<div class="sidebar">
-    <a href="#">Profile</a>
-    <a href="#">Login</a>
-    <a href="#">Signup</a>
-    <a href="#">Orders</a>
-    <a href="#">Cart</a>
-    <a href="#">Wishlist</a>
-    <a href="#">Wallet</a>
-    <a href="#">Logout</a>
-</div>
+    <%- include('../partials/user/sidebar')%>
 <br><br>
 <div class="content">
     <h3>Wallet</h3>
@@ -119,10 +89,14 @@
             </tbody>
         </table>
     </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<%- include('../partials/user/footer')%>
+
+
 </body>
 </html>

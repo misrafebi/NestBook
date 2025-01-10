@@ -12,16 +12,20 @@
         /* #accountDropdown{
            margin-right: 65px !important;
         } */
-        
+        .menu_bar_logo{
+            width: 120px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <header class="navbar navbar-expand-lg navbar-light bg-light w-100">
-            <a class="navbar-brand" href="#">
-                <img src="" alt="NestBook" class="menu_bar_logo">
-            </a>
+          
+            <!--navigation image-->
+                <img src="/assets/sidebar.png" alt="NestBook" class="menu_bar_logo">
+         
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +35,7 @@
                 <!-- Left Aligned Links -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="">Home</a>
+                        <a class="nav-link" href="/user/home">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
@@ -43,61 +47,66 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="/user/aboutUs">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="/user/contactUs">Contact</a>
                     </li>
                 </ul>
 
-                <!-- Right Aligned Search, Cart, Account -->
+               
                 <ul class="navbar-nav ms-auto d-none d-lg-flex">
+                     <!--Search -->
                     <li class="nav-item">
                         <form class="form-inline">
                             <input class="form-control me-2" type="search" placeholder="Search Product"
                                 aria-label="Search">
                         </form>
                     </li>
+                    <!--Cart-->
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
+                        <a class="nav-link" href="/user/cart"><i class="fas fa-shopping-cart"></i></a>
                     </li>
+                    <!--Account-->
                     <li class="nav-item dropdown" >
                         <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
+                        <!--drop down-->
                         <div class="dropdown-menu custom-dropdown" id="accountDropdown" aria-labelledby="accountDropdown">
-                            <a class="dropdown-item" href="#"><i class="fas fa-user"></i>&nbsp; Profile</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-lock"></i>&nbsp; Login</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-user-plus"></i>&nbsp; Sign Up</a>
-                            <a class="dropdown-item" href=""><i class="fa-solid fa-book"></i>&nbsp; Products</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-shopping-cart"></i>&nbsp; Orders</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-shopping-bag"></i>&nbsp; Cart</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-heart"></i>&nbsp; Wishlist</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-wallet"></i>&nbsp; Wallet</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-sign-out-alt"
+                            <a class="dropdown-item" href="/user/profile"><i class="fas fa-user"></i>&nbsp; Profile</a>
+                            <a class="dropdown-item" href="/user/login"><i class="fas fa-lock"></i>&nbsp; Login</a>
+                            <a class="dropdown-item" href="/user/signup"><i class="fas fa-user-plus"></i>&nbsp; Sign Up</a>
+                            <a class="dropdown-item" href="/user/products"><i class="fa-solid fa-book"></i>&nbsp; Products</a>
+                            <a class="dropdown-item" href="/user/orders"><i class="fas fa-shopping-cart"></i>&nbsp; Orders</a>
+                            <a class="dropdown-item" href="/user/cart"><i class="fas fa-shopping-bag"></i>&nbsp; Cart</a>
+                            <a class="dropdown-item" href="/user/wishlist"><i class="fas fa-heart"></i>&nbsp; Wishlist</a>
+                            <a class="dropdown-item" href="/user/wallet"><i class="fas fa-wallet"></i>&nbsp; Wallet</a>
+                            <a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out-alt"
                                     style="color: #d60505;"></i>&nbsp; Logout</a>
                         </div>
                     </li>
                 </ul>
 
-                <!-- Right Aligned for Mobile -->
+                <!-- For Mobile -->
                 <ul class="navbar-nav d-lg-none">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="accountDropdownMobile" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Account
                         </a>
+                        <!--drop down for mobile-->
                         <div class="dropdown-menu" aria-labelledby="accountDropdownMobile">
-                            <a class="dropdown-item" href="#"><i class="fas fa-user"></i>&nbsp; Profile</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-lock"></i>&nbsp; Login</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-user-plus"></i>&nbsp; Sign Up</a>
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-book"></i>&nbsp; Products</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-shopping-cart"></i>&nbsp; Orders</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-shopping-bag"></i>&nbsp; Cart</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-heart"></i>&nbsp; Wishlist</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-wallet"></i>&nbsp; Wallet</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-sign-out-alt"
+                            <a class="dropdown-item" href="/user/profile"><i class="fas fa-user"></i>&nbsp; Profile</a>
+                            <a class="dropdown-item" href="/user/login"><i class="fas fa-lock"></i>&nbsp; Login</a>
+                            <a class="dropdown-item" href="/user/signup"><i class="fas fa-user-plus"></i>&nbsp; Sign Up</a>
+                            <a class="dropdown-item" href="/user/products"><i class="fa-solid fa-book"></i>&nbsp; Products</a>
+                            <a class="dropdown-item" href="/user/orders"><i class="fas fa-shopping-cart"></i>&nbsp; Orders</a>
+                            <a class="dropdown-item" href="/user/cart"><i class="fas fa-shopping-bag"></i>&nbsp; Cart</a>
+                            <a class="dropdown-item" href="/user/wishlist"><i class="fas fa-heart"></i>&nbsp; Wishlist</a>
+                            <a class="dropdown-item" href="/user/wallet"><i class="fas fa-wallet"></i>&nbsp; Wallet</a>
+                            <a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out-alt"
                                     style="color: #d60505;"></i>&nbsp; Logout</a>
                         </div>
                     </li>

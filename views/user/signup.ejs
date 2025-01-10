@@ -49,6 +49,8 @@
     </style>
 </head>
 <body>
+    <%- include('../partials/user/nav-bar')%>
+
     <div class="container">
         <div class="signup-container">
             <h2>Signup</h2>
@@ -80,7 +82,7 @@
                 <button type="submit" class="btn btn-primary btn-block">Signup</button>
 
                 <div class="login-link">
-                    Already have an account? <a href="#">Login</a>
+                    Already have an account? <a href="/user/login">Login</a>
                 </div><br>
             </form>
             
@@ -90,5 +92,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <%- include('../partials/user/footer')%>
+
 </body>
 </html>

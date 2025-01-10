@@ -10,58 +10,34 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            width: 200px;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #000;
-        }
-        .sidebar a:hover {
-            background-color: #ddd;
-        }
+       
         .main-content {
             margin-left: 220px;
             padding: 20px;
         }
-        .add-money-box {
-            margin-left: 120px;
+        .withdraw-money-box {
+            margin-left: 180px;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 700px;
         }
-        .add-money-txt{
+        .withdraw-money-txt{
             text-align: center;
         }
         
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <a href="#">Profile</a>
-        <a href="#">Login</a>
-        <a href="#">Signup</a>
-        <a href="#">Orders</a>
-        <a href="#">Cart</a>
-        <a href="#">Wishlist</a>
-        <a href="#">Wallet</a>
-        <a href="#">Logout</a>
-    </div>
-    <br><br><br><br><br><br>
+    <%- include('../partials/user/nav-bar')%>
+    <%- include('../partials/user/sidebar')%>
+    <br><br><br>
     <div class="main-content">
-        <h4 class="add-money-txt">Withdraw Money</h4>
+        <h4 class="withdraw-money-txt">Withdraw Money</h4>
         <br>
-        <div class="add-money-box">
-            <form class="add-money-form">
+        <div class="withdraw-money-box">
+            <form class="withdraw-money-form">
                 <br>
                 <div class="form-group ">
                     <label for="amount">Amount to be Withdraw</label>
@@ -77,10 +53,14 @@
                 <br>
             </form>
         </div>
+        <br><br><br>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <%- include('../partials/user/footer')%>
+
 </body>
 </html>

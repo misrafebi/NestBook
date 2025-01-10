@@ -12,6 +12,7 @@
         .sidebar {
             padding: 20px;
             border-right: 1px solid #ddd;
+            /* margin-left: 10px; */
         }
         .product-card {
             position: relative;
@@ -38,11 +39,14 @@
     </style>
 </head>
 <body>
+    <%- include('../partials/user/nav-bar')%>
+
     <br><br>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 sidebar">
                 <h5>Filters</h5>
+                <br>
                 <div class="mb-4">
                     <h6>Category</h6>
                     <ul class="list-unstyled">
@@ -92,5 +96,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <%- include('../partials/user/footer')%>
+
 </body>
 </html>

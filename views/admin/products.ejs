@@ -11,23 +11,7 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            width: 200px;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #333;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #ddd;
-        }
+        
         .main-content {
             margin-left: 220px;
             padding: 20px;
@@ -55,21 +39,8 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <h2>BookNest</h2>
-        </div>
-        <a href="#">Dashboard</a>
-        <a href="#">Products</a>
-        <a href="#">Categories</a>
-        <a href="#">Orders</a>
-        <a href="#">Customers</a>
-        <a href="#">Offers</a>
-        <a href="#">Coupon</a>
-        <a href="#">Reviews</a>
-        <a href="#">Change Password</a>
-        <a href="#">Logout</a>
-    </div>
+    <%- include('../partials/admin/sideBar') %>
+
     <div class="main-content">
         <div class="header">
             <h4>Products</h4>
