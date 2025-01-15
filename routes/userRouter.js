@@ -22,7 +22,7 @@ router.get('/forgotOTP',userController.loadForgotOTP)
 router.get('/aboutUs',userController.loadAbout)
 
 router.get('/contactUs',userController.loadContactUs)
- 
+  
 router.get('/products',productController.loadProducts)
 router.get('/productDetail',productController.loadProductDetail)
 router.get('/productReview',productController.loadProductReview)

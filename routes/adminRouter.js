@@ -13,6 +13,7 @@ const orderController = require('../controllers/admin/orderController')
 router.get('/dashboard',adminController.loadDashboard)
 
 router.get('/login',adminController.loadLogin)
+router.post('/login',adminController.login)
 router.get('/changePassword',adminController.changePassword)
 
 router.get('/category',categoryController.loadCategory)

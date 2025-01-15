@@ -1,8 +1,8 @@
 
 
 const loadHome = (req,res) =>{
-    try {
-        res.render('user/home')
+    try {      
+        res.render('user/home')              
     } catch (error) {
         console.log(error);
         
