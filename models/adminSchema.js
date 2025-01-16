@@ -13,7 +13,7 @@ const adminSchema = new Schema({
     },
    
     password: {
-        type: String,
+        type: String, 
         required: false,
     },
     

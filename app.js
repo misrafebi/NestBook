@@ -10,6 +10,17 @@ const env = require('dotenv').config()
 const db = require('./config/db')
 db()
 
+app.use(session({
+    secret: 'secretKey',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 72 * 60 * 60 * 1000,
+        secure: false,
+        httpOnly: true,
+    }
+}));
+
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
@@ -24,7 +35,10 @@ const userRouter = require('./routes/userRouter')
 const adminRouter = require('./routes/adminRouter')
 app.use('/user', userRouter)
 app.use('/admin', adminRouter)
- 
+
+
+
+
 
 app.listen(process.env.PORT, () =>
     console.log('server running')

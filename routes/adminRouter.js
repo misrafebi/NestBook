@@ -10,29 +10,36 @@ const productController = require('../controllers/admin/productController')
 const reviewController = require('../controllers/admin/reviewController')
 const orderController = require('../controllers/admin/orderController')
 
-router.get('/dashboard',adminController.loadDashboard)
+const adminAuth = require('../middlewares/adminAuth')
 
-router.get('/login',adminController.loadLogin)
-router.post('/login',adminController.login)
-router.get('/changePassword',adminController.changePassword)
 
-router.get('/category',categoryController.loadCategory)
+router.get('/login', adminAuth.noCache, adminAuth.isLogin, adminController.loadLogin);
+router.post('/login', adminAuth.noCache, adminController.login,adminAuth.checkSession);
 
-router.get('/coupon',couponController.laodCoupon)
-router.get('/addCoupon',couponController.loadAddCoupon)
-router.get('/editCoupon',couponController.loadEditCoupon)
+router.get('/dashboard', adminAuth.noCache, adminAuth.checkSession, adminController.loadDashboard);
+router.get('/logout',adminAuth.noCache,adminController.logout,adminAuth.checkSession)
 
-router.get('/customer',customerController.loadCustomer)
 
-router.get('/offer',offerController.loadOffer)
+router.get('/changePassword', adminAuth.noCache,adminAuth.checkSession,adminController.loadChangePassword)
+router.post('/changePassword',adminAuth.noCache,adminAuth.checkSession,adminController.changePassword)
 
-router.get('/product',productController.loadProduct)
-router.get('/addProduct',productController.loadAddProduct)
-router.get('/editProduct',productController.loadEditProduct)
+router.get('/category', categoryController.loadCategory)
 
-router.get('/review',reviewController.loadReviews)
-router.get('/replay',reviewController.loadReplay)
+router.get('/coupon', couponController.laodCoupon)
+router.get('/addCoupon', couponController.loadAddCoupon)
+router.get('/editCoupon', couponController.loadEditCoupon)
 
-router.get('/orders',orderController.loadOrders)
+router.get('/customer', customerController.loadCustomer)
+
+router.get('/offer', offerController.loadOffer)
+
+router.get('/product', productController.loadProduct)
+router.get('/addProduct', productController.loadAddProduct)
+router.get('/editProduct', productController.loadEditProduct)
+
+router.get('/review', reviewController.loadReviews)
+router.get('/replay', reviewController.loadReplay)
+
+router.get('/orders', orderController.loadOrders)
 
 module.exports = router
