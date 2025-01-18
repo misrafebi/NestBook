@@ -79,7 +79,7 @@
                 isValid = false
 
             } else if (!emailPattern.test(emailVal)) {
-                emailError.textContent = 'Invalid email format'
+                emailError.textContent = 'Please enter a valid email. '
                 isValid = false
 
             } else {
@@ -133,14 +133,14 @@
         </script>
         <%}%>
 
-        <script>
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            if (message) {
-                alert(message);
-            }
-        </script>
-        
+            <script>
+                const urlParams = new URLSearchParams(window.location.search);
+                const message = urlParams.get('message');
+                if (message) {
+                    alert(message);
+                }
+            </script>
+
 </body>
 
 </html>

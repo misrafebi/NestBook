@@ -65,7 +65,7 @@ const logout = (req, res) => {
 const loadChangePassword = (req, res) => {
     try {
         res.render('admin/changePassword',
-            {message:''}
+            { message: '' }
         )
     } catch (error) {
         console.error('Error in loadChangePassowrd:', error.message);

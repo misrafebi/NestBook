@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const passport=require('passport')
 
 const userController = require('../controllers/user/userController')
 const productController = require('../controllers/user/productController')
@@ -7,6 +8,15 @@ const profileController = require('../controllers/user/profileController')
 const cartController = require('../controllers/user/cartController')
 const wishlistController = require('../controllers/user/wishliastController')
 const walletController = require('../controllers/user/walletController')
+
+router.get('/auth/google',passport.authenticate('google',{scope:['profile','email']}))
+router.get('/auth/google/callback',
+    passport.authenticate('google',{failureRedirect:'/user/signup'}),
+    (req,res)=>{
+        console.log('User authenticated: ',req.user);
+        res.redirect('/user/home')
+    }
+)
  
 router.get('/home',userController.loadHome)
 
