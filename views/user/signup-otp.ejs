@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .verification-container {
             max-width: 400px;
             margin: 50px auto;
@@ -18,41 +20,129 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .verification-container h2 {
             margin-bottom: 20px;
             text-align: center;
         }
+
         .verification-container .form-group {
             margin-bottom: 15px;
         }
+
         .verification-container .btn {
             width: 100%;
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <br><br><br>
-    <div class="container">
-        <div class="verification-container">
-            <h2>Verification Code</h2>
-            <p>Please enter the verification code sent to your email.</p>
-            <form>
-                <div class="form-group">
-                    <label for="verification-code">Verification Code</label>
-                    <input type="text" class="form-control" id="verification-code" maxlength="6" placeholder="Enter code" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Continue</button>
+        <br><br><br>
+        <div class="container">
+            <div class="verification-container">
+                <h2>Verification Code</h2>
+                <p>Please enter the verification code sent to your email.</p>
+                <form action="/user/signupOTP" method="post" id="otpForm" onsubmit="return validateOTPForm()">
+                    <div class="form-group">
+                        <label for="verification-code">Verification Code</label>
+                        <input type="text" class="form-control" id="otp" maxlength="6" placeholder="Enter code" name="otp">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Continue</button>
+                    <div class="form-group text-center d-flex justify-content-center align-items-center mt-3">
+                        <div id="otpTimer" class="otp-timer mr-2">
+                            <span id="timerValue">60</span>
+                        </div>
+
+                    </div>
+                    <button type="button" class="btn btn-secondary resend-btn">Resend OTP</button>
+                    <% if (locals.message && message.length> 0) { %>
+                        <div class="alert alert-danger">
+                            <%= message %>
+                        </div>
+                        <% } %>
+
+            </div>
             </form>
         </div>
         <br>
-    </div>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <%- include('../partials/user/footer')%>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <script>
+            let timer = 60
+            let timeInterval;
+
+            function startTimer() {
+                timer = 60
+                document.getElementById('otp').disabled = false
+                clearInterval(timeInterval)
+                timeInterval = setInterval(() => {
+                    timer--
+                    document.getElementById('timerValue').textContent = timer
+
+                    if (timer <= 0) {
+                        clearInterval(timeInterval)
+                        document.getElementById('timerValue').classList.add('expired')
+                        document.getElementById('timerValue').textContent = 'Expired'
+                        document.getElementById('otp').disabled = true
+                    }
+                }, 1000)
+            }
+            startTimer()
+
+            // function validateOTPForm() {
+            //     const otpInput = document.getElementById('otp').value;
+
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: 'signupOTP',
+            //         data: { otp: otpInput },
+
+            //         success: function (response) {
+            //             if (response.success) {
+            //                 Swal.fire({
+            //                     icon: 'success',
+            //                     title: 'OTP Verified Scuccessfully',
+            //                     showConfirmButton: false,
+            //                     timer: 1500,
+            //                 }).then(() => {
+            //                     window.location.href = response.redirect;
+            //                 })
+            //             } else {
+            //                 Swal.fire({
+            //                     icon: 'error',
+            //                     title: 'Error',
+            //                     text: response.message,
+            //                 })
+            //             }
+            //         },
+
+            //         error: function () {
+            //             Swal.fire({
+            //                 icon: 'error',
+            //                 title: 'Invalid OTP',
+            //                 text: 'Please try again'
+            //             })
+            //         }
+            //     })
+
+            //     return false
+            // }
+
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <%- include('../partials/user/footer')%>
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
 </body>
+
 </html>

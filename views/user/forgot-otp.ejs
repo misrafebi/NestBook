@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .verification-container {
             max-width: 400px;
             margin: 50px auto;
@@ -17,41 +19,141 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .verification-container h2 {
             margin-bottom: 20px;
             text-align: center;
         }
+
         .verification-container .form-group {
             margin-bottom: 15px;
         }
+
         .verification-container .btn {
             width: 100%;
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <br><br><br>
-    <div class="container">
-        <div class="verification-container">
-            <h2>Verification Code</h2>
-            <p>Please enter the verification code sent to your email.</p>
-            <form>
-                <div class="form-group">
-                    <label for="verification-code">Verification Code</label>
-                    <input type="text" class="form-control" id="verification-code" maxlength="6" placeholder="Enter code" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Continue</button>
-            </form>
-        </div>
-        <br>
-    </div>
+        <br><br><br>
+        <div class="container">
+            <div class="verification-container">
+                <h2>Verification Code</h2>
+                <p>Please enter the verification code sent to your email.</p>
+                <form action="/user/forgotOTP" method="post" id="otpForm">
+                    <div class="form-group">
+                        <label for="verification-code">Verification Code</label>
+                        <input type="text" class="form-control" id="verification-code" maxlength="6"
+                            placeholder="Enter code" name="otp">
+                        <div class="text-danger" id="otp-error"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Continue</button>
+                    <div class="form-group text-center d-flex justify-content-center align-items-center mt-3">
+                        <div id="otpTimer" class="otp-timer mr-2">
+                            <span id="timerValue">60</span>
+                        </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <%- include('../partials/user/footer')%>
+                    </div>
+                    <button type="button" class="btn btn-secondary resend-btn" id="resendOtpButton">Resend OTP</button>
+                   
+                </form>
+            </div>
+            <br>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            let timer = 60
+            let timeInterval;
+
+            function startTimer() {
+                timer = 60
+                document.getElementById('otp').disabled = false
+                clearInterval(timeInterval)
+                timeInterval = setInterval(() => {
+                    timer--
+                    document.getElementById('timerValue').textContent = timer
+
+                    if (timer <= 0) {
+                        clearInterval(timeInterval)
+                        document.getElementById('timerValue').classList.add('expired')
+                        document.getElementById('timerValue').textContent = 'Expired'
+                        document.getElementById('otp').disabled = true
+                    }
+                }, 1000)
+            }
+            startTimer()
+
+            const OTPForm = document.getElementById('otpForm')
+
+            const otp = document.getElementById('verification-code')
+            const otpError = document.getElementById('otp-error')
+
+            function otpValidationChecking(isValid) {
+                const otpVal = otp.value;
+                const otpPattern = /^\d{6}$/;
+
+                if (!otpVal) {
+                    otpError.textContent = 'OTP should not be empty.'
+                    isValid = false
+                } else if (!otpPattern.test(otpVal)) {
+                    otpError.textContent = 'The OTP must be exactly 6 digits.'
+                    isValid = false
+                }
+
+                return isValid
+            }
+
+            OTPForm.addEventListener('submit', function (event) {
+                event.preventDefault()
+
+                let isValid = true
+
+                isValid = otpValidationChecking(isValid)
+
+                if (isValid) {
+                    this.submit()
+                }
+            })
+
+            document.getElementById('resendOtpButton').addEventListener('clikc',async()=>{
+                try {
+                    const response=await fetch('/resentForgotOTP',{
+                        method:'POST',
+                        headers:{
+                            'Content-Tyoe':'application/json',
+                        },
+                        body:JSON.stringify({})
+                    })
+
+                    const result=await response.json()
+
+                    if(result.success){
+                        alert(result.message)
+                    }else{
+                        alert(result.message)
+                    }
+                } catch (error) {
+                    console.error('Error:',error);
+                    alert('An error ocuured while resending the OTP. Please try again.')
+                }
+            })
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <%- include('../partials/user/footer')%>
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
 
 </body>
+
 </html>

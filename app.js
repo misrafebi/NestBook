@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const flash = require('connect-flash');
+
 
 const path = require('path')
 const nocache = require('nocache')
@@ -25,6 +27,13 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
+    next();
+});
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

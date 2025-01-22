@@ -40,6 +40,19 @@
 
         .sort-box {
             width: 100px;
+            display: block;
+            /* width: 100%; */
+            height: calc(1.5em + .75rem + 2px);
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
     </style>
 </head>
@@ -58,8 +71,10 @@
                     aria-label="Recipient's username" aria-describedby="button-addon2">
                 <button class="btn btn-outline-secondary" id="search-btn" type="button" id="button-addon2"><i
                         class="fa-solid fa-magnifying-glass"></i></button>
-            </div> 
-            <select class="form-control sort-box">
+            </div>
+
+            <!-- <input type="text" class="form-control w-25" placeholder="Search Coupon "><span><i class="fa-solid fa-magnifying-glass"></i></span> -->
+            <select class=" sort-box">
                 <option>Sort by</option>
                 <option>Code</option>
                 <option>Discount</option>
@@ -92,27 +107,8 @@
                     <td class="status-active">Active</td>
                     <td><button class="btn btn-primary">Edit</button></td>
                 </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Alan</td>
-                    <td>alan@gmail.com</td>
-                    <td class="status-active">Active</td>
-                    <td><button class="btn btn-primary">Edit</button></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Vishnu</td>
-                    <td>vishnu@gmail.com</td>
-                    <td class="status-active">Active</td>
-                    <td><button class="btn btn-primary">Edit</button></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Jasmin</td>
-                    <td>jasmin@gmail.com</td>
-                    <td class="status-active">Active</td>
-                    <td><button class="btn btn-primary">Edit</button></td>
-                </tr>
+                
+                
             </tbody>
         </table>
     </div>
