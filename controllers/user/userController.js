@@ -46,6 +46,12 @@ const login = async (req, res) => {
         return res.render('user/login',
             { message: 'Incorrect password. Please try again.' })
     }
+const active = user.isBlocked
+    if(!active){
+        console.log('User is Blocked');
+       return res.render('user/login',
+            {message:'Your account has been blocked. Please contact support.'})
+    }
 
     req.session.userData = email
     return res.redirect('/user/home?message=User logged in successfully.')

@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Customer=require('../models/userScehma')
 
 const adminController = require('../controllers/admin/adminController')
 const categoryController = require('../controllers/admin/categoryController')
@@ -30,6 +31,10 @@ router.get('/addCoupon', couponController.loadAddCoupon)
 router.get('/editCoupon', couponController.loadEditCoupon)
 
 router.get('/customer', customerController.loadCustomer)
+router.get('/edit-customer/:id',customerController.loadEditCustomer)
+router.post('/update-customer/:id',customerController.editCustomer)
+router.get('/addCustomer',customerController.loadAddCustomer)
+router.post('/addCustomer',customerController.addCustomer)
 
 router.get('/offer', offerController.loadOffer)
 
