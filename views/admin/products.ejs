@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,24 +12,29 @@
         body {
             font-family: Arial, sans-serif;
         }
-        
+
         .main-content {
             margin-left: 220px;
             padding: 20px;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        .table td, .table th {
+
+        .table td,
+        .table th {
             vertical-align: middle;
         }
+
         .product-img {
             width: 50px;
             height: auto;
         }
+
         #search-btn {
             border-radius: 0px 5px 5px 0px;
             border-color: #d6d1d1;
@@ -52,56 +58,142 @@
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/admin/sideBar') %>
 
-    <div class="main-content">
-        <div class="header">
-            <h4>Products</h4>
-            <button class="btn btn-dark">+ Add Product</button>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="input-group  w-25">
-                <input type="text" class="form-control  w-25" placeholder="Search Coupon"
-                    aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" id="search-btn" type="button" id="button-addon2"><i
-                        class="fa-solid fa-magnifying-glass"></i></button>
+        <div class="main-content">
+            <div class="header">
+                <h4>Products</h4>
+                <a href="/admin/addProduct" class="btn btn-dark">+ Add Product</a>
             </div>
+            <%if(products.length==0){%>
+                <p>No products found</p>
+                <%}else{%>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="input-group  w-25">
+                            <input type="text" class="form-control  w-25" placeholder="Search Product"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" id="searchInput"
+                                onkeyup="searchProduct()">
+                            <button class="btn btn-outline-secondary" id="search-btn" type="button"
+                                id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                        <!---------------------->
+                        <!----Search Product---->
+                        <script>
+                            function searchProduct() {
+                                const input = document.getElementById('searchInput')
+                                const filter = input.value.toLowerCase()
+                                const table = document.getElementById('table-data')
+                                const rows = table.getElementsByTagName('tr')
 
-            <!-- <input type="text" class="form-control w-25" placeholder="Search Coupon "><span><i class="fa-solid fa-magnifying-glass"></i></span> -->
-            <select class=" sort-box">
-                <option>Sort by</option>
-                <option>Code</option>
-                <option>Discount</option>
-                <option>Status</option>
-            </select>
+                                for (let i = 1; i < rows.length; ++i) {
+                                    const productCell = rows[i].getElementsByTagName('td')[2]
+                                    if (productCell) {
+                                        const productName = productCell.textContent || productCell.innerText
+                                        if (productName.toLowerCase().indexOf(filter) > -1) {
+                                            rows[i].style.display = ''
+                                        } else {
+                                            rows[i].style.display = 'none'
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+                        <!--------------------->
+
+                        <select class=" sort-box">
+                            <option>Sort by</option>
+                            <option>Code</option>
+                            <option>Discount</option>
+                            <option>Status</option>
+                        </select>
+                    </div>
+                    <br>
+                    <table class="table " id="table-data">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Sale Price</th>
+                                <th>Stock</th>
+                                <th>Quantity</th>
+                                <th>Edit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%products.forEach((product,index)=>{%>
+                                <tr>
+                                    <td>
+                                        <%=(currentPage - 1) * 10 + index + 1%>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>
+                                        <%=product.productName%>
+                                    </td>
+                                    <td>
+                                        <%=product.salePrice%>
+                                    </td>
+                                    <td>
+                                        <%=product.status%>
+                                    </td>
+                                    <td>
+                                        <%=product.quantity%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary">Edit</button>
+                                    </td>
+                                    <td>
+                                        <%if(product.isBlocked==false){%>
+                                            <button class="btn btn-success">UnBlocked</button>
+                                            <%}else{%>
+                                                <button class="btn btn-danger">Blocked</button>
+                                                <%}%>
+                                    </td>
+                                </tr>
+                                <%})%>
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <% if (currentPage > 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>" class="btn btn-outline-secondary"><</a>
+                        <% } %>
+                    
+                        <% if (currentPage > 4) { %>
+                            <a href="?page=1" class="btn btn-outline-secondary">1</a>
+                            <% if (currentPage > 5) { %>
+                                <span class="dots">...</span>
+                            <% } %>
+                        <% } %>
+                    
+                        <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                            <a href="?page=<%= i %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-secondary' %>"><%= i %></a>
+                        <% } %>
+                    
+                        <% if (currentPage < totalPages - 3) { %>
+                            <% if (currentPage < totalPages - 4) { %>
+                                <span class="dots">...</span>
+                            <% } %>
+                            <a href="?page=<%= totalPages %>" class="btn btn-outline-secondary"><%= totalPages %></a>
+                        <% } %>
+                    
+                        <% if (currentPage < totalPages) { %>
+                            <a href="?page=<%= currentPage + 1 %>" class="btn btn-outline-secondary">></a>
+                        <% } %>
+                    </div>
+                    <%}%>
         </div>
-        <br>
-        <table class="table ">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Edit</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><img src="book1.jpg" alt="Will" class="product-img"></td>
-                    <td>Will</td>
-                    <td>₹870</td>
-                    <td><button class="btn btn-primary ">Edit</button></td>
-                    <td><button class="btn btn-success">Unblock</button></td>
-                </tr>
-                
-                
-            </tbody>
-        </table>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -40,14 +40,15 @@ router.get('/addCustomer',adminAuth.noCache,adminAuth.checkSession,customerContr
 router.post('/addCustomer',adminAuth.noCache,adminAuth.checkSession,customerController.addCustomer)
 
 router.get('/offer', offerController.loadOffer)
-
+ 
 router.get('/product', productController.loadProduct)
 router.get('/addProduct', productController.loadAddProduct)
+router.post('/addProduct',productController.addProduct)
 router.get('/editProduct', productController.loadEditProduct)
 
 router.get('/review', reviewController.loadReviews)
 router.get('/replay', reviewController.loadReplay)
-
+ 
 router.get('/orders', orderController.loadOrders)
 
 module.exports = router

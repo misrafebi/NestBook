@@ -11,9 +11,9 @@ const productSchema = new Schema({
     },
     numberPage: {
         type: Number,
-    },
+    }, 
     category: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Category',
         required: true,
     },
@@ -35,15 +35,15 @@ const productSchema = new Schema({
         required: true,
     },
     productOffer: {
-        type: number,
+        type: Number,
         default: 0,
     },
     quantity: {
-        type: number,
+        type: Number,
         default: 1
     },
     status: {
-        type: Number,
+        type: String,
         enum: ['Available', 'Out Of Stock', 'Disconnected'],
         default: 'Available',
         required: true,
@@ -60,4 +60,4 @@ const productSchema = new Schema({
 
 const Product = mongoose.model('Product', productSchema)
 
-module.exports = Product
+module.exports = Product 

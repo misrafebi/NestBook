@@ -30,13 +30,13 @@
             line-height: 25px;
             cursor: pointer;
         }
+
         .form-container {
             background-color: #f8f9fa;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        
     </style>
 </head>
 
@@ -44,15 +44,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
         </ol>
     </nav>
     <div class="container">
         <h4>Add Product</h4>
-       <br>
+        <br>
         <div class="form-container">
-            <form>
+            <form action="/admin/addProduct" method="post" id="add-product-form">
                 <div class="form-group">
                     <label for="bookImage">Photo</label>
                     <div class="position-relative">
@@ -61,63 +61,220 @@
                     </div>
                     <input type="file" class="form-control-file" id="bookImageUpload">
                 </div>
+
                 <div class="form-group">
                     <label for="bookName">Book Name</label>
-                    <input type="text" class="form-control" id="bookName" >
+                    <input type="text" class="form-control" id="bookName" name="productName">
+                    <div class="text-danger" id="name-error"></div>
                 </div>
+ 
                 <div class="form-group">
                     <label for="authorName">Author Name</label>
-                    <input type="text" class="form-control" id="authorName" >
+                    <input type="text" class="form-control" id="authorName" name="authorName">
+                    <div class="text-danger" id="auther-name-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="category">Category</label>
-                    <input type="text" class="form-control" id="category" >
+                    <%if(categories.length===0){%>
+                        <small>No categories found</small>
+                        <%}else{%>
+                            <datalist name="category" id="categories" name="category">                           
+                                <%categories.forEach(category=>{%>
+                                    <option value="<%=category.name%>">                                      
+                                    </option>
+                                    <%})%>
+                            </datalist>
+                            <input list="categories" id="categories" name="category" placeholder="Select or type a category">
+                            <%}%>
+                                <div class="text-danger" id="category-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="stock">Stock</label>
-                    <select class="form-control" id="stock">
+                    <select class="form-control" id="stock" name="status">
                         <option>Available</option>
-                        <option>Unavailable</option>
+                        <option>Out Of Stock</option>
+                        <option>Disconnected</option>
                     </select>
+                    <div class="text-danger" id="stock-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="publishedDate">Published Date</label>
-                    <input type="date" class="form-control" id="publishedDate">
+                    <input type="date" class="form-control" id="publishedDate" name="publishDate">
+                    <div class="text-danger" id="publish-date-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="publisher">Publisher</label>
-                    <input type="text" class="form-control" id="publisher" >
+                    <input type="text" class="form-control" id="publisher" name="publisher">
+                    <div class="text-danger" id="publisher-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="number" class="form-control" id="price" >
+                    <input type="number" class="form-control" id="price" name="regularPrice">
+                    <div class="text-danger" id="price-error"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="offer">Offer</label>
-                    <input type="text" class="form-control" id="offer" ]>
+                    <label for="offer">Offer(%)</label>
+                    <input type="text" class="form-control" id="offer" name="productOffer">
+                    <div class="text-danger" id="offer-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="noOfPages">No-of Pages</label>
-                    <input type="text" class="form-control" id="noOfPages">
+                    <input type="text" class="form-control" id="noOfPages" name="numberPage">
+                    <div class="text-danger" id="number-page-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="availableQuantity">Available Quantity</label>
-                    <input type="number" class="form-control" id="availableQuantity" >
+                    <input type="number" class="form-control" id="availableQuantity" name="quantity">
+                    <div class="text-danger" id="quantity-error"></div>
                 </div>
+
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description"
-                        rows="3"></textarea>
+                    <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+                    <div class="text-danger" id="description-error"></div>
                 </div>
+
                 <button type="submit" class="btn btn-dark">Save</button>
                 <button type="button" class="btn btn-secondary">Cancel</button>
             </form>
         </div>
         <br><br>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const addForm = document.getElementById('add-product-form')
+
+        const name = document.getElementById('bookName')
+        const autherName = document.getElementById('authorName')
+        const category = document.getElementById('categories')
+        const stock = document.getElementById('stock')
+        const publishDate = document.getElementById('publishedDate')
+        const publisher = document.getElementById('publisher')
+        const price = document.getElementById('price')
+        const offer = document.getElementById('offer')
+        const numberPage = document.getElementById('noOfPages')
+        const quantity = document.getElementById('availableQuantity')
+        const description = document.getElementById('description')
+
+        const nameError = document.getElementById('name-error')
+        const autherNameError = document.getElementById("auther-name-error")
+        const categoryError = document.getElementById('category-error')
+        const stockError = document.getElementById('stock-error')
+        const publishDateError = document.getElementById("publish-date-error")
+        const publisherError = document.getElementById('publisher-error')
+        const priceError = document.getElementById('price-error')
+        const offerError = document.getElementById('offer-error')
+        const numberPageError = document.getElementById("number-page-error")
+        const quantityError = document.getElementById('quantity-error')
+        const descriptionError = document.getElementById("description-error")
+
+        function nameValidationChecking(isValid) {
+            const nameVal = name.value
+            if (!nameVal) {
+                nameError.textContent = 'Name can not be empty. Please enter name.'
+                isValid = false
+            } else {
+                nameError.textContent = ''
+            }
+
+            return isValid
+        }
+
+        function priceValidationChecking(isValid) {
+            const priceVal = price.value
+            const pricePattern = /\d/
+            if (!priceVal) {
+                priceError.textContent = 'Poduct price can not be empty.'
+                isValid = false
+            } else if (!pricePattern.test(priceVal)) {
+                priceError.textContent = 'Product price should be number. Please enter valid price.'
+                isValid = false
+            } else {
+                priceError.textContent = ''
+            }
+            return isValid
+        }
+        function offerValidationChecking(isValid) {
+            const offerVal = offer.value
+            const offerPattern = /\d/
+
+            if (!offerPattern.test(offerVal) && offerVal) {
+                offerError.textContent = 'Product offer should be number. Please enter valid price.'
+                isValid = false
+            } else if (offerVal > 100) {
+                offerError.textContent = 'Product offer should be below 100%'
+                isValid = false
+            }
+            return isValid
+        }
+        function numberOfPagesValidationChecking(isValid) {
+            const numberPageVal = numberPage.value
+            const numberPagePatt = /\d/
+
+            if (!numberPagePatt.test(numberPageVal) && numberPageVal) {
+                numberPageError.textContent = 'number of page should be in digits'
+            } else {
+                numberPageError.textContent = ''
+            }
+            return isValid
+        }
+        function quantityValidationChecking(isValid) {
+            const quantityVal = quantity.value
+            const quantityPatt = /\d/
+            if (!quantityVal) {
+                quantityError.textContent = 'Product quantity can not be empty.'
+                isValid = false
+            } else if (!quantityPatt.test(quantityVal)) {
+                quantityError.textContent = 'Quantity should be in digit.'
+                isValid = false
+            } else {
+                quantityError.textContent = ''
+            }
+            return isValid
+        }
+
+        function categoryValidationChecking(isValid) {
+            const categoryVal = category.value
+            if (!categoryVal||categoryVal=='Select category') {
+                categoryError.textContent = 'Category can not be empty. Please select or enter a category.'
+                isValid = false
+            } else {
+                categoryError.textContent = ''
+            }
+            return isValid
+        }
+
+        addForm.addEventListener('submit', (event) => {
+            let isValid = true
+            isValid = nameValidationChecking(isValid)
+            isValid = priceValidationChecking(isValid)
+            isValid = offerValidationChecking(isValid)
+            isValid = numberOfPagesValidationChecking(isValid)
+            isValid = quantityValidationChecking(isValid)
+            // isValid = categoryValidationChecking(isValid)
+
+            if (!isValid) {
+                event.preventDefault()
+            }
+        })
+    </script>
+
+    <%if(message){%>
+        <script>
+            alert('<%=message%>')
+        </script>
+        <%}%>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

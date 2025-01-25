@@ -147,7 +147,7 @@ return res.redirect('/admin/customer?message=Customer added successfully.')
 }
 
 
-
+ 
 module.exports = {
     loadCustomer,
     loadEditCustomer,
