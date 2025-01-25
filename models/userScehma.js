@@ -33,7 +33,7 @@ const userSchema = new Schema({
     },
     isAdmin: {
         type: Boolean,
-        default: false,
+        default: false, 
     },
     cart: [{
         type: Schema.Types.ObjectId,

@@ -65,8 +65,8 @@
             <div class="mb-3">
                 <label for="editUserStatus" class="form-label">Status</label>
                 <select class="form-control" id="editUserStatus" name="isBlocked">
-                    <option value="true" <%=!customer.isBlocked ? 'selected' : '' %>>Active</option>
-                    <option value="false" <%=customer.isBlocked ? 'selected' : '' %>>Blocked</option>
+                    <option value="false" <%=!customer.isBlocked ? 'selected' : '' %>>Active</option>
+                    <option value="true" <%=customer.isBlocked ? 'selected' : '' %>>Blocked</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Save </button>

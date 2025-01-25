@@ -1,14 +1,29 @@
 const env = require('dotenv').config
 const { find } = require('../../models/adminSchema')
+const Category = require('../../models/categorySchema')
 const User = require('../../models/userScehma')
 const bcrypt = require('bcrypt')
 
 const loadCustomer = async (req, res) => {
     try {
-        const customers = await User.find({}).sort({ createOn: -1 })
+        const page = parseInt(req.query.page) || 1
+        const limit = 10
+        const skip = (page - 1) * limit
+
+        const totalCustomers = await User.countDocuments()
+
+        const customers = await User.find({})
+            .sort({ createOn: -1 })
+            .skip(skip)
+            .limit(limit)
+
+        const totalPages = Math.ceil(totalCustomers / limit)
+        // const customers = await User.find({}).sort({ createOn: -1 })
         res.render('admin/customers', {
             message: '',
             customers,
+            currentPage: page,
+            totalPages
         })
     } catch (error) {
         console.error('Error: ', error);
@@ -23,9 +38,10 @@ const loadEditCustomer = async (req, res) => {
         const customer = await User.findById(customerId);
         const customers = await User.find({})
         if (!customer) {
-            res.render('admin/customers', { message: 'Customer not found', customers })
+            // res.render('admin/customers', { message: 'Customer not found', customers })
+return res.redirect('/admin/customer?message=Customer not found')
         }
-        res.render('admin/editcustomer', { message: '', customer })
+      return  res.render('admin/editcustomer', { message: '', customer })
     } catch (error) {
         console.error('Error:', error);
         res.render('admin/login',
@@ -46,18 +62,20 @@ const editCustomer = async (req, res) => {
         if (existingUser) {
             const customer = await User.findById(customerId)
 
-            return res.render('admin/customers', {
-                message: `Email ${email} is already in use by another customer.`,
-                customers: await User.find({})
-            })
+            return res.redirect(`/admin/customer?message=Email ${email} is already in use by another customer.`)
+            // return res.render('admin/customers', {
+            //     message: `Email ${email} is already in use by another customer.`,
+            //     customers: await User.find({})
+            // })
         }
 
         const currentUser = await User.findById(customerId)
         if (!currentUser) {
-            return res.render('admin/customers', {
-                message: `Customer with ID ${customerId} not found.`,
-                customers: await User.find({})
-            })
+            return res.redirect(`/admin/customer?message=Customer with ID ${customerId} not found.`)
+            // return res.render('admin/customers', {
+            //     message: `Customer with ID ${customerId} not found.`,
+            //     customers: await User.find({})
+            // })
         }
 
         const updates = { name, email, phone, isBlocked }
@@ -67,10 +85,13 @@ const editCustomer = async (req, res) => {
             updates.password = hashedPass
         }
 
+
         const customer = await User.findByIdAndUpdate(customerId, updates, { new: true, runValidators: true })
         const customers = await User.find({})
-        return res.render('admin/customers',
-            { message: 'User updated successfully', customers })
+return res.redirect(`/admin/customer?message=User updated successfully`)
+    
+        // return res.render('admin/customers',
+        //     { message: 'User updated successfully', customers ,currentPage})
     } catch (error) {
         console.error('Error:', error);
         res.render('admin/login',
@@ -80,7 +101,7 @@ const editCustomer = async (req, res) => {
 
 const loadAddCustomer = async (req, res) => {
     try {
-        res.render('admin/addCustomer',{message:''})
+        res.render('admin/addCustomer', { message: '' })
     } catch (error) {
         console.error('Error:', error);
         res.render('admin/login',
@@ -98,7 +119,7 @@ const addCustomer = async (req, res) => {
             })
         }
 
-        const customer = await User.findOne({ email })
+        const customer = await User.findOne({ email:{ $regex: `^${email}`, $options: 'i' } })
         if (customer) {
             return res.render('admin/addCustomer', {
                 message: `Customer with email ${email} already exists.`
@@ -116,16 +137,15 @@ const addCustomer = async (req, res) => {
         })
 
         await newUser.save()
-
-        return res.render('admin/addCustomer',
-            { message: 'Customer added successfully.' })
-
+return res.redirect('/admin/customer?message=Customer added successfully.')
+    
     } catch (error) {
         console.error('Error', error);
         res.render('admin/login',
             { message: 'Something went wrong while add customers. Please try again shortly.' })
     }
 }
+
 
 
 module.exports = {

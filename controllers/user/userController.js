@@ -3,12 +3,16 @@ const User = require('../../models/userScehma')
 const env = require('dotenv').config()
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
+const Category = require('../../models/categorySchema')
 
-const loadHome =async (req, res) => {
+const loadHome = async (req, res) => {
     try {
-        const email=req.session.userData?.email
-        const user=await User.findOne({email})
-        res.render('user/home', { message: '',user })
+        const categories = await Category.find({})
+        console.log(categories);
+
+        const email = req.session.userData?.email
+        const user = await User.findOne({ email })
+        res.render('user/home', { message: '', user, categories })
     } catch (error) {
         console.log(error);
         res.render('user/pageNotFound',
@@ -19,9 +23,10 @@ const loadHome =async (req, res) => {
 ///////////////
 //LOGIN
 
-const loadLogin = (req, res) => {
+const loadLogin = async (req, res) => {
     try {
-        res.render('user/login', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/login', { message: '', categories })
     } catch (error) {
         console.error('Error in load home:', error);
         res.render('user/pageNotFound',
@@ -30,13 +35,14 @@ const loadLogin = (req, res) => {
 }
 
 const login = async (req, res) => {
+    const categories = await Category.find({})
     const { email, password } = req.body;
     const user = await User.findOne({ email })
 
     if (!user) {
         console.log('User does not exist.');
         return res.render('user/login',
-            { message: 'Account not found. Please sign up first.' })
+            { message: 'Account not found. Please sign up first.', categories })
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
@@ -44,13 +50,13 @@ const login = async (req, res) => {
     if (!isMatch) {
         console.log('Password does not match.');
         return res.render('user/login',
-            { message: 'Incorrect password. Please try again.' })
+            { message: 'Incorrect password. Please try again.', categories })
     }
-const active = user.isBlocked
-    if(!active){
+    const blocked = user.isBlocked
+    if (blocked) {
         console.log('User is Blocked');
-       return res.render('user/login',
-            {message:'Your account has been blocked. Please contact support.'})
+        return res.render('user/login',
+            { message: 'Your account has been blocked. Please contact support.', categories })
     }
 
     req.session.userData = email
@@ -106,9 +112,10 @@ const securePassword = async (password) => {
 ////////////
 //SIGNUP
 
-const loadSignup = (req, res) => {
+const loadSignup = async (req, res) => {
     try {
-        res.render('user/signup', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/signup', { message: '', categories })
     } catch (error) {
         console.error('Error in load signup page', error);
         res.render('user/pageNotFound',
@@ -118,17 +125,18 @@ const loadSignup = (req, res) => {
 
 const signup = async (req, res) => {
     try {
+        const categories = await Category.find({})
         const { name, mobile, email, password, confirmPassword } = req.body
 
         if (password !== confirmPassword) {
             return res.render('user/signup',
-                { message: 'Passwords do not match' })
+                { message: 'Passwords do not match', categories })
         }
 
         const findUser = await User.findOne({ email })
         if (findUser) {
             return res.render('user/signup',
-                { message: 'User with this email already exists' })
+                { message: 'User with this email already exists', categories })
         }
 
         const otp = generateOtp()
@@ -136,13 +144,13 @@ const signup = async (req, res) => {
 
         if (!emailSent) {
             return res.render('user/signup',
-                { message: "Email could not be sent" })
+                { message: "Email could not be sent", categories })
         }
 
         req.session.userOtp = otp
         req.session.userData = { name, email, password, mobile }
 
-        res.render('user/signup-otp', { message: '' })
+        res.render('user/signup-otp', { message: '', categories })
         console.log(otp);
 
     } catch (error) {
@@ -152,10 +160,11 @@ const signup = async (req, res) => {
     }
 }
 
-const loadSignupOTP = (req, res) => {
+const loadSignupOTP = async (req, res) => {
     try {
+        const categories = await Category.find({})
         res.render('user/signup-otp',
-            { message: '' })
+            { message: '', categories })
     } catch (error) {
         console.error('Error load OTP :', error);
         res.render('user/pageNotFound',
@@ -165,6 +174,7 @@ const loadSignupOTP = (req, res) => {
 
 const verifySignupOtp = async (req, res) => {
     try {
+        const categories = await Category.find({})
         const { otp } = req.body
         console.log(otp);
 
@@ -188,7 +198,7 @@ const verifySignupOtp = async (req, res) => {
             return res.redirect('/user/home?message=User signed up successfully.')
         } else {
             res.render('user/signup-otp',
-                { message: 'Invalid OTP' })
+                { message: 'Invalid OTP', categories })
         }
 
 
@@ -202,9 +212,10 @@ const verifySignupOtp = async (req, res) => {
 //////////////////
 //FORGOT PASSWORD
 
-const loadForgotMail = (req, res) => {
+const loadForgotMail = async (req, res) => {
     try {
-        res.render('user/forgot-validate-email', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/forgot-validate-email', { message: '', categories })
     } catch (error) {
         console.error('Error in load forgot mail page', error);
         res.render('user/pageNotFound',
@@ -214,7 +225,7 @@ const loadForgotMail = (req, res) => {
 
 const forgotMail = async (req, res) => {
     try {
-
+        const categories = await Category.find({})
         const { email } = req.body
         console.log(email);
         req.session.email = email;
@@ -222,7 +233,7 @@ const forgotMail = async (req, res) => {
         const findUser = await User.findOne({ email })
         if (!findUser) {
             return res.render('user/forgot-validate-email',
-                { message: "No account found with this email address." })
+                { message: "No account found with this email address.", categories })
         }
         const otp = generateOtp()
 
@@ -230,13 +241,13 @@ const forgotMail = async (req, res) => {
 
         if (!emailSent) {
             return res.render('user/forgot-validate-email',
-                { message: "Failed to send OTP. Please try again." })
+                { message: "Failed to send OTP. Please try again.", categories })
         }
 
         req.session.userOtp = otp
         req.session.userData = { email }
 
-        res.render('user/forgot-otp', { message: '' })
+        res.render('user/forgot-otp', { message: '', categories })
         console.log('OTP: ', otp);
 
     } catch (error) {
@@ -246,9 +257,10 @@ const forgotMail = async (req, res) => {
     }
 }
 
-const loadForgotOTP = (req, res) => {
+const loadForgotOTP = async (req, res) => {
     try {
-        res.render('user/forgot-otp', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/forgot-otp', { message: '', categories })
     } catch (error) {
         console.error();
         res.render('user/pageNotFound',
@@ -258,14 +270,15 @@ const loadForgotOTP = (req, res) => {
 
 const verifyForgotOTP = async (req, res) => {
     try {
+        const categories = await Category.find({})
         const { otp } = req.body;
         console.log("OTP: ", otp);
 
         if (otp === req.session.userOtp) {
-            return res.render('user/forgot-reset-password', { message: '' })
+            return res.render('user/forgot-reset-password', { message: '', categories })
         } else {
             return res.render('user/forgot-otp',
-                { message: 'Invalid OTP' })
+                { message: 'Invalid OTP', categories })
         }
 
     } catch (error) {
@@ -277,6 +290,7 @@ const verifyForgotOTP = async (req, res) => {
 
 const resentForgotOTP = async (req, res) => {
     try {
+        const categories = await Category.find({})
         const { email } = req.session.userData?.email
         const newOtp = generateOtp()
 
@@ -284,11 +298,11 @@ const resentForgotOTP = async (req, res) => {
 
         if (!emailSent) {
             res.render('user/forgot-otp',
-                { message: 'Failed to resend OTP. Please try again.' })
+                { message: 'Failed to resend OTP. Please try again.', categories })
         } else {
             req.session.userOtp = newOtp
             res.render('user/forgot-otp',
-                { message: 'OTP resent successfully. Please check your email.' })
+                { message: 'OTP resent successfully. Please check your email.', categories })
         }
     } catch (error) {
         console.error('Error rending OTP', error);
@@ -297,12 +311,11 @@ const resentForgotOTP = async (req, res) => {
     }
 }
 
-const loadForgotPassword = (req, res) => {
-    console.log('enterd into load resetPassword page');
-    try {
-        console.log('enterd into load resetPassword page try');
+const loadForgotPassword = async (req, res) => {
 
-        res.render('user/forgot-reset-password', { message: '' })
+    try {
+        const categories = await Category.find({})
+        res.render('user/forgot-reset-password', { message: '', categories })
     } catch (error) {
         console.error();
         res.render('user/pageNotFound',
@@ -311,10 +324,11 @@ const loadForgotPassword = (req, res) => {
 }
 
 const resetPassword = async (req, res) => {
-    console.log('entered into resetPassword');
+
 
     try {
-        console.log('entered into try');
+        const categories = await Category.find({})
+
 
         const { newPassword, confirmPassword } = req.body
         console.log(req.body);
@@ -323,21 +337,21 @@ const resetPassword = async (req, res) => {
 
         if (!email) {
             return res.render('user/forgot-reset-password',
-                { message: 'Email not found. Please restart the process.' })
+                { message: 'Email not found. Please restart the process.', categories })
         }
         if (!newPassword || !confirmPassword) {
             return res.render('user/forgot-reset-password',
-                { message: 'New password and confirm password can not be empty.' })
+                { message: 'New password and confirm password can not be empty.', categories })
         }
         if (newPassword !== confirmPassword) {
             return res.render('user/forgot-reset-password',
-                { message: 'Passwords do not match. Please re-enter them.' })
+                { message: 'Passwords do not match. Please re-enter them.', categories })
         }
 
         const user = await User.findOne({ email })
         if (!user) {
             return res.render('user/forgot-reset-password',
-                { message: 'User not found.' })
+                { message: 'User not found.', categories })
         }
 
         const passwordHash = await bcrypt.hash(newPassword, 10)
@@ -354,18 +368,20 @@ const resetPassword = async (req, res) => {
 
 /////////
 //ABOUT & CONTACT
-const loadAbout = (req, res) => {
+const loadAbout = async (req, res) => {
     try {
-        res.render('user/aboutUs', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/aboutUs', { message: '', categories })
     } catch (error) {
         console.error('Error to load about us', error);
         res.render('user/pageNotFound',
             { message: 'Something went wrong while loading the about us page. Please try again shortly.' })
     }
 }
-const loadContactUs = (req, res) => {
+const loadContactUs = async (req, res) => {
     try {
-        res.render('user/contactUs', { message: '' })
+        const categories = await Category.find({})
+        res.render('user/contactUs', { message: '', categories })
     } catch (error) {
         console.error('Error to load contact us', error);
         res.render('user/pageNotFound',

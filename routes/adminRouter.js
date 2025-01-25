@@ -24,17 +24,20 @@ router.get('/logout',adminAuth.noCache,adminController.logout,adminAuth.checkSes
 router.get('/changePassword', adminAuth.noCache,adminAuth.checkSession,adminController.loadChangePassword)
 router.post('/changePassword',adminAuth.noCache,adminAuth.checkSession,adminController.changePassword)
 
-router.get('/category', categoryController.loadCategory)
+router.get('/category',adminAuth.noCache,adminAuth.checkSession, categoryController.loadCategory)
+router.post('/edit-category/:id',adminAuth.noCache,adminAuth.checkSession,categoryController.editCategory)
+router.post('/add-category',adminAuth.noCache,adminAuth.checkSession,categoryController.addCategory)
+router.delete('/deleteCategory/:id',adminAuth.noCache,adminAuth.checkSession, categoryController.deleteCategory);
 
 router.get('/coupon', couponController.laodCoupon)
 router.get('/addCoupon', couponController.loadAddCoupon)
 router.get('/editCoupon', couponController.loadEditCoupon)
 
-router.get('/customer', customerController.loadCustomer)
-router.get('/edit-customer/:id',customerController.loadEditCustomer)
-router.post('/update-customer/:id',customerController.editCustomer)
-router.get('/addCustomer',customerController.loadAddCustomer)
-router.post('/addCustomer',customerController.addCustomer)
+router.get('/customer',adminAuth.noCache,adminAuth.checkSession, customerController.loadCustomer)
+router.get('/edit-customer/:id',adminAuth.noCache,adminAuth.checkSession,customerController.loadEditCustomer)
+router.post('/update-customer/:id',adminAuth.noCache,adminAuth.checkSession,customerController.editCustomer)
+router.get('/addCustomer',adminAuth.noCache,adminAuth.checkSession,customerController.loadAddCustomer)
+router.post('/addCustomer',adminAuth.noCache,adminAuth.checkSession,customerController.addCustomer)
 
 router.get('/offer', offerController.loadOffer)
 

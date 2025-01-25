@@ -1,30 +1,33 @@
 
-
-const loadWallet =(req,res)=>{
+const Category = require('../../models/categorySchema')
+const loadWallet = async (req, res) => {
     try {
-        res.render('user/wallet')
+        const categories = await Category.find({})
+        res.render('user/wallet', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadAddMoney = (req,res)=>{
+const loadAddMoney = async (req, res) => {
     try {
-        res.render('user/addmoney')
+        const categories = await Category.find({})
+        res.render('user/addmoney', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadWithdrawMoney = (req,res) =>{
+const loadWithdrawMoney = async (req, res) => {
     try {
-        res.render('user/withdrawmoney')
+        const categories = await Category.find({})
+        res.render('user/withdrawmoney', { categories })
     } catch (error) {
-        
+
     }
 }
 
-module.exports ={
+module.exports = {
     loadWallet,
     loadAddMoney,
     loadWithdrawMoney

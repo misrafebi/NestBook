@@ -37,15 +37,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/user/home">Home</a>
                     </li>
+                    <%if(categories.length>0){%>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Categories
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Dropdown
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <!-- Add Categories -->
-                        </div>
-                    </li>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <%categories.forEach((category)=>{%>
+                          <li><a class="dropdown-item" href="#"><%=category.name%></a></li>
+                          <%})%>
+                        </ul>
+                      </li>
+                      <%}%>
                     <li class="nav-item">
                         <a class="nav-link" href="/user/aboutUs">About</a>
                     </li>

@@ -1,41 +1,46 @@
-
-const loadProfile = (req,res) =>{
+const Category = require('../../models/categorySchema')
+const loadProfile = async (req, res) => {
     try {
-        res.render('user/profile')
+        const categories = await Category.find({})
+        res.render('user/profile', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadEditAddress = (req,res)=>{
+const loadEditAddress = async (req, res) => {
     try {
-        res.render('user/edit-address')
+        const categories = await Category.find({})
+        res.render('user/edit-address', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadAddAddress = (req,res) =>{
+const loadAddAddress = async (req, res) => {
     try {
-        res.render('user/add-address')
+        const categories = await Category.find({})
+        res.render('user/add-address', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadCheckOut = (req,res) =>{
+const loadCheckOut = async (req, res) => {
     try {
-        res.render('user/checkout')
+        const categories = await Category.find({})
+        res.render('user/checkout', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadOrders = (req,res) =>{
+const loadOrders = async (req, res) => {
     try {
-        res.render('user/orders')
+        const categories = await Category.find({})
+        res.render('user/orders', { categories })
     } catch (error) {
-        
+
     }
 }
 

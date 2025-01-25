@@ -567,6 +567,7 @@
       </div>
     </section>
 
+    <%if(categories.length>0){%>
     <section class="py-5 overflow-hidden">
       <div class="container-fluid">
         <div class="row">
@@ -591,54 +592,57 @@
 
             <div class="category-carousel swiper">
               <div class="swiper-wrapper">
+                <%categories.forEach((category)=>{%>
                 <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
+                  <h3 class="category-title"><%=category.name%></h3>
                 </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                <%})%>
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
+                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
+                  <h3 class="category-title">Fruits & Veges</h3>
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-bread-baguette.png" alt="Category Thumbnail">
                   <h3 class="category-title">Breads & Sweets</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-soft-drinks-bottle.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-wine-glass-bottle.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-animal-products-drumsticks.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-bread-herb-flour.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
+                </a> -->
+                <!-- <a href="user/home" class="nav-link category-item swiper-slide">
                   <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
                   <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="user/home" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
+                </a> -->
+                
 
               </div>
             </div>
@@ -647,6 +651,7 @@
         </div>
       </div>
     </section>
+    <%}%>
 
 
     <!-- <section class="py-5 overflow-hidden">
@@ -3163,7 +3168,7 @@
           alert(message);
         }
       </script>
-
+ 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

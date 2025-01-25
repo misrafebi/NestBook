@@ -1,26 +1,29 @@
+const Category = require('../../models/categorySchema')
 
-
-const loadProducts = (req,res) => {
+const loadProducts = async (req, res) => {
     try {
-        res.render('user/products')
+        const categories = await Category.find({})
+        res.render('user/products', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadProductDetail = (req,res) =>{
+const loadProductDetail = async (req, res) => {
     try {
-        res.render('user/product-details')
+        const categories = await Category.find({})
+        res.render('user/product-details', { categories })
     } catch (error) {
-        
+
     }
 }
 
-const loadProductReview = (req,res) =>{
+const loadProductReview = async (req, res) => {
     try {
-        res.render('user/product-review')
+        const categories = await Category.find({})
+        res.render('user/product-review', { categories })
     } catch (error) {
-        
+
     }
 }
 
