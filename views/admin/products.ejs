@@ -43,7 +43,6 @@
         .sort-box {
             width: 100px;
             display: block;
-            /* width: 100%; */
             height: calc(1.5em + .75rem + 2px);
             padding: .375rem .75rem;
             font-size: 1rem;
@@ -55,6 +54,11 @@
             border: 1px solid #ced4da;
             border-radius: .25rem;
             transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        #product-image{
+            width: 60px;
+            height: auto;
         }
     </style>
 </head>
@@ -129,7 +133,9 @@
                                     <td>
                                         <%=(currentPage - 1) * 10 + index + 1%>
                                     </td>
-                                    <td>&nbsp;</td>
+                                    <td><a href="">
+                                        <img src="/<%= product.image[0] %>" alt="<%= product.productName %>" id="product-image">
+                                    </a></td>
                                     <td>
                                         <%=product.productName%>
                                     </td>
@@ -183,6 +189,7 @@
                             <a href="?page=<%= currentPage + 1 %>" class="btn btn-outline-secondary">></a>
                         <% } %>
                     </div>
+                    
                     <%}%>
         </div>
 

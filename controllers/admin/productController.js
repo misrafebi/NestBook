@@ -1,39 +1,47 @@
 const Product = require('../../models/productSchema')
 const Category = require('../../models/categorySchema');
-const { options } = require('../../routes/adminRouter');
-const loadProduct =async (req, res) => {
-    try { 
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs')
+const env = require('dotenv').config()
+const mongoose = require('mongoose');
+
+
+
+const loadProduct = async (req, res) => {
+    try {
         const page = parseInt(req.query.page) || 1
         const limit = 10
         const skip = (page - 1) * limit
 
-        const totalProducts=await Product.countDocuments()
+        const totalProducts = await Product.countDocuments()
 
-        const categories=await Category.find({})
-        const products=await Product.find({})
-        .sort({createdAt:-1})
-        .skip(skip)
-        .limit(limit)
+        const categories = await Category.find({})
+        const products = await Product.find({})
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
 
-        const totalPages=Math.ceil(totalProducts/limit)
-        res.render('admin/products', { 
+        const totalPages = Math.ceil(totalProducts / limit)
+        res.render('admin/products', {
             message: '',
             categories,
             products,
-currentPage:page,
-totalPages
-         })
+            currentPage: page,
+            totalPages
+        })
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
             { message: 'Something went wrong while loading the products page. Please try again shortly.' })
     }
-} 
+}
 
 const loadAddProduct = async (req, res) => {
     try {
+        const products = await Product.find///9[]
         const categories = await Category.find({})
-        res.render('admin/addProduct', { categories, message: '' })
+        res.render('admin/addProduct', { categories, message: '', products })
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
@@ -44,38 +52,69 @@ const loadAddProduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
-        const categories = await Category.find({})
-        const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description } = req.body
+        const normalizePath = (filePath) => {
+            return filePath.replace(/^.*\/uploads\//, 'uploads/');
+        };
+        const categories = await Category.find({});
+        const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description } = req.body;
 
-        if (!category || category == 'Select category') {
+        if (!category || category === 'Select category') {
             return res.render('admin/addProduct', {
                 message: 'Category cannot be empty. Please select or enter a valid category.',
                 categories
-            })
+            });
+        }
+
+        if (!req.files || req.files.length === 0) {
+            return res.render('admin/addProduct', {
+                categories,
+                message: 'Please upload at least one product image.'
+            });
+        }
+
+        const images = [];
+        const uploadDir = path.join('public', 'uploads', 'product-images');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        for (let file of req.files) {
+            const originalImagePath = file.path;
+            const resizedImagePath = path.join(uploadDir, file.filename);
+
+            await sharp(originalImagePath)
+                .resize({ width: 440, height: 440 })
+                .toFile(resizedImagePath);
+
+            images.push(normalizePath(resizedImagePath));
         }
 
         const productExists = await Product.findOne({
             productName: { $regex: `${productName}$`, $options: 'i' }
-        })
+        });
 
         if (productExists) {
-            return res.render('admin/addProduct',
-                { message: `Product :${productName} already exists.`, categories })
-
+            return res.render('admin/addProduct', {
+                message: `Product: ${productName} already exists.`,
+                categories
+            });
         }
-        let categoryDoc = await Category.findOne({ name: category })
+
+        let categoryDoc = await Category.findOne({ name: category });
         if (!categoryDoc) {
-            categoryDoc = new Category({ name: category, description: '' })
-            await categoryDoc.save()
+            categoryDoc = new Category({ name: category, description: '' });
+            await categoryDoc.save();
         }
 
         const salePrice = Math.round(regularPrice - (regularPrice * productOffer) / 100);
 
         const newProduct = new Product({
+            image: images,
             productName,
             authorName,
             category: categoryDoc._id,
-            status, publishDate,
+            status,
+            publishDate,
             publisher,
             regularPrice,
             productOffer,
@@ -83,20 +122,37 @@ const addProduct = async (req, res) => {
             quantity,
             description,
             salePrice
-        })
+        });
 
-        await newProduct.save()
+        await newProduct.save();
+        // console.log('Product added with images:', newProduct.image);
 
-        return res.render('admin/products',
-            { message: 'product added successfully.' })
+        const page = parseInt(req.query.page) || 1
+        const limit = 10
+        const skip = (page - 1) * limit
 
+        const totalProducts = await Product.countDocuments()
+
+        // const categories=await Category.find({})
+        const products = await Product.find({})
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+        const totalPages = Math.ceil(totalProducts / limit)
+
+        return res.render('admin/products', {
+            message: 'Product added successfully.',
+            products,
+            totalPages,
+            currentPage: page
+        });
     } catch (error) {
         console.error('Error: ', error);
-        res.render('admin/login',
-            { message: 'Something went wrong while add product. Please try again shortly.' })
+        res.render('admin/login', {
+            message: 'Something went wrong while adding the product. Please try again shortly.'
+        });
     }
-}
-
+};
 const loadEditProduct = (req, res) => {
     try {
         res.render('admin/editProduct')
