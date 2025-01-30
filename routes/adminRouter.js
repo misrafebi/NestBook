@@ -71,7 +71,7 @@ router.get('/offer', offerController.loadOffer)
 router.get('/product', productController.loadProduct)
 router.get('/addProduct', productController.loadAddProduct)
 router.post('/addProduct', upload.array('images', 4), productController.addProduct)
-
+router.get('/viewProduct/:id',productController.loadViewProduct)
 router.get('/editProduct', productController.loadEditProduct)
 
 router.get('/review', reviewController.loadReviews)

@@ -39,7 +39,7 @@ const loadProduct = async (req, res) => {
 
 const loadAddProduct = async (req, res) => {
     try {
-        const products = await Product.find///9[]
+        const products = await Product.find({})
         const categories = await Category.find({})
         res.render('admin/addProduct', { categories, message: '', products })
     } catch (error) {
@@ -163,9 +163,31 @@ const loadEditProduct = (req, res) => {
     }
 }
 
+const loadViewProduct = async (req, res) => {
+    try {
+        const id = req.params.id
+        const product = await Product.findById(id).populate('category')
+        if (!product) {
+            return console.log('product is not defined');
+
+        }
+        // const category = await Category.findOne({ name: product.category })
+        
+        res.render('admin/viewProduct', {
+            message: '',
+            product,
+            category:product.category
+        })
+    } catch (error) {
+        console.error('Error: ', error);
+        res.render('admin/login',
+            { message: 'Something went wrong while loading the view product page. Please try again shortly.' })
+    }
+}
 module.exports = {
     loadProduct,
     loadAddProduct,
     loadEditProduct,
-    addProduct
+    addProduct,
+    loadViewProduct
 }

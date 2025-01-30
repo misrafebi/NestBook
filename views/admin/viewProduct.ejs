@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Product</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <style>
+        .product-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .product-images img:hover {
+            transform: scale(1.1);
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+        }
+
+        .edit-btn {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #product-image {
+            width: 315px;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #productCarousel {
+            height: 490px;
+            width: 297px;
+        }
+
+        /* .description-box {
+            max-height: 100px;
+            overflow-y: auto;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            padding: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        } */
+        .carousel-control-prev,
+        .carousel-control-next {
+            background: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgb(14, 2, 2);
+            width: 30px;
+            height: 30px;
+            margin-top: 250px;
+        }
+
+        .carousel-control-prev:focus,
+        .carousel-control-next:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">View Product</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid p-3">
+        <!-- Product Details -->
+        <div class="card p-3">
+            <div class="product-container">
+                <!-- Image Section -->
+                <div>
+                    <h5>Product Images</h5>
+                    <div class="d-flex flex-wrap gap-2 product-images">
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner" id="img-size">
+                                <% for(let i=0; i < product.image.length;i++){%>
+                                    <div class="carousel-item <%=i===0?'active':''%>">
+                                        <img src="/<%=product.image[i]%>" alt="" id="product-image">
+                                    </div>
+                                    <%}%>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden"></span>
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Details Section -->
+                <div class="product-details">
+                    <h4>Product Details</h4>
+                    <table class="table table-striped">
+                        <tbody>
+                            <%if(product.productName){%>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <td>
+                                        <%=product.productName%>
+                                    </td>
+                                </tr>
+                                <%}%>
+
+                                    <%if(product.authorName){%>
+                                        <tr>
+                                            <th>Author Name</th>
+                                            <td>
+                                                <%=product.authorName%>
+                                            </td>
+                                        </tr>
+                                        <%}%>
+
+                                            <%if(product.regularPrice){%>
+                                                <tr>
+                                                    <th>Price</th>
+                                                    <td><del>₹<%=product.regularPrice%></del></td>
+                                                </tr>
+                                                <%}%>
+
+                                                    <%if(product.productOffer){%>
+                                                        <tr>
+                                                            <th>Discount</th>
+                                                            <td>
+                                                                <%=product.productOffer%>% Off
+                                                            </td>
+                                                        </tr>
+                                                        <%}%>
+                                                            <%if(product.salePrice){%>
+                                                                <tr>
+                                                                    <th>Sale Price</th>
+                                                                    <td class="text-success">₹<%=product.salePrice%>
+                                                                    </td>
+                                                                </tr>
+                                                                <%}%>
+
+                                                                    <%if(category.name){%>
+                                                                        <tr>
+                                                                            <th>Category</th>
+                                                                            <td>
+                                                                                <%=category.name%>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <%}%>
+
+                                                                            <%if(product.status){%>
+                                                                                <tr>
+                                                                                    <th>Status</th>
+                                                                                    <%if(product.status==='Available'){%>
+                                                                                        <td class="text-success">
+                                                                                            <%=product.status%>
+                                                                                        </td>
+                                                                                        <%}else
+                                                                                            if(product.status==='Out Of Stock'
+                                                                                            ){%>
+                                                                                            <td class="text-warning">
+                                                                                                <%=product.status%>
+                                                                                            </td>
+                                                                                            <%}else{%>
+                                                                                                <td class="text-danger">
+                                                                                                    <%=product.status%>
+                                                                                                </td>
+                                                                                                <%}%>
+                                                                                </tr>
+                                                                                <%}%>
+
+                                                                                    <%if(product.quantity){%>
+                                                                                        <tr>
+                                                                                            <th>Available Quantity</th>
+                                                                                            <td>
+                                                                                                <%=product.quantity%>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <%}%>
+
+                                                                                            <%if(product.numberPage){%>
+                                                                                                <tr>
+                                                                                                    <th>Number of Pages
+                                                                                                    </th>
+                                                                                                    <td>
+                                                                                                        <%=product.numberPage%>
+                                                                                                            Pages
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <%}%>
+
+                                                                                                    <%if(product.publishDate){%>
+                                                                                                        <tr>
+                                                                                                            <th>Publish
+                                                                                                                Date
+                                                                                                            </th>
+                                                                                                            <td>
+                                                                                                                <%=product.publishDate%>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <%}%>
+
+                                                                                                            <%if(product.publisher){%>
+                                                                                                                <tr>
+                                                                                                                    <th>Publisher
+                                                                                                                    </th>
+                                                                                                                    <td>
+                                                                                                                        <%=product.publisher%>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                                <%}%>
+
+                                                                                                                    <%if(product.description){%>
+                                                                                                                        <tr>
+                                                                                                                            <th>Description
+                                                                                                                            </th>
+                                                                                                                            <td>
+                                                                                                                                <div
+                                                                                                                                    class="description-box">
+                                                                                                                                    <%=product.description%>
+                                                                                                                                </div>
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                        <%}%>
+
+
+                        </tbody>
+                    </table>
+                    <!-- <button class="btn btn-primary edit-btn">Edit</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
