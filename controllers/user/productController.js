@@ -1,9 +1,11 @@
 const Category = require('../../models/categorySchema')
+const Product=require('../../models/productSchema')
 
 const loadProducts = async (req, res) => {
     try {
+        const products=await Product.find({})
         const categories = await Category.find({})
-        res.render('user/products', { categories })
+        res.render('user/products', { categories,products })
     } catch (error) {
 
     }

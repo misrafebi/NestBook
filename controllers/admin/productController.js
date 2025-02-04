@@ -171,12 +171,11 @@ const loadViewProduct = async (req, res) => {
             return console.log('product is not defined');
 
         }
-        // const category = await Category.findOne({ name: product.category })
-        
+
         res.render('admin/viewProduct', {
             message: '',
             product,
-            category:product.category
+            category: product.category
         })
     } catch (error) {
         console.error('Error: ', error);

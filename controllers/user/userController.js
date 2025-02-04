@@ -4,15 +4,17 @@ const env = require('dotenv').config()
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const Category = require('../../models/categorySchema')
+const Product=require('../../models/productSchema')
 
 const loadHome = async (req, res) => {
     try {
+        const newArrivals=await Product.find({}).sort({createdAt:-1}).limit(10)
         const categories = await Category.find({})
         console.log(categories);
 
         const email = req.session.userData?.email
         const user = await User.findOne({ email })
-        res.render('user/home', { message: '', user, categories })
+        res.render('user/home', { message: '', user, categories,newArrivals })
     } catch (error) {
         console.log(error);
         res.render('user/pageNotFound',

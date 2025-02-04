@@ -33,9 +33,21 @@
     .hide-nav-bar {
       display: none;
     }
+    /* #category-icon{
+      height: 64px;
+      width: 64px;
+    } */
+     .sale-price{
+      font-weight: bold;
+     }
+     .regular-price{
+      color: rgb(118, 114, 106);
+     }
+     .offer-price{
+      color: rgb(188, 147, 65);
+     }
   </style>
 
-</head>
 
 <body>
   <%- include('../partials/user/nav-bar')%>
@@ -593,8 +605,8 @@
             <div class="category-carousel swiper">
               <div class="swiper-wrapper">
                 <%categories.forEach((category)=>{%>
-                <a href="user/home" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
+                <a href="user/home" class="nav-link category-item swiper-slide" >
+                  <img src="/assets/category-icon-3.png" alt="Category Thumbnail" id="category-icon">
                   <h3 class="category-title"><%=category.name%></h3>
                 </a>
                 <%})%>
@@ -789,13 +801,13 @@
             <div class="bootstrap-tabs product-tabs">
               <div class="tabs-header d-flex justify-content-between border-bottom my-5">
                 <h3>Trending Products</h3>
-                <nav>
-                  <!-- <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <!-- <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a href="#" class="nav-link text-uppercase fs-6 active" id="nav-all-tab" data-bs-toggle="tab" data-bs-target="#nav-all">All</a>
                     <a href="#" class="nav-link text-uppercase fs-6" id="nav-fruits-tab" data-bs-toggle="tab" data-bs-target="#nav-fruits">Fruits & Veges</a>
                     <a href="#" class="nav-link text-uppercase fs-6" id="nav-juices-tab" data-bs-toggle="tab" data-bs-target="#nav-juices">Juices</a>
-                  </div> -->
-                </nav>
+                  </div>
+                </nav> -->
               </div>
               <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
@@ -1806,11 +1818,11 @@
               <h2 class="section-title">Best selling products</h2>
 
               <div class="d-flex align-items-center">
-                <!-- <a href="#" class="btn-link text-decoration-none">View All Categories →</a> -->
-                <!-- <div class="swiper-buttons">
+                <a href="/user/products" class="btn-link text-decoration-none">View All Books →</a> 
+                 <div class="swiper-buttons">
                   <button class="swiper-prev products-carousel-prev btn btn-primary">❮</button>
                   <button class="swiper-next products-carousel-next btn btn-primary">❯</button>
-                </div>   -->
+                </div>  
               </div>
             </div>
 
@@ -2174,13 +2186,13 @@
 
               <h2 class="section-title">Most popular products</h2>
 
-              <!-- <div class="d-flex align-items-center">
-                <a href="#" class="btn-link text-decoration-none">View All Categories →</a>
+              <div class="d-flex align-items-center">
+                <a href="/user/products" class="btn-link text-decoration-none">View All Books →</a>
                 <div class="swiper-buttons">
                   <button class="swiper-prev products-carousel-prev btn btn-primary">❮</button>
                   <button class="swiper-next products-carousel-next btn btn-primary">❯</button>
                 </div>  
-              </div> -->
+              </div>
             </div>
 
           </div>
@@ -2486,7 +2498,7 @@
         </div>
       </div>
     </section>
-
+<%if(newArrivals.length>0){%>
     <section class="py-5 overflow-hidden">
       <div class="container-fluid">
         <div class="row">
@@ -2496,13 +2508,13 @@
 
               <h2 class="section-title">Just arrived</h2>
 
-              <!-- <div class="d-flex align-items-center">
-                <a href="#" class="btn-link text-decoration-none">View All Categories →</a>
+              <div class="d-flex align-items-center">
+                <a href="/user/products" class="btn-link text-decoration-none">View All Books →</a>
                 <div class="swiper-buttons">
                   <button class="swiper-prev products-carousel-prev btn btn-primary">❮</button>
                   <button class="swiper-next products-carousel-next btn btn-primary">❯</button>
                 </div>  
-              </div> -->
+              </div>
             </div>
 
           </div>
@@ -2513,20 +2525,26 @@
             <div class="products-carousel swiper">
               <div class="swiper-wrapper">
 
+                <% for(let i=0; i < newArrivals.length; ++i) { %>
+
                 <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
                   <figure>
                     <a href="index.html" title="Product Title">
-                      <img src="images/thumb-tomatoes.png" class="tab-image">
+                      <img src="/<%=newArrivals[i].image[0]%>" alt="<%=newArrivals[i].productName%>" class="tab-image">
                     </a>
                   </figure>
-                  <h3>Sunstar Fresh Melon Juice</h3>
-                  <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary">
+                  <h3><%=newArrivals[i].productName%></h3>
+                  <span class="rating"><svg width="24" height="24" class="text-primary">
                       <use xlink:href="#star-solid"></use>
                     </svg> 4.5</span>
-                  <span class="price">$18.00</span>
+                    <div >
+                  <span class="sale-price">₹<%=newArrivals[i].salePrice%></span>&nbsp;
+                  <span class="regular-price"><del>₹<%=newArrivals[i].regularPrice%></del></span>&nbsp;
+                  <span class="offer-price">(<%=newArrivals[i].productOffer%>% Off)</span>
+                </div>
                   <div class="d-flex align-items-center justify-content-between">
                     <div class="input-group product-qty">
                       <span class="input-group-btn">
@@ -2549,7 +2567,9 @@
                   </div>
                 </div>
 
-                <div class="product-item swiper-slide">
+                <%}%>
+
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2583,9 +2603,9 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
-                <div class="product-item swiper-slide">
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2619,9 +2639,9 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
-                <div class="product-item swiper-slide">
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2655,8 +2675,8 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
-                <div class="product-item swiper-slide">
+                </div> -->
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2690,9 +2710,9 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
-                <div class="product-item swiper-slide">
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2726,9 +2746,9 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
-                <div class="product-item swiper-slide">
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2762,9 +2782,9 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
-                <div class="product-item swiper-slide">
+                <!-- <div class="product-item swiper-slide">
                   <a href="#" class="btn-wishlist"><svg width="24" height="24">
                       <use xlink:href="#heart"></use>
                     </svg></a>
@@ -2798,7 +2818,7 @@
                     </div>
                     <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                   </div>
-                </div>
+                </div> -->
 
               </div>
             </div>
@@ -2808,6 +2828,7 @@
         </div>
       </div>
     </section>
+    <%}%>
 
     <!-- <section id="latest-blog" class="py-5">
       <div class="container-fluid">
