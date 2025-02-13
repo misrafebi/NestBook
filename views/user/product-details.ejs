@@ -1,177 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Page - Atomic Habits</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>BookNest - Product Details </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .product-page {
-            padding: 20px;
+        /*head*/
+        .product-detail-page {
+            margin-top: 20px;
         }
-        .product-image-container {
-            position: relative;
-        }
-        .heart-button {
+
+        .carousel-item img {
+            width: 296px !important;
+            height: 490px !important;
+            object-fit: cover;
+            border-radius: 5px;
+        } 
+
+
+
+        .wishlist-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: none;
-            border: none;
+            background: rgba(20, 2, 2, 0.8);
+            padding: 5px;
+            border-radius: 50%;
+            z-index: 2;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
         }
-        .heart-button i {
-            font-size: 24px;
-            color: red;
+
+        .wishlist-btn:hover {
+            transform: scale(1.2);
+            background: #ff6f61;
+            color: white;
         }
+
+        .wishlist-button i {
+            color: #333;
+        }
+
         .product-details {
             margin-top: 20px;
         }
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-        .quantity-controls input {
-            width: 60px;
-            text-align: center;
-        }
-        .suggestions {
-            margin-top: 40px;
-        }
-        .suggestions img {
-            max-width: 100%;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
+
+        .product-details h3 {
+            margin-bottom: 10px;
         }
 
+        #img-size {
+            height: 490px;
+            position: relative;
+            width: 297px;
+            overflow: hidden;
+        }
 
-        #quantity-input {
-            width: 60px;
+        #productCarousel {
+            height: 490px;
+            width: 297px;
+        }
+
+        .mb-3 {
+
+            width: 190px;
+            margin-bottom: 1rem !important;
+        }
+
+        #cart-btn {
+            background-color: #FF9F00;
+
+            border-color: #FF9F00;
+            width: 145px;
+        }
+
+        #cart-btn:hover {
+            color: #ab8b57;
+            color: #ddd;
+        }
+
+        #buy-btn {
+            background-color: #FB641B;
+            border-color: #FB641B;
+            color: #ddd;
+            width: 145px;
+        }
+
+        #buy-btn:hover {
+            color: #eb9164;
+            color: #ddd;
+        }
+
+        .quantity-form {
+            width: 100px;
             border: none;
-            background-color: #e3e3e3;
+            background-color: rgb(230, 230, 230);
         }
 
-        .decrement-btn {
+        .quality-btn {
             border: none;
-            background-color: #e3e3e3;
-            border-radius: 5px 0px 0px 5px;
+
         }
 
-        .increment-btn {
-            border: none;
-            background-color: #e3e3e3;
-            border-radius: 0px 5px 5px 0px;
+        .quality-div {
+            background-color: rgb(230, 230, 230);
+            border-radius: 5px;
         }
+
+        #orginal-price {
+            color: #9e9d9d;
+        }
+
+        /*content*/
+
+        .product-details {
+            margin-top: 20px;
+        }
+
+        .product-details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .product-details table td,
+        .product-details table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .product-details table th {
+            background-color: #f2f2f2;
+        }
+
+        /*footer*/
+        .mb-3 {
+            width: 190px;
+            margin-bottom: 1rem !important;
+        }
+
+        .suggested-img {
+            height: 249px;
+            width: 171px;
+        }
+
+        /**/
     </style>
 </head>
+
 <body>
-    <%- include('../partials/user/nav-bar')%>
+    <!------- HEADER --------->
+    <%- include('../partials/user/nav-bar') %>
+        <!------------------------>
 
-    <div class="container product-page">
-        <div class="row">
-            <div class="col-md-4 product-image-container">
-                <img src="atomic-habits.jpg" alt="Atomic Habits" class="img-fluid">
-                <button class="heart-button"><i class="fas fa-heart"></i></button>
-                <div class="mt-3">
-                    <button class="btn btn-warning ">Add to Cart</button>
-                    <button class="btn btn-danger ">Buy Now</button>
+        <%- include('../partials/user/product-detail-header') %>
+      
+
+                                    <!----------- content --------------->
+                                    <hr>
+                                     <br>
+                                     <a href="/user/productDetails?id=<%= product._id %>"></a>
+                                     <button class="btn btn-outline-light">Details</button>
+                                    </a>
+                                     <a href="/user/productReview?id=<%= product._id %>">
+                                        
+                                         <button class="btn btn-light">Reviews</button>
+                                        
+                                     </a>
+                                      <br><br>
+                    </div>
+                    <div class="product-details">
+                        <h4>Product Details</h4>
+                        <p>
+                            <%=product.description%>
+                        </p>
+                        <br>
+                        <table>
+                            <% if(product.productName){%>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <td>
+                                        <%=product.productName%>
+                                    </td>
+                                </tr>
+                                <%}%>
+
+                                    <% if(product.authorName){%>
+                                        <tr>
+                                            <th>Author Name</th>
+                                            <td>
+                                                <%=product.authorName%>
+                                            </td>
+                                        </tr>
+                                        <%}%>
+
+                                            <% if(product.numberOfPage){%>
+                                                <tr>
+                                                    <th>No-of Pages</th>
+                                                    <td>
+                                                        <%=product.numberOfPage%>
+                                                    </td>
+                                                </tr>
+                                                <%}%>
+
+                                                    <% if (product.category && product.category.name) { %>
+                                                        <tr>
+                                                            <th>Category</th>
+                                                            <td>
+                                                                <%= product.category.name %>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+
+
+                                                            <% if(product.productOffer){%>
+                                                                <tr>
+                                                                    <th>Offer</th>
+                                                                    <td>₹<%=product.productOffer%>
+                                                                    </td>
+                                                                </tr>
+                                                                <%}%>
+
+                                                                    <% if(product.quantity){%>
+                                                                        <tr>
+                                                                            <th>Available Quantity</th>
+                                                                            <td>
+                                                                                <%=product.quantity%>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <%}%>
+
+                                                                            <% if(product.publisher){%>
+                                                                                <tr>
+                                                                                    <th>Publisher</th>
+                                                                                    <td>
+                                                                                        <%=product.publisher%>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <%}%>
+
+                                                                                    <% if(product.publishDate){%>
+                                                                                        <tr>
+                                                                                            <th>Publish Date</th>
+                                                                                            <td>
+                                                                                                <%=product.publishDate%>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <%}%>
+
+                        </table>
+                    </div>
                 </div>
             </div>
+        </div>
+        <br>
+
+        <!---------------------------->
+        <%- include('../partials/user/product-detail-footer') %>
+
+
+
+
+        <!------- FOOTER --------->
+        <%- include('../partials/user/footer')%>
+
+            <!-- -------------------- -->
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
             
-            <div class="col-md-8">
-                <br><br>
-                <h4>ATOMIC HABITS</h4>
-                <p>4.2 - 72 Ratings | INSTOCK</p>
-                <p>₹766</p>
 
-                <div class="quantity-control">
-                    <div class="quantity-control-div">
-                        <div class="input-group mb-3">
-                            <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
-                            <input type="text" class="form-control " placeholder="1" id="quantity-input"
-                                aria-label="Example text with two button addons">
-                            <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
-                        </div>
-                   </div>
-                </div>
-                
-                <div class="mt-3">
-                    <button class="btn btn-outline-light">Details</button>
-                    <button class="btn btn-secondary">Reviews</button>
-                </div>
-                <div class="product-details mt-4">
-                    <h5>Product Details</h5>
-                    <p>Atomic Habits: An Easy and Proven Way to Build Good Habits by James Clear</p>
-                    <table class="table border ">
-                        <tr>
-                            <th>Book Name</th>
-                            <td>Atomic Habits</td>
-                        </tr>
-                        <tr>
-                            <th>Author Name</th>
-                            <td>James Clear</td>
-                        </tr>
-                        <tr>
-                            <th>No-of Page</th>
-                            <td>320 Pages</td>
-                        </tr>
-                        <tr>
-                            <th>Category</th>
-                            <td>Nonfiction</td>
-                        </tr>
-                        <tr>
-                            <th>Offer</th>
-                            <td>₹130</td>
-                        </tr>
-                        <tr>
-                            <th>Available Quantity</th>
-                            <td>14</td>
-                        </tr>
-                        <tr>
-                            <th>Publisher</th>
-                            <td>Avery (an imprint of Penguin Random House)</td>
-                        </tr>
-                        <tr>
-                            <th>Publish Date</th>
-                            <td>16-10-2018</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="suggestions mt-5">
-            <h3>You Might Also Like</h3>
-            <div class="row">
-                <div class="col-md-2">
-                    <img src="suggestion1.jpg" alt="Suggestion 1" class="img-fluid">
-                </div>
-                <div class="col-md-2">
-                    <img src="suggestion2.jpg" alt="Suggestion 2" class="img-fluid">
-                </div>
-                <div class="col-md-2">
-                    <img src="suggestion3.jpg" alt="Suggestion 3" class="img-fluid">
-                </div>
-                <div class="col-md-2">
-                    <img src="suggestion4.jpg" alt="Suggestion 4" class="img-fluid">
-                </div>
-                <div class="col-md-2">
-                    <img src="suggestion5.jpg" alt="Suggestion 5" class="img-fluid">
-                </div>
-                <div class="col-md-2">
-                    <img src="suggestion6.jpg" alt="Suggestion 6" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <%- include('../partials/user/footer')%>
+            <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

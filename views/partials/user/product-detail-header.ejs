@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Product Details </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <style>
+        /*head*/
+        .product-detail-page {
+            margin-top: 20px;
+        }
+
+        .carousel-item img {
+            width: 296px !important;
+            height: 490px !important;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 10px; 
+            right: 10px;
+            background: rgba(20, 2, 2, 0.8);
+            padding: 5px;
+            border-radius: 50%;
+            z-index: 2;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.2);
+            background: #ff6f61;
+            color: white;
+        }
+
+        .wishlist-button i {
+            color: #333;
+        }
+
+        .product-details {
+            margin-top: 20px;
+        }
+
+        .product-details h3 {
+            margin-bottom: 10px;
+        }
+
+        #img-size {
+            height: 490px;
+            position: relative;
+            width: 297px;
+            overflow: hidden;
+        }
+
+        #productCarousel {
+            height: 490px;
+            width: 297px;
+        }
+
+        .mb-3 {
+
+            width: 190px;
+            margin-bottom: 1rem !important;
+        }
+
+        #cart-btn {
+            background-color: #FF9F00;
+
+            border-color: #FF9F00;
+            width: 145px;
+        }
+
+        #cart-btn:hover {
+            color: #ab8b57;
+            color: #ddd;
+        }
+
+        #buy-btn {
+            background-color: #FB641B;
+            border-color: #FB641B;
+            color: #ddd;
+            width: 145px;
+        }
+
+        #buy-btn:hover {
+            color: #eb9164;
+            color: #ddd;
+        }
+
+        .quantity-form {
+            width: 100px;
+            border: none;
+            background-color: rgb(230, 230, 230);
+        }
+
+        .quality-btn {
+            border: none;
+
+        }
+
+        .quality-div {
+            background-color: rgb(230, 230, 230);
+            border-radius: 5px;
+        }
+
+        #orginal-price {
+            color: #9e9d9d;
+        }
+
+        .zoom-container {
+            position: relative;
+            width: 100%;
+            display: inline-block;
+        }
+
+        .zoom-img {
+            width: 100%;
+            cursor: zoom-in;
+        }
+
+        .zoom-lens {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            width: 100px;
+            height: 100px;
+            visibility: hidden;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .zoom-result {
+            position: absolute;
+            top: 0;
+            left: 110%;
+            border: 1px solid #d4d4d4;
+            width: 300px;
+            height: 300px;
+            background: white;
+            overflow: hidden;
+            visibility: hidden;
+            background-repeat: no-repeat;
+            background-size: 200% 200%;
+            /* Apply 2x zoom */
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="container product-detail-page">
+                    <div class="row">
+                        <!-- Product Images Carousel -->
+                        <div class="col-md-6">
+                            <div>
+                                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                                   
+
+                                    <div class="carousel-inner" id="img-size">
+                                        <% for (let i=0; i < product.productImage.length; i++) { %>
+                                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                                <div class="zoom-container">
+                                                    <img src="/<%= product.productImage[i] %>"
+                                                        class="d-block w-100 zoom-img"
+                                                        alt="Product Image <%= i + 1 %>"  id="productImage" />
+                                                    <a href="/addToWishlist?id=<%=product._id%>" class="wishlist-btn">
+                                                        <i class="fas fa-heart" style="color: #ddd;"></i>
+                                                    </a>
+                                                    <div class="zoom-lens" id="zoomLens"></div>
+                                                    <div class="zoom-result" id="zoomResult"></div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    </div>
+
+
+                                    <br>
+                                    <!-- Carousel Controls -->
+                                    <button class="btn btn-primary" id="cart-btn">Add to Cart</button>
+                                    <button class="btn btn-outline-primary" id="buy-btn">Buy Now</button>
+
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-8">
+                <br>
+                <div class="product-details">
+                    <h3>
+                        <%=product.productName%>
+                    </h3>
+                    <div class="d-flex align-items-center">
+                        <p class="mr-2">Rating:</p>
+                        <span class="text-primary">
+                            <%= averageRating %>/5
+                        </span>&nbsp;
+                        <span class="text-muted">(<%= totalReviews %> reviews)</span>
+                    </div>
+                    <p>Stock:
+                        <% if (product.quantity> 0) { %>
+                            In Stock
+                            <% } else { %>
+                                Out of Stock
+                                <% } %>
+                    </p>
+                    <%if(product.salePrice==product.regularPrice){%>
+                        <p>Price: ₹ <%=product.salePrice%>
+                        </p>
+                        <% } else { %>
+                            <p>Price: ₹ <%=product.salePrice%> <del id="orginal-price">₹<%= product.regularPrice %>
+                                    </del>
+                            </p>
+                            <%}%>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend quality-div ">
+                                        <button class="btn  quality-btn" type="button">-</button>
+                                    </div>
+                                    <input type="text" id="form-control" class=" text-center quantity-form" value="1">
+                                    <div class="input-group-append quality-div ">
+                                        <button class="btn  quality-btn" type="button">+</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('.zoom-img').ezPlus({
+                                            zoomType: 'inner',
+                                            cursor: 'crosshair'
+                                        });
+                                    });
+                                </script>
+
+
+
+
+                               
+
+                                <script>
+                                    const zoomContainer = document.querySelector('.zoom-container');
+                                    const img = document.querySelector('.zoom-img');
+                                    const lens = document.querySelector('.zoom-lens');
+                                    const result = document.querySelector('.zoom-result');
+
+
+                                    const lensSize = 100;
+                                    lens.style.width = `${lensSize}px`;
+                                    lens.style.height = `${lensSize}px`;
+
+
+                                    zoomContainer.addEventListener('mousemove', (e) => {
+                                        const imgRect = img.getBoundingClientRect();
+                                        const x = e.pageX - imgRect.left;
+                                        const y = e.pageY - imgRect.top;
+
+
+                                        const lensX = Math.max(0, Math.min(x - lensSize / 2, img.width - lensSize));
+                                        const lensY = Math.max(0, Math.min(y - lensSize / 2, img.height - lensSize));
+
+                                        lens.style.left = `${lensX}px`;
+                                        lens.style.top = `${lensY}px`;
+
+
+                                        result.style.backgroundImage = `url(${img.src})`;
+                                        result.style.backgroundPosition = `-${lensX * 2}px -${lensY * 2}px`;
+                                        result.style.visibility = 'visible';
+                                        lens.style.visibility = 'visible';
+                                    });
+
+
+                                    zoomContainer.addEventListener('mouseleave', () => {
+                                        lens.style.visibility = 'hidden';
+                                        result.style.visibility = 'hidden';
+                                    });
+
+
+                                </script>
+
+
+
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+                                <script
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                                <script
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.ez-plus.min.js"></script>
+                                    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+
+                                <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

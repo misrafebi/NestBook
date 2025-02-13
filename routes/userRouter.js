@@ -75,8 +75,9 @@ router.get('/aboutUs', userController.loadAbout)
 router.get('/contactUs', userController.loadContactUs)
 
 router.get('/products', productController.loadProducts)
-router.get('/productDetail', productController.loadProductDetail)
-router.get('/productReview', productController.loadProductReview)
+router.get('/productDetail', productController.productDetails)
+router.get('/productReview', productController.loadReview)
+router.post('/post-review',productController.postReview)
 
 router.get('/profile', profileController.loadProfile)
 
