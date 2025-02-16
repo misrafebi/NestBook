@@ -89,13 +89,21 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <%for(let i=0;i<reviews.length;++i){%>
                     <tr>
-                        <td>Rahul</td>
-                        <td>Fantastic app! Found all my favorite books in one place. The reading experience is smooth
-                            ...</td>
-                        <td><button class="btn btn-outline-secondary">View</button></td>
-                    </tr>
+                        <td><%=reviews[i].name%></td>
+                        <%if(reviews[i].review.split(' ').length<=15){%>
+                        <td><%=reviews[i].review%></td>
+                        <%}else{%>
+                            <td><%=reviews[i].review.split(' ').slice(0,15).join(' ')+'...'%></td>
+                            <%}%>
+                        <td>
+                            <a href="/user/replay/<%=reviews[i]._id%>" class="btn btn-outline-secondary">View</a>
+                            <!-- <a href="/user/replay/<%=reviews[i]._id%>" class="btn btn-outline-secondary">View</a> -->
 
+                        </td>
+                    </tr>
+<%}%>
 
                 </tbody>
             </table>

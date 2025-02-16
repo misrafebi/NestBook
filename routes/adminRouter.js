@@ -75,7 +75,8 @@ router.get('/viewProduct/:id',productController.loadViewProduct)
 router.get('/editProduct', productController.loadEditProduct)
 
 router.get('/review', reviewController.loadReviews)
-router.get('/replay', reviewController.loadReplay)
+router.get('/replay/:id', reviewController.loadReplay)
+// router.get('/replay/:id', reviewController.loadReplay);
 
 router.get('/orders', orderController.loadOrders)
 

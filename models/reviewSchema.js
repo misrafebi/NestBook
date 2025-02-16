@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-// const User = require('./userSchema')
-// const Product = require('./productSchema')
+const { create } = require('./userScehma')
+const Product = require('./productSchema')
 const { Schema } = mongoose
 
 
@@ -15,11 +15,11 @@ const reviewSchema = new Schema({
     },
     rating: {
         type: Number,
-    },
+    }, 
     review: {
         type: String,
         required: true
-    },
+    }, 
     createdAt: {
         type: Date,
         default: Date.now,
@@ -41,6 +41,7 @@ const reviewSchema = new Schema({
         required: true,
     },
 })
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;

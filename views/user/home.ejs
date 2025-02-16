@@ -2531,14 +2531,14 @@
                       <use xlink:href="#heart"></use>
                     </svg></a>
                   <figure>
-                    <a href="index.html" title="Product Title">
+                    <a href="/user/productDetail?id=<%= newArrivals[i]._id %>" title="Product Title">
                       <img src="/<%=newArrivals[i].image[0]%>" alt="<%=newArrivals[i].productName%>" class="tab-image">
                     </a>
                   </figure>
                   <h3><%=newArrivals[i].productName%></h3>
                   <span class="rating"><svg width="24" height="24" class="text-primary">
                       <use xlink:href="#star-solid"></use>
-                    </svg> 4.5</span>
+                    </svg> <%= newArrivals[i].avgRating.toFixed(1) %></span>
                     <div >
                   <span class="sale-price">₹<%=newArrivals[i].salePrice%></span>&nbsp;
                   <span class="regular-price"><del>₹<%=newArrivals[i].regularPrice%></del></span>&nbsp;

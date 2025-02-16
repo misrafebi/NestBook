@@ -166,10 +166,10 @@
                                    
 
                                     <div class="carousel-inner" id="img-size">
-                                        <% for (let i=0; i < product.productImage.length; i++) { %>
+                                        <% for (let i=0; i < product.image.length; i++) { %>
                                             <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
                                                 <div class="zoom-container">
-                                                    <img src="/<%= product.productImage[i] %>"
+                                                    <img src="/<%= product.image[i] %>"
                                                         class="d-block w-100 zoom-img"
                                                         alt="Product Image <%= i + 1 %>"  id="productImage" />
                                                     <a href="/addToWishlist?id=<%=product._id%>" class="wishlist-btn">
