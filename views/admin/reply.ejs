@@ -1,77 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Review</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        
         .review-container {
             margin: 20px;
         }
+
         .review-box {
             background-color: #f8f9fa;
             padding: 20px;
             border-radius: 5px;
             margin-bottom: 20px;
         }
+
         .star-rating {
             color: #ffc107;
         }
-        
+
         .delete-button:hover {
             background-color: red;
             color: white;
         }
-       
+
         .send-button:hover {
             background-color: #333;
         }
     </style>
 </head>
+
 <body>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item"><a href="#">Review</a></li>
+            <li class="breadcrumb-item"><a href="/admin/review">Review</a></li>
             <li class="breadcrumb-item active" aria-current="page">View Review</li>
         </ol>
     </nav>
-    
+
     <div class="container review-container">
         <br><br>
         <div class="review-box">
-            <p>Midhun</p>
+            <p>
+                <%=review.name%>
+            </p>
             <br>
-            <p>User-friendly and well-organized. The ability to preview books before buying is a fantastic feature. Looking forward to more updates and discounts!</p>
+            <p>
+                <%=review.review%>
+            </p>
+
             <div class="star-rating">
+                <%for(let i=0; i<validRating;++i){%>
+                    <span>&#9733;</span>
+                    <!-- <span>&#9733;</span>
                 <span>&#9733;</span>
                 <span>&#9733;</span>
-                <span>&#9733;</span>
-                <span>&#9733;</span>
-                <span>&#9734;</span>
+                <span>&#9734;</span> -->
+
+                    <%}%>
+                        <%if(validRating<5){%>
+                            <%for(let i=5; i>validRating;--i){%>
+                                <span>&#9734;</span>
+                                <%}%>
+                                    <%}%>
+
             </div>
             <br>
-        
-        <form>
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" value="2024-12-10">
+                <input type="text" class="form-control" id="date" value="<%=formattedDate%>">
             </div>
             <br>
-            <div class="form-group">
-                <label for="reply">Reply</label>
-                <textarea class="form-control" id="reply" rows="4"></textarea>
-            </div>
-            <br>
-            <button class="btn-danger btn">DELETE</button>
-            <button type="submit" class="btn btn-dark">SEND</button>
-        </form>
+
+            <form action="/admin/reply/<%= review._id %>" method="post">               
+                <br><br>
+                <div class="form-group">
+                    <label for="reply">Reply</label>
+                    <textarea name="reply" class="form-control" id="reply" rows="4"></textarea>
+                </div>
+                <br>
+                <button class="btn-danger btn">DELETE</button>
+                <button type="submit" class="btn btn-dark">SEND</button>
+            </form>
+        </div>
     </div>
-    </div>
+
+    <%if(message){%>
+        <script>
+            alert('<%=message%>')
+        </script>
+        <%}%>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

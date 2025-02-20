@@ -1,3 +1,4 @@
+const mongoose=require('mongoose')
 const { findById } = require('../../models/categorySchema');
 const Review = require('../../models/reviewSchema')
 
@@ -5,23 +6,87 @@ const loadReviews = async (req, res) => {
     try {
         const reviews = await Review.find().sort({ createdAt: -1 })
 
-        res.render('admin/review', { reviews })
+        res.render('admin/review', { reviews, message: '' })
     } catch (error) {
         console.error(error);
     }
 }
 
-const loadReplay = async (req, res) => {
+const loadReply = async (req, res) => {
     try {
-        console.log('........');
-        
+
+
         const id = req.params.id
-        console.log('req.params.id:',req.params.id);
-        console.log('id:',id);
-        
-        
+        if (!id) {
+            return res.render('admin/reply', {
+                review,
+                formattedDate: review.createdAt.toLocaleDateString('en-GB'),
+                validRating: review.rating,
+                message: 'ID not found'
+            })
+        }
         const review = await Review.findById(id)
-        res.render('admin/replay', review)
+        if (!review) {
+            return res.render('admin/review', {
+                message: 'Review not found',
+                reviews: await Review.find({})
+            })
+        }
+
+        // const formattedDate = review.createdAt.toLocaleDateString('en-GB');
+        // const validRating = review.rating
+
+        return res.render('admin/reply', {
+            review,
+            formattedDate: review.createdAt.toLocaleDateString('en-GB'),
+            validRating: review.rating,
+            id,
+            message: ''
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+const postReply = async (req, res) => {
+    try {
+
+        const id = req.params.id
+        if (!id) {
+            return res.render('admin/reply', {
+                review,
+                formattedDate: review.createdAt.toLocaleDateString('en-GB'),
+                validRating: review.rating,
+                message: 'ID not found'
+            })
+        }
+        const review = await Review.findById(id)
+        if (!review) {
+            return res.render('admin/review', {
+                message: 'Review not found',
+                reviews: await Review.find({})
+            })
+        }
+        // const formattedDate = review.createdAt.toLocaleDateString('en-GB');
+        // const validRating = review.rating
+        const { reply } = req.body
+        if (!reply) {
+            return res.render('admin/reply', {
+                review,
+                formattedDate: review.createdAt.toLocaleDateString('en-GB'),
+                validRating: review.rating,
+                message: 'Reply can not be empty'
+            })
+        }
+
+        review.replies = review.replies || []
+        review.replies.push({ _id: new mongoose.Types.ObjectId(), text: reply })
+        await review.save()
+
+
+        res.render('admin/review', {
+            reviews: await Review.find({}),
+            message: 'Replay sended successfully'
+        })
     } catch (error) {
         console.error(error);
     }
@@ -29,5 +94,6 @@ const loadReplay = async (req, res) => {
 
 module.exports = {
     loadReviews,
-    loadReplay
+    loadReply,
+    postReply
 }

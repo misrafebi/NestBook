@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const Category = require('../../models/categorySchema')
 const Product = require('../../models/productSchema')
+const Contact = require('../../models/contactSchema')
 
 const loadHome = async (req, res) => {
     try {
@@ -37,7 +38,7 @@ const loadHome = async (req, res) => {
             { $limit: 10 }
         ]);
         const categories = await Category.find({})
-        console.log(categories);
+    
 
         const email = req.session.userData?.email
         const user = await User.findOne({ email })
@@ -419,6 +420,42 @@ const loadContactUs = async (req, res) => {
     }
 }
 
+const postContactUsForm = async (req, res) => {
+    try {
+        const categories=await Category.find({})
+      
+
+
+        const user = req.session.userData
+
+        if (!user) {
+          return  res.render('user/contactUs', {
+                message: 'Cannot found user. ',
+                categories
+            })
+        }
+
+        const { name, email, message } = req.body
+        if (!name || !email || !message) {
+          return  res.render('user/contactUs', {
+                message: 'name, email and message requied. ',
+                categories
+            })
+        }
+        const newContact = new Contact({
+            name, email, message,
+            user:  req.session.userData
+        })
+
+        await newContact.save()
+        res.render('user/contactUs', { message: 'Message sent successfully'  ,categories})
+    } catch (error) {
+        console.error('Error to load contact us', error);
+        res.render('user/pageNotFound',
+            { message: 'Something went wrong while posting the contact us page. Please try again shortly.' })
+    }
+}
+
 ////////////
 //LOGOUT
 
@@ -451,4 +488,5 @@ module.exports = {
     verifyForgotOTP,
     resetPassword,
     resentForgotOTP,
+    postContactUsForm
 }

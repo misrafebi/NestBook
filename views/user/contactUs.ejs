@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,57 +11,132 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
-       
+
         .main-content {
             margin-left: 220px;
             padding: 20px;
         }
+
         .contact-form {
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .contact-form h2 {
             text-align: center;
             margin-bottom: 20px;
         }
-        .send-button{
+
+        .send-button {
             width: 200px;
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <%- include('../partials/user/sidebar')%>
-    <br><br><br>
-    <div class="main-content">
-        <div class="contact-form">
-            <h2>Contact Us</h2>
-            <form>
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+        <%- include('../partials/user/sidebar')%>
+            <br><br><br>
+            <div class="main-content">
+                <div class="contact-form">
+                    <h2>Contact Us</h2>
+                    <form action="/user/contactUs" method="post" id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name">
+                            <div class="text-danger" id="name-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" id="email" placeholder="Enter your email"
+                                name="email">
+                            <div class="text-danger" id="email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" rows="5" placeholder="Enter your message"
+                                name="message"></textarea>
+                            <div class="text-danger" id="message-error"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success  send-button">Send</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea class="form-control" id="message" rows="5" placeholder="Enter your message" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-success  send-button">Send</button>
-            </form>
-        </div>
-        <br><br>
-    </div>
+                <br><br>
+            </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <%- include('../partials/user/footer')%>
+            <script>
+                const form = document.getElementById('contact-form')
+                const name = document.getElementById('name')
+                const email = document.getElementById('email')
+                const message = document.getElementById('message')
+                const nameError = document.getElementById('name-error')
+                const emailError = document.getElementById('email-error')
+                const messageError = document.getElementById('message-error')
+
+
+                form.addEventListener('submit', function (event) {
+
+                    function nameValidation(isValid) {
+                        const nameVal = name.value
+                        if (!name.value.trim()) {
+                            nameError.textContent = 'Name required'
+                            isValid = false
+                        } else {
+                            nameError.textContent = ''
+                        }
+                        return isValid
+                    }
+                    function emailValidation(isValid) {
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                        if (!email.value.trim()) {
+                            emailError.textContent = 'Email required'
+                            isValid = false
+                        } else if (!emailPattern.test(email.value)) {
+                            emailError.textContent = 'Invalid email format'
+                            isValid = false
+                        } else {
+                            emailError.textContent = ''
+                        }
+                        return isValid
+                    }
+
+                    function messageValidation(isValid) {
+                        if (!message.value.trim()) {
+                            messageError.textContent = 'Message required'
+                            isValid = false
+                        } else {
+                            messageError.textContent = ''
+                        }
+                        return isValid
+                    }
+
+                    let isValid = true
+
+                    isValid = nameValidation(isValid)
+                    isValid = emailValidation(isValid)
+                    isValid = messageValidation(isValid)
+
+                    if (!isValid) {
+                        event.preventDefault()
+                    }
+                })
+
+            </script>
+
+            <%if(message){%>
+                <script>
+                    alert('<%=message%>')
+                </script>
+                <%}%>
+
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <%- include('../partials/user/footer')%>
 
 </body>
+
 </html>

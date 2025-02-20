@@ -98,8 +98,9 @@
                             <td><%=reviews[i].review.split(' ').slice(0,15).join(' ')+'...'%></td>
                             <%}%>
                         <td>
-                            <a href="/user/replay/<%=reviews[i]._id%>" class="btn btn-outline-secondary">View</a>
-                            <!-- <a href="/user/replay/<%=reviews[i]._id%>" class="btn btn-outline-secondary">View</a> -->
+                            <a href="/admin/reply/<%=reviews[i]._id%>" class="btn btn-outline-secondary">View</a>
+                            
+
 
                         </td>
                     </tr>
@@ -108,6 +109,13 @@
                 </tbody>
             </table>
         </div>
+
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
+            
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

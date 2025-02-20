@@ -28,44 +28,52 @@
 
     <div class="container edit-address-container">
         <h2>Edit Address </h2>
-        <form>
+        <form action="/user/editAddress" method="post">
+            <input type="hidden" value="<%=userAddress._id%>" name="id">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" value="<%=userAddress.name%>">
             </div>
             <div class="mb-3">
                 <label for="mobile" class="form-label">Mobile Number</label>
-                <input type="number" class="form-control" id="mobile" name="mobile">
+                <input type="number" class="form-control" id="mobile" name="mobile" value="<%=userAddress.phone%>">
             </div>
             <div class="mb-3">
                 <label for="house" class="form-label">House Address</label>
-                <input type="text" class="form-control" id="house" name="houseAddress">
+                <input type="text" class="form-control" id="house" name="houseAddress" value="<%=userAddress.houseAddress%>">
             </div>
             <div class="mb-3">
                 <label for="pin" class="form-label">Pin</label>
-                <input type="text" class="form-control" id="pin" name="pin">
+                <input type="text" class="form-control" id="pin" name="pin" value="<%=userAddress.pin%>">
             </div>
             <div class="mb-3">
                 <label for="post" class="form-label">Post</label>
-                <input type="text" class="form-control" id="post" name="post">
+                <input type="text" class="form-control" id="post" name="post" value="<%=userAddress.post%>">
             </div>
             <div class="mb-3">
                 <label for="city" class="form-label">City</label>
-                <input type="text" class="form-control" id="city" name="city">
+                <input type="text" class="form-control" id="city" name="city" value="<%=userAddress.city%>">
             </div>
             <div class="mb-3">
                 <label for="district" class="form-label">District</label>
-                <input type="text" class="form-control" id="district" name="district">
+                <input type="text" class="form-control" id="district" name="district" value="<%=userAddress.district%>">
             </div>
             <div class="mb-3">
                 <label for="state" class="form-label">State</label>
-                <input type="text" class="form-control" id="state" name="state">
+                <input type="text" class="form-control" id="state" name="state" value="<%=userAddress.state%>">
             </div>
             <button type="submit" class="btn btn-secondary">Cancel</button>
             <button type="submit" class="btn btn-dark">Save</button>
+
+            <!-- <a href="/user/addAddress" type="submit" class="btn btn-outline-info">Add new address</a> -->
         </form>
     </div>
 
+    <%if(message){%>
+        <script>
+            alert('<%=message%>')
+        </script>
+        <%}%>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <%- include('../partials/user/footer')%>

@@ -24,8 +24,11 @@ const noCache = (req, res, next) => {
     next();
 };
 
+
+
 module.exports = {
     checkSession,
     isLogin,
     noCache,
+   
 }

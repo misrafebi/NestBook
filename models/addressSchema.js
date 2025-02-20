@@ -11,7 +11,7 @@ const addressSchema = new Schema({
     address: [{
         name: {
             type: String,
-            required: true,
+            required: true, 
         },
         phone: {
             type: Number,
@@ -29,7 +29,7 @@ const addressSchema = new Schema({
             type: String,
             required: true,
         },
-        cty: {
+        city: {
             type: String,
             required: true,
         },

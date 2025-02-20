@@ -67,16 +67,16 @@ router.get('/addCustomer', adminAuth.noCache, adminAuth.checkSession, customerCo
 router.post('/addCustomer', adminAuth.noCache, adminAuth.checkSession, customerController.addCustomer)
 
 router.get('/offer', offerController.loadOffer)
-
+ 
 router.get('/product', productController.loadProduct)
 router.get('/addProduct', productController.loadAddProduct)
 router.post('/addProduct', upload.array('images', 4), productController.addProduct)
 router.get('/viewProduct/:id',productController.loadViewProduct)
 router.get('/editProduct', productController.loadEditProduct)
 
-router.get('/review', reviewController.loadReviews)
-router.get('/replay/:id', reviewController.loadReplay)
-// router.get('/replay/:id', reviewController.loadReplay);
+router.get('/review', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReviews)
+router.get('/reply/:id', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReply)
+router.post('/reply/:id', adminAuth.noCache, adminAuth.checkSession,reviewController.postReply)
 
 router.get('/orders', orderController.loadOrders)
 
