@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/user/home/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,7 +27,7 @@
             max-width: 100%;
             height: auto;
         }
-        .book-card .close-btn {
+      .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -46,7 +47,7 @@
     <h4>Wishlist</h4>
     <div class="row">
        
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
             <div class="book-card">
                 <button class="close-btn">&times;</button>
                 <img src="https://via.placeholder.com/150" alt="Rich Dad Poor Dad">
@@ -55,8 +56,83 @@
                 <p>₹540</p>
                 <button class="btn btn-outline-warning btn-block">Move to Cart</button>
             </div>
-        </div>
+        </div> -->
 
+
+        <!-- <main class="col-md-9 col-lg-10">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+           
+              
+                <div class="product-item" date-category="">
+     
+                        <button class="close-btn">&times;</button>
+                  
+                    <a href="" title="Product Title">
+                      <img src="" class="tab-image" alt="">
+                    </a>
+                  </figure>
+                  <h3>
+                   
+                  </h3>
+                  <span class="rating">
+  
+                    <i class="fa-solid fa-star" style="color: rgb(74, 74, 189);"></i>
+  
+                    4.5</span><br>
+                  <span class="sale-price">₹</span>&nbsp;
+                  <span class="regular-price"><del>₹</del></span>&nbsp;
+                  <span class="offer-price">( Off)</span>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="input-group product-qty" id="product-qty">
+                      <span class="input-group-btn" id="input-group-btn">
+                        <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+  
+                          <i class="fa-solid fa-minus"></i>
+  
+                        </button>
+                      </span>
+                      <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
+                      <span class="input-group-btn">
+                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                         
+                          <i class="fa-solid fa-plus"></i>
+                        
+                        </button>
+                      </span>
+                    </div>
+                    <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                  </div>
+                </div>
+                
+  
+  
+            </div>
+          </main> -->
+          
+
+          <main class="col-md-9 col-lg-10">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+              <% products.forEach(product => { %>
+                <div class="product-item">
+                  <button class="btn-wishlist active" data-product-id="<%= product._id %>">
+                    <svg width="24" height="24">
+                      <use xlink:href="#heart"></use>
+                    </svg>
+                  </button>
+                  <figure>
+                    <img src="/<%= product.image[0] %>" alt="<%= product.productName %>">
+                  </figure>
+                  <h3><%= product.productName %></h3>
+                  <!-- Add other product details -->
+                  <button class="remove-from-wishlist" data-product-id="<%= product._id %>">
+                    Remove
+                  </button>
+                </div>
+              <% }); %>
+            </div>
+          </main>
+
+          
     </div>
 </div>
 

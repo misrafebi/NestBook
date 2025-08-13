@@ -90,10 +90,11 @@ router.post('/addAddress',profileController.addAddress)
 router.get('/checkout', profileController.loadCheckOut)
 
 router.get('/orders', profileController.loadOrders)
-
+ 
 router.get('/cart', cartController.loadCart)
 
-router.get('/wishlist', wishlistController.loadWishlist)
+router.post('/wishlist', wishlistController.addToWishlist);
+router.get('/wishlist', wishlistController.loadWishlist);
 
 router.get('/wallet', walletController.loadWallet)
 router.get('/addMoney', walletController.loadAddMoney)

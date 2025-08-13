@@ -149,12 +149,12 @@
             <!-- Product Card  -->
             <%for(let i=0;i<products.length;++i){%>
               <div class="product-item" date-category="<%=products[i].category%>">
-                <a href="#" class="btn-wishlist" id="whishlist-container">
+                <a href="/user/wishlist" class="btn-wishlist" id="whishlist-container">
                   <svg width="24" height="24">
                     <i class="fas fa-heart" id="whishlist-icon"></i>
                   </svg>
                 </a>
-                <figure>
+                <figure> 
                   <a href="/user/productDetail?id=<%= products[i]._id %>" title="Product Title">
                     <img src="/<%=products[i].image[0]%>" class="tab-image" alt="<%=products[i].productName%>">
                   </a>
