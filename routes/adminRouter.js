@@ -47,7 +47,7 @@ router.post('/login', adminAuth.noCache, adminController.login, adminAuth.checkS
 router.get('/dashboard', adminAuth.noCache, adminAuth.checkSession, adminController.loadDashboard);
 router.get('/logout', adminAuth.noCache, adminController.logout, adminAuth.checkSession)
 
-
+ 
 router.get('/changePassword', adminAuth.noCache, adminAuth.checkSession, adminController.loadChangePassword)
 router.post('/changePassword', adminAuth.noCache, adminAuth.checkSession, adminController.changePassword)
 
@@ -56,9 +56,9 @@ router.post('/edit-category/:id', adminAuth.noCache, adminAuth.checkSession, cat
 router.post('/add-category', adminAuth.noCache, adminAuth.checkSession, categoryController.addCategory)
 router.delete('/deleteCategory/:id', adminAuth.noCache, adminAuth.checkSession, categoryController.deleteCategory);
 
-router.get('/coupon', couponController.laodCoupon)
-router.get('/addCoupon', couponController.loadAddCoupon)
-router.get('/editCoupon', couponController.loadEditCoupon)
+router.get('/coupon', adminAuth.noCache, adminAuth.checkSession,couponController.laodCoupon)
+router.get('/addCoupon',adminAuth.noCache, adminAuth.checkSession, couponController.loadAddCoupon)
+router.get('/editCoupon',adminAuth.noCache, adminAuth.checkSession, couponController.loadEditCoupon)
 
 router.get('/customer', adminAuth.noCache, adminAuth.checkSession, customerController.loadCustomer)
 router.get('/edit-customer/:id', adminAuth.noCache, adminAuth.checkSession, customerController.loadEditCustomer)
@@ -66,18 +66,18 @@ router.post('/update-customer/:id', adminAuth.noCache, adminAuth.checkSession, c
 router.get('/addCustomer', adminAuth.noCache, adminAuth.checkSession, customerController.loadAddCustomer)
 router.post('/addCustomer', adminAuth.noCache, adminAuth.checkSession, customerController.addCustomer)
 
-router.get('/offer', offerController.loadOffer)
+router.get('/offer', adminAuth.noCache, adminAuth.checkSession,offerController.loadOffer)
  
-router.get('/product', productController.loadProduct)
-router.get('/addProduct', productController.loadAddProduct)
-router.post('/addProduct', upload.array('images', 4), productController.addProduct)
-router.get('/viewProduct/:id',productController.loadViewProduct)
-router.get('/editProduct', productController.loadEditProduct)
+router.get('/product',adminAuth.noCache, adminAuth.checkSession, productController.loadProduct)
+router.get('/addProduct',adminAuth.noCache, adminAuth.checkSession, productController.loadAddProduct)
+router.post('/addProduct', adminAuth.noCache, adminAuth.checkSession,upload.array('images', 4), productController.addProduct)
+router.get('/viewProduct/:id',adminAuth.noCache, adminAuth.checkSession,productController.loadViewProduct)
+router.get('/editProduct', adminAuth.noCache, adminAuth.checkSession,productController.loadEditProduct)
 
 router.get('/review', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReviews)
 router.get('/reply/:id', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReply)
 router.post('/reply/:id', adminAuth.noCache, adminAuth.checkSession,reviewController.postReply)
 
-router.get('/orders', orderController.loadOrders)
+router.get('/orders',adminAuth.noCache, adminAuth.checkSession, orderController.loadOrders)
 
 module.exports = router

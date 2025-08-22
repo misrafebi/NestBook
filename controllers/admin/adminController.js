@@ -9,7 +9,7 @@ const Admin = require('../../models/adminSchema')
 const loadLogin = (req, res) => {
     try {
         res.render('admin/login', {
-            message: ''
+            message: req.query.message || ''
         })
     } catch (error) {
         console.error(error.message);
@@ -49,7 +49,7 @@ const loadDashboard = (req, res) => {
         res.render('admin/login', { message: 'An error occurred. Please try again.' });
     }
 };
-
+ 
 const logout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
