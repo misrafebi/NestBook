@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs')
 const env = require('dotenv').config()
 const mongoose = require('mongoose');
+const { findById } = require('../../models/userScehma');
 
 
 
@@ -94,6 +95,7 @@ const addProduct = async (req, res) => {
         });
 
         if (productExists) {
+            
             return res.render('admin/addProduct', {
                 message: `Product: ${productName} already exists.`,
                 categories
@@ -153,16 +155,34 @@ const addProduct = async (req, res) => {
         });
     }
 };
-const loadEditProduct = (req, res) => {
+const  loadEditProduct = async(req, res) => {
     try {
-        res.render('admin/editProduct')
+        
+        let productId=req.query.id
+
+        if(!productId){
+            return redirect('/admin/product?message:Product ID is missing!')
+        }
+
+        let product=await Product.findById(productId)
+
+        if(!product){
+            return redirect('/admin/product?message:Product not found!')
+        }
+let statusOptions=await Product.schema.path('status').enumValues
+        let categories = await Category.find({})
+res.render('admin/editProduct',{
+    product,
+    categories,
+    statusOptions
+})
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
             { message: 'Something went wrong while loading the edit product page. Please try again shortly.' })
     }
 }
-
+ 
 const loadViewProduct = async (req, res) => {
     try {
         const id = req.params.id

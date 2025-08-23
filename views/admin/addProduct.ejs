@@ -90,7 +90,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
             <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
+            <li class="breadcrumb-item active" aria-current="page">Add Product</li>
         </ol>
     </nav>
     <div class="container">
@@ -291,26 +291,65 @@
                     const croppedCanvas = croppers[index].getCroppedCanvas();
                     croppedCanvas.toBlob((blob) => {
                         const formData = new FormData();
-                        formData.append('image', blob, `cropped-img-${Date.now()}-${index}.jpg`);
+                        ////////#################### ///////// 
+                        //    formData.append('image', blob, `cropped-img-${Date.now()}-${index}.jpg`);
 
-                        fetch('/admin/addProduct', {
-                            method: 'POST',
-                            body: formData,
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Image uploaded successfully', data);
+                        const cropperKeys = Object.keys(croppers)
+                        let blobPromises = cropperKeys.map(index => {
+                            return new Promise(resolve => {
+                                croppers[index].getCroppedCanvas().toBlob(blob => {
+                                    formData.append('images', blob, `cropped-${Date.now()}-${index}.jpg`)
+                                    resolve()
+                                })
                             })
-                            .catch(error => {
-                                console.error('Error uploading image', error);
-                            });
-                    });
+                        })
+
+
+
+                        Promise.all(blobPromises).then(() => {
+        // Now send data via fetch
+        fetch('/admin/addProduct', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                // handle success (maybe redirect or show message)
+                alert('Product added successfully!');
+                window.location.href = '/admin/products';
+            } else {
+                // handle errors
+                alert('Error uploading product');
+            }
+        })
+        .catch(err => {
+            console.error('Upload error:', err);
+        });
+    });
+});
+
+                        // fetch('/admin/addProduct', {
+                        //     method: 'POST',
+                        //     body: formData,
+                        // })
+                        //     .then(response => response.json())
+                        //     .then(data => {
+                        //         console.log('Image uploaded successfully', data);
+                        //     })
+                        //     .catch(error => {
+                        //         console.error('Error uploading image', error);
+                        //     });
+
+
+
+                    }
+                // );
 
                     document.getElementById(`croppedImg${index}`).style.display = 'none';
                 };
             };
             reader.readAsDataURL(input.files[0]);
-        }
+        // }
 
         const selectedImages = [];
 
@@ -319,6 +358,7 @@
             const files = event.target.files;
             const selectedImagesContainer = document.getElementById(`selectedImagesContainer${inputId.slice(-1)}`);
             const thumbnailsContainer = document.getElementById('addedImagesContainer');
+            thumbnailsContainer.innerHTML = ''
 
             selectedImagesContainer.innerHTML = '';
 
@@ -354,6 +394,10 @@
                 thumbnailsContainer.appendChild(thumbnail);
             }
         }
+
+
+
+
 
 
         document.getElementById('input1').addEventListener('change', (event) => {
@@ -473,7 +517,7 @@
             }
         })
 
-        
+
     </script>
 
     <%if(message){%>

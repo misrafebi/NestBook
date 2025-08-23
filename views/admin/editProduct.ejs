@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +10,12 @@
         .container {
             margin-top: 50px;
         }
+
         .form-group img {
             max-width: 100px;
             margin-bottom: 10px;
         }
+
         .form-group .remove-image {
             position: absolute;
             top: 0;
@@ -28,6 +30,7 @@
             line-height: 25px;
             cursor: pointer;
         }
+
         .form-container {
             background-color: #f8f9fa;
             padding: 30px;
@@ -36,11 +39,12 @@
         }
     </style>
 </head>
+
 <body>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
         </ol>
     </nav>
@@ -48,65 +52,81 @@
         <h4>Edit Product</h4>
         <br>
         <div class="form-container">
-        <form>
-            <div class="form-group">
-                <label for="bookImage">Photo</label>
-                <div class="position-relative">
-                    <img src="book-cover.jpg" alt="Book Cover" id="bookImage">
-                    <button type="button" class="remove-image">&times;</button>
+            <form>
+                <div class="form-group">
+                    <label for="bookImage">Photo</label>
+                    <div class="position-relative">
+                        <img src="book-cover.jpg" alt="Book Cover" id="bookImage">
+                        <button type="button" class="remove-image">&times;</button>
+                    </div>
+                    <input type="file" class="form-control-file" id="bookImageUpload">
                 </div>
-                <input type="file" class="form-control-file" id="bookImageUpload">
-            </div>
-            <div class="form-group">
-                <label for="bookName">Book Name</label>
-                <input type="text" class="form-control" id="bookName" value="Will">
-            </div>
-            <div class="form-group">
-                <label for="authorName">Author Name</label>
-                <input type="text" class="form-control" id="authorName" value="Will Smith, with Mark Manson">
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <input type="text" class="form-control" id="category" value="Non Fiction">
-            </div>
-            <div class="form-group">
-                <label for="stock">Stock</label>
-                <select class="form-control" id="stock">
-                    <option>Available</option>
-                    <option>Unavailable</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="publishedDate">Published Date</label>
-                <input type="date" class="form-control" id="publishedDate" value="2021-09-11">
-            </div>
-            <div class="form-group">
-                <label for="publisher">Publisher</label>
-                <input type="text" class="form-control" id="publisher" value="Penguin Press">
-            </div>
-            <div class="form-group">
-                <label for="price">Price</label>
-                <input type="number" class="form-control" id="price" value="870">
-            </div>
-            <div class="form-group">
-                <label for="offer">Offer</label>
-                <input type="text" class="form-control" id="offer" value="10%">
-            </div>
-            <div class="form-group">
-                <label for="noOfPages">No-of Pages</label>
-                <input type="text" class="form-control" id="noOfPages" value="432 pages">
-            </div>
-            <div class="form-group">
-                <label for="availableQuantity">Available Quantity</label>
-                <input type="number" class="form-control" id="availableQuantity" value="11">
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3">Will is Will Smith's inspiring memoir, co-written with Mark Manson. It chronicles his journey from a determined West Philadelphia kid to a global superstar.</textarea>
-            </div>
-            <button type="submit" class="btn btn-dark">Save</button>
-            <button type="button" class="btn btn-secondary">Cancel</button>
-        </form>
+                <div class="form-group">
+                    <label for="bookName">Book Name</label>
+                    <input type="text" class="form-control" id="bookName" value="<%=product.productName%>">
+                </div>
+                <div class="form-group">
+                    <label for="authorName">Author Name</label>
+                    <input type="text" class="form-control" id="authorName" value="<%=product.authorName%>">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                        <% categories.forEach(cat=> { %>
+                            <option value="<%= cat._id %>" <%=(cat._id.toString()===product.category.toString())
+                                ? 'selected' : '' %>>
+                                <%= cat.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <select class="form-control" id="stock">
+                        <%statusOptions.forEach(options=>{%>
+                            <option value="<%=options%>" <%=(options===product.status)?'selected':''%>>
+                                <%=options%>
+                            </option>
+                            <% })%>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="publishedDate">Published Date</label>
+                    <input type="date" class="form-control" id="publishedDate" value="<%=product.publishDate ? product.publishDate.toISOString().substring(0,10):''%>">
+                </div>
+
+                <div class="form-group">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" class="form-control" id="publisher" value="<%=product.publisher%>">
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" class="form-control" id="price" value="<%=product.salePrice%>">
+                </div>
+                <div class="form-group">
+                    <label for="offer">Offer</label>
+                    <input type="text" class="form-control" id="offer" value="<%=product.productOffer%> %">
+                </div>
+                <div class="form-group">
+                    <label for="noOfPages">No-of Pages</label>
+                    <input type="text" class="form-control" id="noOfPages" value="<%=product.numberPage%>">
+                </div>
+                <div class="form-group">
+                    <label for="availableQuantity">Available Quantity</label>
+                    <input type="number" class="form-control" id="availableQuantity" value="<%=product.quantity%>">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" rows="3"><%=product.description%></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Save</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </form>
         </div>
         <br><br><br>
     </div>
@@ -114,4 +134,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

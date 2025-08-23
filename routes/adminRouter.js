@@ -17,18 +17,49 @@ const adminAuth = require('../middlewares/adminAuth')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
+
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         const uploadDir = 'uploads/'
+//         if (!fs.existsSync(uploadDir)) {
+//             fs.mkdirSync(uploadDir, { recursive: true })
+//         }
+//         cb(null, uploadDir);
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + path.extname(file.originalname));
+//     }
+// });
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = 'uploads/'
+        const uploadDir = 'uploads/';
         if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true })
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+        // Use Date.now with a random number suffix to ensure uniqueness
+        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
     }
 });
+// for (let file of req.files) {
+//     const originalImagePath = file.path;
+
+//     // Create unique filename for resized image
+//     const resizedFilename = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+//     const resizedImagePath = path.join(uploadDir, resizedFilename);
+
+//     await sharp(originalImagePath)
+//         .resize({ width: 440, height: 440 })
+//         .toFile(resizedImagePath);
+
+//     images.push(normalizePath(resizedImagePath));
+// }
+
+
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
