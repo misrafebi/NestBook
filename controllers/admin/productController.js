@@ -95,7 +95,7 @@ const addProduct = async (req, res) => {
         });
 
         if (productExists) {
-            
+
             return res.render('admin/addProduct', {
                 message: `Product: ${productName} already exists.`,
                 categories
@@ -155,34 +155,118 @@ const addProduct = async (req, res) => {
         });
     }
 };
-const  loadEditProduct = async(req, res) => {
-    try {
-        
-        let productId=req.query.id
 
-        if(!productId){
+const loadEditProduct = async (req, res) => {
+    try {
+
+        let productId = req.query.id
+
+        if (!productId) {
             return redirect('/admin/product?message:Product ID is missing!')
         }
 
-        let product=await Product.findById(productId)
+        let product = await Product.findById(productId)
 
-        if(!product){
+        if (!product) {
             return redirect('/admin/product?message:Product not found!')
         }
-let statusOptions=await Product.schema.path('status').enumValues
+        let statusOptions = await Product.schema.path('status').enumValues
         let categories = await Category.find({})
-res.render('admin/editProduct',{
-    product,
-    categories,
-    statusOptions
-})
+        res.render('admin/editProduct', {
+            product,
+            categories,
+            statusOptions
+        })
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
             { message: 'Something went wrong while loading the edit product page. Please try again shortly.' })
     }
 }
- 
+
+const editProduct = async (req, res) => {
+    try {
+
+        const {id}=req.body
+        const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description } = req.body;
+const product = await Product.findById(id);
+        if (!id) {
+            return res.redirect('/admin/product?message=Product ID missing!');
+        }
+        
+        let categoryDoc=await Category.findOne({_id:category})
+        if(!categoryDoc){
+            return res.redirect('/admin/product?message:Invalid category!')
+        }
+
+        const salePrice = Math.round(regularPrice - (regularPrice * productOffer) / 100);
+
+        if(req.files&&req.files.length>0){
+            req.files.forEach(file=>{
+                const relPath='uploads/product-images/'+file.filename
+                if(!product.image.includes(relPath)&&product.image.length<4){
+                    product.image.push(relPath)
+                }
+            })
+        }
+
+        await product.save()
+
+        const updated = await Product.findByIdAndUpdate(
+            id,{
+                productName,
+            authorName,
+            category: categoryDoc._id,
+            status,
+            publishDate,
+            publisher,
+            regularPrice,
+            productOffer,
+            numberPage,
+            quantity,
+            description,
+            salePrice
+            },
+            {new:true}
+        )
+
+        if (!updated) {
+            return res.redirect('/admin/product?message=Product not found for update!');
+        }
+
+    //    res.redirect('/admin/product?message=Product edited successfully.')
+       res.json({ success: true, message: 'Product edited successfully.' });
+
+    } catch (error) {
+        console.error('Error: ', error);
+        res.render('admin/login',
+            { message: 'Something went wrong while edit product. Please try again shortly.' })
+    }
+}
+
+const deleteImage=async (req,res)=>{
+try {
+    const { id, img } = req.query;
+    if (!id || !img) return res.json({success: false, message: "Missing params"});
+    const product = await Product.findById(id);
+    if (!product) return res.json({success: false, message: "Product not found"});
+
+    // Remove image from DB array
+    product.image = product.image.filter(i => i !== img);
+    await product.save();
+
+    // Remove file from disk
+    const fs = require('fs');
+    const imgPath = require('path').join('public', img); // assuming "uploads/..." is relative from /public
+    if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+
+    res.json({success: true});
+  } catch (err) {
+    res.json({success: false, message: "Server error"});
+  }
+}
+
+
 const loadViewProduct = async (req, res) => {
     try {
         const id = req.params.id
@@ -208,5 +292,7 @@ module.exports = {
     loadAddProduct,
     loadEditProduct,
     addProduct,
-    loadViewProduct
+    loadViewProduct,
+    editProduct,
+    deleteImage
 }

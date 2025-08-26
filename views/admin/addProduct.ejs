@@ -81,6 +81,10 @@
             border-radius: 50%;
             cursor: pointer;
         }
+
+        .mandatory{
+            color: red;
+        }
     </style>
 
 </head>
@@ -150,7 +154,7 @@
 
 
                 <div class="form-group">
-                    <label for="bookName">Book Name</label>
+                    <label for="bookName">Book Name <span class="mandatory">*</span></label>
                     <input type="text" class="form-control" id="bookName" name="productName">
                     <div class="text-danger" id="name-error"></div>
                 </div>
@@ -162,7 +166,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category">Category</label>
+                    <label for="category">Category <span class="mandatory">*</span></label>
                     <%if(categories.length===0){%>
                         <small>No categories found</small>
                         <%}else{%>
@@ -201,7 +205,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="price">Price</label>
+                    <label for="price">Price <span class="mandatory">*</span></label>
                     <input type="number" class="form-control" id="price" name="regularPrice">
                     <div class="text-danger" id="price-error"></div>
                 </div>
@@ -219,7 +223,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="availableQuantity">Available Quantity</label>
+                    <label for="availableQuantity">Available Quantity <span class="mandatory">*</span></label>
                     <input type="number" class="form-control" id="availableQuantity" name="quantity">
                     <div class="text-danger" id="quantity-error"></div>
                 </div>
@@ -451,6 +455,7 @@
             }
             return isValid
         }
+
         function offerValidationChecking(isValid) {
             const offerVal = offer.value
             const offerPattern = /\d/
@@ -464,6 +469,7 @@
             }
             return isValid
         }
+
         function numberOfPagesValidationChecking(isValid) {
             const numberPageVal = numberPage.value
             const numberPagePatt = /\d/

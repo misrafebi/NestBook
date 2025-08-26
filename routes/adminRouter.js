@@ -32,19 +32,25 @@ const fs = require('fs')
 //     }
 // });
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = 'uploads/';
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        // Use Date.now with a random number suffix to ensure uniqueness
-        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
-    }
-});
+
+////////////////
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         const uploadDir = 'uploads/';
+//         if (!fs.existsSync(uploadDir)) {
+//             fs.mkdirSync(uploadDir, { recursive: true });
+//         }
+//         cb(null, uploadDir);
+//     },
+//     filename: (req, file, cb) => {
+//         // Use Date.now with a random number suffix to ensure uniqueness
+//         cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
+//     }
+// });
+///////////
+
+
+
 // for (let file of req.files) {
 //     const originalImagePath = file.path;
 
@@ -58,7 +64,15 @@ const storage = multer.diskStorage({
 
 //     images.push(normalizePath(resizedImagePath));
 // }
-
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = 'public/uploads/product-images';
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + Math.round(Math.random()*1E6) + path.extname(file.originalname));
+    }
+});
 
 const upload = multer({
     storage: storage,
@@ -70,6 +84,7 @@ const upload = multer({
         cb(null, true);
     }
 });
+
 
 
 router.get('/login', adminAuth.noCache, adminAuth.isLogin, adminController.loadLogin);
@@ -104,6 +119,8 @@ router.get('/addProduct',adminAuth.noCache, adminAuth.checkSession, productContr
 router.post('/addProduct', adminAuth.noCache, adminAuth.checkSession,upload.array('images', 4), productController.addProduct)
 router.get('/viewProduct/:id',adminAuth.noCache, adminAuth.checkSession,productController.loadViewProduct)
 router.get('/editProduct', adminAuth.noCache, adminAuth.checkSession,productController.loadEditProduct)
+router.post('/editProduct',adminAuth.noCache,adminAuth.checkSession,upload.array('newImages', 4),productController.editProduct)
+router.delete('/deleteProductImage',productController.deleteImage)
 
 router.get('/review', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReviews)
 router.get('/reply/:id', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReply)
