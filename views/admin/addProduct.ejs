@@ -82,7 +82,7 @@
             cursor: pointer;
         }
 
-        .mandatory{
+        .mandatory {
             color: red;
         }
     </style>
@@ -108,134 +108,300 @@
                         <h4>Choose images</h4>
                     </div>
 
-                    <!-- Thumbnails Container -->
-                    <div class=" row">
-                        <div id="addedImagesContainer" class="thumbnails-container"></div>
+
+
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+
+
+                    <div class="form-group">
+
                     </div>
 
+
+
+                    <div class="form-group">
+                        <label>Add Product Images (max 4)</label>
+                        <!-- Thumbnails for selected cropped images -->
+                        <div id="thumbnails" class="d-flex flex-wrap mb-3"></div>
+
+                        <!-- Only one file input at a time -->
+                        <input type="file" class="form-control mb-2" id="fileInput" accept="image/*">
+
+                        <!-- Modal for cropping -->
+                        <div id="cropperModal"
+                            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; z-index:9999;">
+                            <div
+                                style="position:relative; margin:auto; background:#fff; padding:20px; border-radius:8px; max-width:90vw;">
+                                <img id="imageToCrop" src="" style="max-width:90vw; max-height:70vh;">
+                                <br>
+                                <button type="button" id="cropBtn" class="btn btn-success mt-2">Crop & Add</button>
+                                <button type="button" id="closeCropperBtn"
+                                    class="btn btn-secondary mt-2">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+                        rel="stylesheet">
+
+                    <script>
+                        let croppedImages = []; // Holds objects: {blob, url}
+                        const maxImages = 4;
+                        const thumbnails = document.getElementById('thumbnails');
+                        const fileInput = document.getElementById('fileInput');
+
+                        // Cropper modal handling
+                        const cropperModal = document.getElementById('cropperModal');
+                        const imageToCrop = document.getElementById('imageToCrop');
+                        let cropper = null;
+
+                        fileInput.addEventListener('change', function (e) {
+                            if (!this.files.length) return;
+                            const file = this.files[0];
+                            // Show modal and initialize cropper
+                            const reader = new FileReader();
+                            reader.onload = function (evt) {
+                                imageToCrop.src = evt.target.result;
+                                cropperModal.style.display = 'flex';
+                                if (cropper) cropper.destroy();
+                                cropper = new Cropper(imageToCrop, {
+                                    aspectRatio: 1,
+                                    viewMode: 1
+                                });
+                            };
+                            reader.readAsDataURL(file);
+                        });
+
+                        document.getElementById('closeCropperBtn').onclick = function () {
+                            cropperModal.style.display = 'none';
+                            if (cropper) cropper.destroy();
+                            fileInput.value = '';
+                        };
+
+                        document.getElementById('cropBtn').onclick = function () {
+                            if (!cropper) return;
+                            cropper.getCroppedCanvas().toBlob(blob => {
+                                // Make a preview for the thumbnail
+                                const url = URL.createObjectURL(blob);
+                                croppedImages.push({ blob, url });
+
+                                // Add thumbnail with remove icon
+                                const thumbDiv = document.createElement('div');
+                                thumbDiv.className = "position-relative m-2";
+                                thumbDiv.style.display = "inline-block";
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.style = "max-width:80px;max-height:80px;";
+                                const btn = document.createElement('button');
+                                btn.type = "button";
+                                btn.className = "remove-image";
+                                btn.textContent = "×";
+                                btn.onclick = function () {
+                                    // Remove from array and DOM
+                                    const idx = Array.from(thumbnails.children).indexOf(thumbDiv);
+                                    croppedImages.splice(idx, 1);
+                                    thumbDiv.remove();
+                                    // If less than maxImages, show new browser
+                                    checkShowFileInput();
+                                };
+                                thumbDiv.appendChild(img);
+                                thumbDiv.appendChild(btn);
+                                thumbnails.appendChild(thumbDiv);
+
+                                // Reset and possibly add another file input
+                                cropperModal.style.display = "none";
+                                cropper.destroy();
+                                cropper = null;
+                                fileInput.value = '';
+                                checkShowFileInput();
+                            }, 'image/jpeg');
+                        };
+
+                        function checkShowFileInput() {
+                            fileInput.style.display = croppedImages.length < maxImages ? "" : "none";
+                        }
+                        checkShowFileInput();
+
+                        // When submitting, append all cropped images to FormData
+                        document.getElementById('add-product-form').addEventListener('submit', function (e) {
+                            // This assumes you want to handle the images with Ajax.
+                            // To submit via Ajax:
+                            e.preventDefault();
+                            let fd = new FormData(this);
+                            croppedImages.forEach((cimg, i) => fd.append('images', cimg.blob, `image${i}.jpg`));
+                            fetch('/admin/addProduct',
+                                {
+                                    method: 'POST',
+                                    body: fd
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert("Product updated!");
+                                        window.location.href = "/admin/product"; // Or your redirect logic
+                                    } else {
+                                        alert(data.message || "Error saving product.");
+                                    }
+                                })
+                                .catch(err => {
+                                    alert("Submission failed.");
+                                    console.error(err);
+                                })
+                            // To submit via regular form POST, you'll need a little trick:
+                            // croppedImages.forEach((cimg, i) => {
+                            //     let fileInput = document.createElement('input');
+                            //     fileInput.type = 'hidden';
+                            //     fileInput.name = 'newCroppedImages[]'; // make sure backend handles this
+                            //     fileInput.value = cimg.url; // base64 or blob data unsupported: must use Ajax or convert to base64
+                            //     this.appendChild(fileInput);
+                            // });
+                        });
+                    </script>
+
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+
+
+                    <!-- Thumbnails Container -->
+                    <!-- <div class=" row">
+                        <div id="addedImagesContainer" class="thumbnails-container"></div>
+                    </div> -->
+
                     <!-- Input Field 1 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="selected-images-container" id="selectedImagesContainer1"></div>
                         <input class="form-control" type="file" name="images" id="input1"
                             accept="image/png, image/jpeg, image/jpg">
                         <img src="" id="croppedImg1" alt="">
                         <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
-                    </div>
+                    </div> -->
 
 
                     <!-- Input Field 2 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="selected-images-container" id="selectedImagesContainer2"></div>
                         <input class="form-control" type="file" name="images" id="input2"
                             accept="image/png, image/jpeg, image/jpg">
                         <img src="" id="croppedImg2" alt="">
                         <button type="button" id="saveButton2" class="btn-sm btn-primary">Save</button>
-                    </div>
+                    </div> -->
 
                     <!-- Input Field 3 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="selected-images-container" id="selectedImagesContainer3"></div>
                         <input class="form-control" type="file" name="images" id="input3"
                             accept="image/png, image/jpeg, image/jpg">
                         <img src="" id="croppedImg3" alt="">
                         <button type="button" id="saveButton3" class="btn-sm btn-primary">Save</button>
-                    </div>
+                    </div> -->
 
 
                     <!-- Input Field 4 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="selected-images-container" id="selectedImagesContainer4"></div>
                         <input class="form-control" type="file" name="images" id="input4"
                             accept="image/png, image/jpeg, image/jpg">
                         <img src="" id="croppedImg4" alt="">
                         <button type="button" id="saveButton4" class="btn-sm btn-primary">Save</button>
                     </div>
-                </div>
+                </div> -->
 
 
-                <div class="form-group">
-                    <label for="bookName">Book Name <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control" id="bookName" name="productName">
-                    <div class="text-danger" id="name-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="bookName">Book Name <span class="mandatory">*</span></label>
+                        <input type="text" class="form-control" id="bookName" name="productName">
+                        <div class="text-danger" id="name-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="authorName">Author Name</label>
-                    <input type="text" class="form-control" id="authorName" name="authorName">
-                    <div class="text-danger" id="auther-name-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="authorName">Author Name</label>
+                        <input type="text" class="form-control" id="authorName" name="authorName">
+                        <div class="text-danger" id="auther-name-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="category">Category <span class="mandatory">*</span></label>
-                    <%if(categories.length===0){%>
-                        <small>No categories found</small>
-                        <%}else{%>
-                            <datalist name="category" id="categories" name="category">
-                                <%categories.forEach(category=>{%>
-                                    <option value="<%=category.name%>">
-                                    </option>
-                                    <%})%>
-                            </datalist>
-                            <input list="categories" id="categories" name="category"
-                                placeholder="Select or type a category">
-                            <%}%>
-                                <div class="text-danger" id="category-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="category">Category <span class="mandatory">*</span></label>
+                        <%if(categories.length===0){%>
+                            <small>No categories found</small>
+                            <%}else{%>
+                                <datalist name="category" id="categories" name="category">
+                                    <%categories.forEach(category=>{%>
+                                        <option value="<%=category.name%>">
+                                        </option>
+                                        <%})%>
+                                </datalist>
+                                <input list="categories" id="categories" name="category"
+                                    placeholder="Select or type a category">
+                                <%}%>
+                                    <div class="text-danger" id="category-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="stock">Stock</label>
-                    <select class="form-control" id="stock" name="status">
-                        <option>Available</option>
-                        <option>Out Of Stock</option>
-                        <option>Disconnected</option>
-                    </select>
-                    <div class="text-danger" id="stock-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="stock">Stock</label>
+                        <select class="form-control" id="stock" name="status">
+                            <option>Available</option>
+                            <option>Out Of Stock</option>
+                            <option>Disconnected</option>
+                        </select>
+                        <div class="text-danger" id="stock-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="publishedDate">Published Date</label>
-                    <input type="date" class="form-control" id="publishedDate" name="publishDate">
-                    <div class="text-danger" id="publish-date-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="publishedDate">Published Date</label>
+                        <input type="date" class="form-control" id="publishedDate" name="publishDate">
+                        <div class="text-danger" id="publish-date-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="publisher">Publisher</label>
-                    <input type="text" class="form-control" id="publisher" name="publisher">
-                    <div class="text-danger" id="publisher-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="publisher">Publisher</label>
+                        <input type="text" class="form-control" id="publisher" name="publisher">
+                        <div class="text-danger" id="publisher-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="price">Price <span class="mandatory">*</span></label>
-                    <input type="number" class="form-control" id="price" name="regularPrice">
-                    <div class="text-danger" id="price-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="price">Price <span class="mandatory">*</span></label>
+                        <input type="number" class="form-control" id="price" name="regularPrice">
+                        <div class="text-danger" id="price-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="offer">Offer(%)</label>
-                    <input type="text" class="form-control" id="offer" name="productOffer">
-                    <div class="text-danger" id="offer-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="offer">Offer(%)</label>
+                        <input type="text" class="form-control" id="offer" name="productOffer">
+                        <div class="text-danger" id="offer-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="noOfPages">No-of Pages</label>
-                    <input type="text" class="form-control" id="noOfPages" name="numberPage">
-                    <div class="text-danger" id="number-page-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="noOfPages">No-of Pages</label>
+                        <input type="text" class="form-control" id="noOfPages" name="numberPage">
+                        <div class="text-danger" id="number-page-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="availableQuantity">Available Quantity <span class="mandatory">*</span></label>
-                    <input type="number" class="form-control" id="availableQuantity" name="quantity">
-                    <div class="text-danger" id="quantity-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="availableQuantity">Available Quantity <span class="mandatory">*</span></label>
+                        <input type="number" class="form-control" id="availableQuantity" name="quantity">
+                        <div class="text-danger" id="quantity-error"></div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" rows="3" name="description"></textarea>
-                    <div class="text-danger" id="description-error"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+                        <div class="text-danger" id="description-error"></div>
+                    </div>
 
-                <button type="submit" class="btn btn-dark">Save</button>
-                <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-dark">Save</button>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
             </form>
         </div>
         <br><br>
@@ -268,165 +434,165 @@
         const quantityError = document.getElementById('quantity-error')
         const descriptionError = document.getElementById("description-error")
 
-        const croppers = {};
+        // const croppers = {};
 
-        function viewImage(event, index) {
-            const input = event.target;
-            const reader = new FileReader();
+        // function viewImage(event, index) {
+        //     const input = event.target;
+        //     const reader = new FileReader();
 
-            if (croppers[index]) {
-                croppers[index].destroy();
-            }
+        //     if (croppers[index]) {
+        //         croppers[index].destroy();
+        //     }
 
-            reader.onload = function () {
-                const image = document.getElementById(`croppedImg${index}`);
-                image.src = reader.result;
+        //     reader.onload = function () {
+        //         const image = document.getElementById(`croppedImg${index}`);
+        //         image.src = reader.result;
 
-                croppers[index] = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    guides: true,
-                    background: false,
-                    autoCropArea: 1,
-                    zoomable: true,
-                });
+        //         croppers[index] = new Cropper(image, {
+        //             aspectRatio: 1,
+        //     viewMode: 1,
+        //     guides: true,
+        //     background: false,
+        //     autoCropArea: 1,
+        //     zoomable: true,
+        // });
 
-                document.getElementById(`saveButton${index}`).onclick = function () {
-                    const croppedCanvas = croppers[index].getCroppedCanvas();
-                    croppedCanvas.toBlob((blob) => {
-                        const formData = new FormData();
-                        ////////#################### ///////// 
-                        //    formData.append('image', blob, `cropped-img-${Date.now()}-${index}.jpg`);
+        // document.getElementById(`saveButton${index}`).onclick = function () {
+        //     const croppedCanvas = croppers[index].getCroppedCanvas();
+        //     croppedCanvas.toBlob((blob) => {
+        //         const formData = new FormData();
+        //         ////////#################### ///////// 
+        //         //    formData.append('image', blob, `cropped-img-${Date.now()}-${index}.jpg`);
 
-                        const cropperKeys = Object.keys(croppers)
-                        let blobPromises = cropperKeys.map(index => {
-                            return new Promise(resolve => {
-                                croppers[index].getCroppedCanvas().toBlob(blob => {
-                                    formData.append('images', blob, `cropped-${Date.now()}-${index}.jpg`)
-                                    resolve()
-                                })
-                            })
-                        })
-
-
-
-                        Promise.all(blobPromises).then(() => {
-        // Now send data via fetch
-        fetch('/admin/addProduct', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => {
-            if (response.ok) {
-                // handle success (maybe redirect or show message)
-                alert('Product added successfully!');
-                window.location.href = '/admin/products';
-            } else {
-                // handle errors
-                alert('Error uploading product');
-            }
-        })
-        .catch(err => {
-            console.error('Upload error:', err);
-        });
-    });
-});
-
-                        // fetch('/admin/addProduct', {
-                        //     method: 'POST',
-                        //     body: formData,
-                        // })
-                        //     .then(response => response.json())
-                        //     .then(data => {
-                        //         console.log('Image uploaded successfully', data);
-                        //     })
-                        //     .catch(error => {
-                        //         console.error('Error uploading image', error);
-                        //     });
+        //         const cropperKeys = Object.keys(croppers)
+        //         let blobPromises = cropperKeys.map(index => {
+        //                     return new Promise(resolve => {
+        //                         croppers[index].getCroppedCanvas().toBlob(blob => {
+        //                             formData.append('images', blob, `cropped-${Date.now()}-${index}.jpg`)
+        //                             resolve()
+        //                         })
+        //                     })
+        //                 })
 
 
 
-                    }
-                // );
+        //                 Promise.all(blobPromises).then(() => {
+        // // Now send data via fetch
+        // fetch('/admin/addProduct', {
+        //     method: 'POST',
+        //     body: formData,
+        // })
+        // .then(response => {
+        //     if (response.ok) {
+        //         // handle success (maybe redirect or show message)
+        //         alert('Product added successfully!');
+        //         window.location.href = '/admin/products';
+        //     } else {
+        //         // handle errors
+        //         alert('Error uploading product');
+        //     }
+        // })
+        //         .catch(err => {
+        //             console.error('Upload error:', err);
+        //         });
+        //     });
+        // });
 
-                    document.getElementById(`croppedImg${index}`).style.display = 'none';
-                };
-            };
-            reader.readAsDataURL(input.files[0]);
+        // fetch('/admin/addProduct', {
+        //     method: 'POST',
+        //     body: formData,
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('Image uploaded successfully', data);
+        //     })
+        //     .catch(error => {
+        //         console.error('Error uploading image', error);
+        //     });
+
+
+
+        //         }
+        //     // );
+
+        //         document.getElementById(`croppedImg${index}`).style.display = 'none';
+        //     };
+        // };
+        // reader.readAsDataURL(input.files[0]);
         // }
 
-        const selectedImages = [];
+        // const selectedImages = [];
 
-        function handleFileSelect(event) {
-            const inputId = event.target.id;
-            const files = event.target.files;
-            const selectedImagesContainer = document.getElementById(`selectedImagesContainer${inputId.slice(-1)}`);
-            const thumbnailsContainer = document.getElementById('addedImagesContainer');
-            thumbnailsContainer.innerHTML = ''
+        //function handleFileSelect(event) {
+        // const inputId = event.target.id;
+        // const files = event.target.files;
+        // const selectedImagesContainer = document.getElementById(`selectedImagesContainer${inputId.slice(-1)}`);
+        // const thumbnailsContainer = document.getElementById('addedImagesContainer');
+        // thumbnailsContainer.innerHTML = ''
 
-            selectedImagesContainer.innerHTML = '';
+        // selectedImagesContainer.innerHTML = '';
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+        // for (let i = 0; i < files.length; i++) {
+        //     const file = files[i];
 
-                const preview = document.createElement('img');
-                preview.src = URL.createObjectURL(file);
-                preview.alt = 'Selected image';
-                preview.className = 'input-preview';
-                selectedImagesContainer.appendChild(preview);
+        // const preview = document.createElement('img');
+        // preview.src = URL.createObjectURL(file);
+        // preview.alt = 'Selected image';
+        // preview.className = 'input-preview';
+        // selectedImagesContainer.appendChild(preview);
 
-                const thumbnail = document.createElement('div');
-                thumbnail.className = 'thumbnail';
+        // const thumbnail = document.createElement('div');
+        // thumbnail.className = 'thumbnail';
 
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.alt = 'Thumbnail';
-                img.className = 'thumbnail-img';
+        // const img = document.createElement('img');
+        // img.src = URL.createObjectURL(file);
+        // img.alt = 'Thumbnail';
+        // img.className = 'thumbnail-img';
 
-                const removeIcon = document.createElement('span');
-                removeIcon.className = 'remove-icon';
-                removeIcon.innerHTML = '&times;';
-                removeIcon.addEventListener('click', function () {
-                    thumbnail.remove();
+        // const removeIcon = document.createElement('span');
+        // removeIcon.className = 'remove-icon';
+        // removeIcon.innerHTML = '&times;';
+        // removeIcon.addEventListener('click', function () {
+        //     thumbnail.remove();
 
-                    const input = document.getElementById(inputId);
-                    input.value = '';
-                });
+        // const input = document.getElementById(inputId);
+        //             input.value = '';
+        //         });
 
-                thumbnail.appendChild(img);
-                thumbnail.appendChild(removeIcon);
-                thumbnailsContainer.appendChild(thumbnail);
-            }
-        }
-
-
+        //         thumbnail.appendChild(img);
+        //         thumbnail.appendChild(removeIcon);
+        //         thumbnailsContainer.appendChild(thumbnail);
+        //     }
+        // }
 
 
 
 
-        document.getElementById('input1').addEventListener('change', (event) => {
-            handleFileSelect(event);
-            viewImage(event, 1);
-        });
-        document.getElementById('input2').addEventListener('change', (event) => {
-            handleFileSelect(event);
-            viewImage(event, 2);
-        });
-        document.getElementById('input3').addEventListener('change', (event) => {
-            handleFileSelect(event);
-            viewImage(event, 3);
-        });
-        document.getElementById('input4').addEventListener('change', (event) => {
-            handleFileSelect(event);
-            viewImage(event, 4);
-        });
+
+
+        // document.getElementById('input1').addEventListener('change', (event) => {
+        //     handleFileSelect(event);
+        //     viewImage(event, 1);
+        // });
+        // document.getElementById('input2').addEventListener('change', (event) => {
+        //     handleFileSelect(event);
+        //     viewImage(event, 2);
+        // });
+        // document.getElementById('input3').addEventListener('change', (event) => {
+        //     handleFileSelect(event);
+        //     viewImage(event, 3);
+        // });
+        // document.getElementById('input4').addEventListener('change', (event) => {
+        //     handleFileSelect(event);
+        //     viewImage(event, 4);
+        // });
 
 
 
-        document.getElementById('input1').addEventListener('change', handleFileSelect);
-        document.getElementById('input2').addEventListener('change', handleFileSelect);
-        document.getElementById('input3').addEventListener('change', handleFileSelect);
-        document.getElementById('input4').addEventListener('change', handleFileSelect);
+        // document.getElementById('input1').addEventListener('change', handleFileSelect);
+        // document.getElementById('input2').addEventListener('change', handleFileSelect);
+        // document.getElementById('input3').addEventListener('change', handleFileSelect);
+        // document.getElementById('input4').addEventListener('change', handleFileSelect);
 
 
         function nameValidationChecking(isValid) {

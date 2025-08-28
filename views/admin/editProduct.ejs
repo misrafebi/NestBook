@@ -100,152 +100,156 @@
 
 
 
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<div class="form-group">
-    <label>Add Product Images (max 4)</label>
-    <!-- Thumbnails for selected cropped images -->
-    <div id="thumbnails" class="d-flex flex-wrap mb-3"></div>
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <div class="form-group">
+                    <label>Add Product Images (max 4)</label>
+                    <!-- Thumbnails for selected cropped images -->
+                    <div id="thumbnails" class="d-flex flex-wrap mb-3"></div>
 
-    <!-- Only one file input at a time -->
-    <input type="file" class="form-control mb-2" id="fileInput" accept="image/*">
+                    <!-- Only one file input at a time -->
+                    <input type="file" class="form-control mb-2" id="fileInput" accept="image/*">
 
-    <!-- Modal for cropping -->
-    <div id="cropperModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; z-index:9999;">
-        <div style="position:relative; margin:auto; background:#fff; padding:20px; border-radius:8px; max-width:90vw;">
-            <img id="imageToCrop" src="" style="max-width:90vw; max-height:70vh;">
-            <br>
-            <button type="button" id="cropBtn" class="btn btn-success mt-2">Crop & Add</button>
-            <button type="button" id="closeCropperBtn" class="btn btn-secondary mt-2">Cancel</button>
-        </div>
-    </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+                    <!-- Modal for cropping -->
+                    <div id="cropperModal"
+                        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; z-index:9999;">
+                        <div
+                            style="position:relative; margin:auto; background:#fff; padding:20px; border-radius:8px; max-width:90vw;">
+                            <img id="imageToCrop" src="" style="max-width:90vw; max-height:70vh;">
+                            <br>
+                            <button type="button" id="cropBtn" class="btn btn-success mt-2">Crop & Add</button>
+                            <button type="button" id="closeCropperBtn" class="btn btn-secondary mt-2">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
-<script>
-let croppedImages = []; // Holds objects: {blob, url}
-const maxImages = 4;
-const thumbnails = document.getElementById('thumbnails');
-const fileInput = document.getElementById('fileInput');
+                <script>
+                    let croppedImages = []; // Holds objects: {blob, url}
+                    const maxImages = 4;
+                    const thumbnails = document.getElementById('thumbnails');
+                    const fileInput = document.getElementById('fileInput');
 
-// Cropper modal handling
-const cropperModal = document.getElementById('cropperModal');
-const imageToCrop = document.getElementById('imageToCrop');
-let cropper = null;
+                    // Cropper modal handling
+                    const cropperModal = document.getElementById('cropperModal');
+                    const imageToCrop = document.getElementById('imageToCrop');
+                    let cropper = null;
 
-fileInput.addEventListener('change', function(e) {
-    if (!this.files.length) return;
-    const file = this.files[0];
-    // Show modal and initialize cropper
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        imageToCrop.src = evt.target.result;
-        cropperModal.style.display = 'flex';
-        if (cropper) cropper.destroy();
-        cropper = new Cropper(imageToCrop, {
-            aspectRatio: 1,
-            viewMode: 1
-        });
-    };
-    reader.readAsDataURL(file);
-});
+                    fileInput.addEventListener('change', function (e) {
+                        if (!this.files.length) return;
+                        const file = this.files[0];
+                        // Show modal and initialize cropper
+                        const reader = new FileReader();
+                        reader.onload = function (evt) {
+                            imageToCrop.src = evt.target.result;
+                            cropperModal.style.display = 'flex';
+                            if (cropper) cropper.destroy();
+                            cropper = new Cropper(imageToCrop, {
+                                aspectRatio: 1,
+                                viewMode: 1
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    });
 
-document.getElementById('closeCropperBtn').onclick = function() {
-    cropperModal.style.display = 'none';
-    if (cropper) cropper.destroy();
-    fileInput.value = '';
-};
+                    document.getElementById('closeCropperBtn').onclick = function () {
+                        cropperModal.style.display = 'none';
+                        if (cropper) cropper.destroy();
+                        fileInput.value = '';
+                    };
 
-document.getElementById('cropBtn').onclick = function() {
-    if (!cropper) return;
-    cropper.getCroppedCanvas().toBlob(blob => {
-        // Make a preview for the thumbnail
-        const url = URL.createObjectURL(blob);
-        croppedImages.push({blob, url});
+                    document.getElementById('cropBtn').onclick = function () {
+                        if (!cropper) return;
+                        cropper.getCroppedCanvas().toBlob(blob => {
+                            // Make a preview for the thumbnail
+                            const url = URL.createObjectURL(blob);
+                            croppedImages.push({ blob, url });
 
-        // Add thumbnail with remove icon
-        const thumbDiv = document.createElement('div');
-        thumbDiv.className = "position-relative m-2";
-        thumbDiv.style.display = "inline-block";
-        const img = document.createElement('img');
-        img.src = url;
-        img.style = "max-width:80px;max-height:80px;";
-        const btn = document.createElement('button');
-        btn.type = "button";
-        btn.className = "remove-image";
-        btn.textContent = "×";
-        btn.onclick = function() {
-            // Remove from array and DOM
-            const idx = Array.from(thumbnails.children).indexOf(thumbDiv);
-            croppedImages.splice(idx, 1);
-            thumbDiv.remove();
-            // If less than maxImages, show new browser
-            checkShowFileInput();
-        };
-        thumbDiv.appendChild(img);
-        thumbDiv.appendChild(btn);
-        thumbnails.appendChild(thumbDiv);
+                            // Add thumbnail with remove icon
+                            const thumbDiv = document.createElement('div');
+                            thumbDiv.className = "position-relative m-2";
+                            thumbDiv.style.display = "inline-block";
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.style = "max-width:80px;max-height:80px;";
+                            const btn = document.createElement('button');
+                            btn.type = "button";
+                            btn.className = "remove-image";
+                            btn.textContent = "×";
+                            btn.onclick = function () {
+                                // Remove from array and DOM
+                                const idx = Array.from(thumbnails.children).indexOf(thumbDiv);
+                                croppedImages.splice(idx, 1);
+                                thumbDiv.remove();
+                                // If less than maxImages, show new browser
+                                checkShowFileInput();
+                            };
+                            thumbDiv.appendChild(img);
+                            thumbDiv.appendChild(btn);
+                            thumbnails.appendChild(thumbDiv);
 
-        // Reset and possibly add another file input
-        cropperModal.style.display = "none";
-        cropper.destroy();
-        cropper = null;
-        fileInput.value = '';
-        checkShowFileInput();
-    }, 'image/jpeg');
-};
+                            // Reset and possibly add another file input
+                            cropperModal.style.display = "none";
+                            cropper.destroy();
+                            cropper = null;
+                            fileInput.value = '';
+                            checkShowFileInput();
+                        }, 'image/jpeg');
+                    };
 
-function checkShowFileInput() {
-    fileInput.style.display = croppedImages.length < maxImages ? "" : "none";
-}
-checkShowFileInput();
+                    function checkShowFileInput() {
+                        fileInput.style.display = croppedImages.length < maxImages ? "" : "none";
+                    }
+                    checkShowFileInput();
 
-// When submitting, append all cropped images to FormData
-document.getElementById('edit-product-form').addEventListener('submit', function(e) {
-    // This assumes you want to handle the images with Ajax.
-    // To submit via Ajax:
-    e.preventDefault();
-    let fd = new FormData(this);
-    croppedImages.forEach((cimg,i) => fd.append('newImages', cimg.blob, `image${i}.jpg`));
-    fetch('/admin/editProduct', 
-    {method:'POST',
-    body:fd})
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Product updated!");
-            window.location.href = "/admin/product"; // Or your redirect logic
-        } else {
-            alert(data.message || "Error saving product.");
-        }
-    })
-    .catch(err => {
-        alert("Submission failed.");
-        console.error(err);
-    })
-    // To submit via regular form POST, you'll need a little trick:
-    croppedImages.forEach((cimg, i) => {
-        let fileInput = document.createElement('input');
-        fileInput.type = 'hidden';
-        fileInput.name = 'newCroppedImages[]'; // make sure backend handles this
-        fileInput.value = cimg.url; // base64 or blob data unsupported: must use Ajax or convert to base64
-        this.appendChild(fileInput);
-    });
-});
-</script>
+                    // When submitting, append all cropped images to FormData
+                    document.getElementById('edit-product-form').addEventListener('submit', function (e) {
+                        // This assumes you want to handle the images with Ajax.
+                        // To submit via Ajax:
+                        e.preventDefault();
+                        let fd = new FormData(this);
+                        croppedImages.forEach((cimg, i) => fd.append('newImages', cimg.blob, `image${i}.jpg`));
+                        fetch('/admin/editProduct',
+                            {
+                                method: 'POST',
+                                body: fd
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Product updated!");
+                                    window.location.href = "/admin/product"; // Or your redirect logic
+                                } else {
+                                    alert(data.message || "Error saving product.");
+                                }
+                            })
+                            .catch(err => {
+                                alert("Submission failed.");
+                                console.error(err);
+                            })
+                        // To submit via regular form POST, you'll need a little trick:
+                        croppedImages.forEach((cimg, i) => {
+                            let fileInput = document.createElement('input');
+                            fileInput.type = 'hidden';
+                            fileInput.name = 'newCroppedImages[]'; // make sure backend handles this
+                            fileInput.value = cimg.url; // base64 or blob data unsupported: must use Ajax or convert to base64
+                            this.appendChild(fileInput);
+                        });
+                    });
+                </script>
 
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
+                <!--  -->
 
 
 
