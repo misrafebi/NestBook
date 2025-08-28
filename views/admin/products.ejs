@@ -154,12 +154,29 @@
                                             href="/admin/editProduct?id=<%=product._id%>">Edit</a>
                                     </td>
                                     <td>
-                                        <%if(product.isBlocked==false){%>
-                                            <button class="btn btn-success">UnBlocked</button>
-                                            <%}else{%>
-                                                <button class="btn btn-danger">Blocked</button>
-                                                <%}%>
+                                        <button  onclick="toggleBlock('<%=product._id%>')"
+                                            class="btn <%=product.isBlocked?'btn-danger':'btn-success'%>">
+                                            <%=product.isBlocked?'Blocked':'UnBlocked'%>
+                                        </button>
                                     </td>
+                                    <!--  -->
+                                    <script>
+                                        function toggleBlock(productId) {
+                                            fetch(`/admin/${productId}/block`, {
+                                                method: 'PUT',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                // body: JSON.stringify({ id: productId })
+                                            })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.success) window.location.reload()
+                                                    else alert('Error blocking/ unblocking')
+                                                })
+                                        }
+                                    </script>
+                                    <!--  -->
+
+
                                 </tr>
                                 <%})%>
                         </tbody>
@@ -167,7 +184,7 @@
                     <div class="pagination">
                         <% if (currentPage> 1) { %>
                             <a href="?page=<%= currentPage - 1 %>" class="btn btn-outline-secondary">
-                                << /a>
+                                < </a>
                                     <% } %>
 
                                         <% if (currentPage> 4) { %>

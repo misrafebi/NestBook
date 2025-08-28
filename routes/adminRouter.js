@@ -121,6 +121,7 @@ router.get('/viewProduct/:id',adminAuth.noCache, adminAuth.checkSession,productC
 router.get('/editProduct', adminAuth.noCache, adminAuth.checkSession,productController.loadEditProduct)
 router.post('/editProduct',adminAuth.noCache,adminAuth.checkSession,upload.array('newImages', 4),productController.editProduct)
 router.delete('/deleteProductImage',productController.deleteImage)
+router.put('/:id/block',productController.toggleBlock)
 
 router.get('/review', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReviews)
 router.get('/reply/:id', adminAuth.noCache, adminAuth.checkSession, reviewController.loadReply)

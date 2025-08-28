@@ -51,160 +51,7 @@ const loadAddProduct = async (req, res) => {
 }
 
 
-// const addProduct = async (req, res) => {
-//     try {
-//         ///////////////////
-//         // const normalizePath = (filePath) => {
-//         //     return filePath.replace(/^.*\/uploads\//, 'uploads/');
-//         // };
-//         ////////////////
 
-//         const categories = await Category.find({});
-//         const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description } = req.body;
-
-//         if (!category || category === 'Select category') {
-//             return res.render('admin/addProduct', {
-//                 message: 'Category cannot be empty. Please select or enter a valid category.',
-//                 categories
-//             });
-//         }
-
-
-//         ///////////////////////
-//         // if (!req.files || req.files.length === 0) {
-//         //     return res.render('admin/addProduct', {
-//         //         categories,
-//         //         message: 'Please upload at least one product image.'
-//         //     });
-//         // }
-//         ////////////////////
-
-//         // if (req.files && req.files.length > 0) {
-//         //     req.files.forEach(file => {
-//         //         const relPath = 'uploads/product-images/' + file.filename
-//         //         if (!product.image.includes(relPath) && product.image.length < 4) {
-//         //             product.image.push(relPath)
-//         //         }
-//         //     })
-//         // }
-
-//         // const images = [];
-//         // const uploadDir = path.join('public', 'uploads', 'product-images');
-//         // if (!fs.existsSync(uploadDir)) {
-//         //     fs.mkdirSync(uploadDir, { recursive: true });
-//         // }
-
-//         // for (let file of req.files) {
-//         //     const originalImagePath = file.path;
-//         //     const resizedImagePath = path.join(uploadDir, file.filename);
-
-//         //     await sharp(originalImagePath)
-//         //         .resize({ width: 440, height: 440 })
-//         //         .toFile(resizedImagePath);
-
-//         //     images.push(normalizePath(resizedImagePath));
-//         // }
-
-//         // Handle images (Required)
-//         let images = [];
-//         const uploadDir = path.join('public', 'uploads', 'product-images');
-//         if (!fs.existsSync(uploadDir)) {
-//             fs.mkdirSync(uploadDir, { recursive: true });
-//         }
-
-//         if (!req.files || req.files.length === 0) {
-//             return res.render('admin/addProduct', {
-//                 categories,
-//                 message: 'Please upload at least one product image.'
-//             });
-//         }
-
-//         // Process and resize images
-//         for (let i = 0; i < req.files.length && images.length < 4; i++) {
-//             const file = req.files[i];
-//             const originalImagePath = file.path;
-//             const resizedImagePath = path.join(uploadDir, file.filename);
-
-//             await sharp(originalImagePath)
-//                 .resize({ width: 440, height: 440 })
-//                 .toFile(resizedImagePath);
-
-//             images.push('uploads/product-images/' + file.filename);
-//         }
-
-//         const productExists = await Product.findOne({
-//             productName: { $regex: `${productName}$`, $options: 'i' }
-//         });
-
-//         if (productExists) {
-
-//             return res.render('admin/addProduct', {
-//                 message: `Product: ${productName} already exists.`,
-//                 categories
-//             });
-//         }
-
-//         let categoryDoc = await Category.findOne({ name: category });
-//         if (!categoryDoc) {
-//             categoryDoc = new Category({ name: category, description: '' });
-//             await categoryDoc.save();
-//         }
-
-//         const salePrice = Math.round(regularPrice - (regularPrice * productOffer) / 100);
-
-//         const newProduct = new Product({
-//             image: images,
-//             productName,
-//             authorName,
-//             category: categoryDoc._id,
-//             status,
-//             publishDate,
-//             publisher,
-//             regularPrice,
-//             productOffer,
-//             numberPage,
-//             quantity,
-//             description,
-//             salePrice
-//         });
-
-//         await newProduct.save();
-//         // console.log('Product added with images:', newProduct.image);
-
-//         const page = parseInt(req.query.page) || 1
-//         const limit = 10
-//         const skip = (page - 1) * limit
-
-//         const totalProducts = await Product.countDocuments()
-
-//         // const categories=await Category.find({})
-//         const products = await Product.find({})
-//             .sort({ createdAt: -1 })
-//             .skip(skip)
-//             .limit(limit)
-//         const totalPages = Math.ceil(totalProducts / limit)
-
-//         // return res.render('admin/products', {
-//         //     message: 'Product added successfully.',
-//         //     products,
-//         //     totalPages,
-//         //     currentPage: page
-//         // });
-//         res.json({ success: true, message: 'Product edited successfully.' });
-
-//     } catch (error) {
-//         console.error('Error: ', error);
-//         res.render('admin/login', {
-//             message: 'Something went wrong while adding the product. Please try again shortly.'
-//         });
-//     }
-// };
-
-
-
-
-
-// Add Product Controller
 const addProduct = async (req, res) => {
     try {
         const categories = await Category.find({});
@@ -248,13 +95,13 @@ const addProduct = async (req, res) => {
         for (let i = 0; i < req.files.length && images.length < 4; i++) {
             const file = req.files[i];
             const originalImagePath = file.path;
-const resizedImagePath = path.join(uploadDir, 'resized-' + file.filename);
+            const resizedImagePath = path.join(uploadDir, 'resized-' + file.filename);
 
             await sharp(originalImagePath)
-  .resize({ width: 440, height: 440 })
-  .toFile(resizedImagePath);
+                .resize({ width: 440, height: 440 })
+                .toFile(resizedImagePath);
 
-images.push('uploads/product-images/' + 'resized-' + file.filename);
+            images.push('uploads/product-images/' + 'resized-' + file.filename);
         }
 
         // Check for existing product
@@ -312,20 +159,13 @@ images.push('uploads/product-images/' + 'resized-' + file.filename);
         // Respond with JSON (for AJAX form) or render as needed
         return res.json({ success: true, message: 'Product added successfully.' });
 
-        // For server-rendered app:
-        // return res.render('admin/products', {
-        //     message: 'Product added successfully.',
-        //     products,
-        //     totalPages,
-        //     currentPage: page
-        // });
 
     } catch (error) {
         console.error('Error: ', error);
-    return res.status(500).json({
-        success: false,
-        message: 'Something went wrong while adding the product.'
-    });
+        return res.status(500).json({
+            success: false,
+            message: 'Something went wrong while adding the product.'
+        });
     }
 };
 
@@ -438,7 +278,8 @@ const deleteImage = async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        res.json({ success: false, message: "Server error" });
+        console.log('Error', err);
+        res.json({ success: false, message: "Something went wrong while delete image. Please try again shortly." });
     }
 }
 
@@ -463,6 +304,24 @@ const loadViewProduct = async (req, res) => {
             { message: 'Something went wrong while loading the view product page. Please try again shortly.' })
     }
 }
+
+const toggleBlock = async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await Product.findById(id)
+
+        if (!product) return res.json({ success: false, message: 'Product not found' });      
+
+        product.isBlocked = !product.isBlocked
+        await product.save()
+
+        res.json({ success: true, message: product.isBlocked })
+
+    } catch (error) {
+        console.error('Error', error);
+        res.json('Something went wrong while toggle block/ unblock product. Please try again shortly.')
+    }
+}
 module.exports = {
     loadProduct,
     loadAddProduct,
@@ -470,5 +329,6 @@ module.exports = {
     addProduct,
     loadViewProduct,
     editProduct,
-    deleteImage
+    deleteImage,
+    toggleBlock
 }
