@@ -82,11 +82,33 @@
                                                 </button>
                                             </td>
 
-
                                             <td>
-                                                <button class="btn btn-danger delete-btn"
+                                                <button onclick="deleteCategory('<%=category._id%>')"
+                                                    class="btn btn-danger delete-btn"
                                                     data-id="<%=category._id%>">Delete</button>
                                             </td>
+
+                                            <!-- Delete category -->
+                                            <script>
+                                                function deleteCategory(categoryId) {
+                                                    if (!confirm('Delete this category')) return
+                                                    fetch(`/admin/deleteCategory?id=${categoryId}`, {
+                                                        method: 'DELETE'
+                                                    })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data.success) {
+                                                                buttonEl.parentNode.remove()
+                                                            }
+                                                            else {
+                                                                alert(data.message || 'Error dleting category.')
+                                                            }
+                                                        })
+                                                }
+                                            </script>
+                                            <!--  -->
+
+
                                 </tr>
                                 <%})%>
                         </tbody>
@@ -274,7 +296,7 @@
 
         <!---------------------------------->
         <!--------Delete category------------->
-        <script>
+        <!-- <script>
 
             document.querySelectorAll('.delete-btn').forEach((button) => {
                 button.addEventListener('click', async (e) => {
@@ -292,7 +314,7 @@
                             if (response.ok) {
                                 const result = await response.json();
                                 alert(result.message || 'Category deleted successfully!');
-                                location.reload(); 
+                                location.reload();
                             } else {
                                 const errorData = await response.json();
                                 alert(errorData.message || 'Failed to delete the category. Please try again.');
@@ -306,7 +328,7 @@
                 });
             });
 
-        </script>
+        </script> -->
 
 
         <%if(message){%>

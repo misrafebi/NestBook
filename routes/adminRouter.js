@@ -100,7 +100,7 @@ router.post('/changePassword', adminAuth.noCache, adminAuth.checkSession, adminC
 router.get('/category', adminAuth.noCache, adminAuth.checkSession, categoryController.loadCategory)
 router.post('/edit-category/:id', adminAuth.noCache, adminAuth.checkSession, categoryController.editCategory)
 router.post('/add-category', adminAuth.noCache, adminAuth.checkSession, categoryController.addCategory)
-router.delete('/deleteCategory/:id', adminAuth.noCache, adminAuth.checkSession, categoryController.deleteCategory);
+router.delete('/deleteCategory', adminAuth.noCache, adminAuth.checkSession, categoryController.deleteCategory);
 
 router.get('/coupon', adminAuth.noCache, adminAuth.checkSession,couponController.laodCoupon)
 router.get('/addCoupon',adminAuth.noCache, adminAuth.checkSession, couponController.loadAddCoupon)

@@ -97,92 +97,97 @@
     </nav>
 
     <div class="container-fluid p-3">
-        <!-- Product Details -->
-        <div class="card p-3">
-            <div class="product-container">
-                <!-- Image Section -->
-                <div>
-                    <h5>Product Images</h5>
-                    <div class="d-flex flex-wrap gap-2 product-images">
-                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner" id="img-size">
-                                <% for(let i=0; i < product.image.length;i++){%>
-                                    <div class="carousel-item <%=i===0?'active':''%>">
-                                        <img src="/<%=product.image[i]%>" alt="" id="product-image">
+        <%if(!category){%>
+            <p>Category is empty, Please add category</p>
+            <%}else{%>
+                <!-- Product Details -->
+                <div class="card p-3">
+                    <div class="product-container">
+                        <!-- Image Section -->
+                        <div>
+                            <h5>Product Images</h5>
+                            <div class="d-flex flex-wrap gap-2 product-images">
+                                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner" id="img-size">
+                                        <% for(let i=0; i < product.image.length;i++){%>
+                                            <div class="carousel-item <%=i===0?'active':''%>">
+                                                <img src="/<%=product.image[i]%>" alt="" id="product-image">
+                                            </div>
+                                            <%}%>
                                     </div>
-                                    <%}%>
+
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden"></span>
+                                    </button>
+
+                                </div>
+
                             </div>
-
-                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden"></span>
-                            </button>
-
                         </div>
 
-                    </div>
-                </div>
-
-                <!-- Details Section -->
-                <div class="product-details">
-                    <h4>Product Details</h4>
-                    <table class="table table-striped">
-                        <tbody>
-                            <%if(product.productName){%>
-                                <tr>
-                                    <th>Book Name</th>
-                                    <td>
-                                        <%=product.productName%>
-                                    </td>
-                                </tr>
-                                <%}%>
-
-                                    <%if(product.authorName){%>
+                        <!-- Details Section -->
+                        <div class="product-details">
+                            <h4>Product Details</h4>
+                            <table class="table table-striped">
+                                <tbody>
+                                    <%if(product.productName){%>
                                         <tr>
-                                            <th>Author Name</th>
+                                            <th>Book Name</th>
                                             <td>
-                                                <%=product.authorName%>
+                                                <%=product.productName%>
                                             </td>
                                         </tr>
                                         <%}%>
 
-                                            <%if(product.regularPrice){%>
+                                            <%if(product.authorName){%>
                                                 <tr>
-                                                    <th>Price</th>
-                                                    <td>₹<%=product.regularPrice%></td>
+                                                    <th>Author Name</th>
+                                                    <td>
+                                                        <%=product.authorName%>
+                                                    </td>
                                                 </tr>
                                                 <%}%>
 
-                                                    <%if(product.productOffer){%>
+                                                    <%if(product.regularPrice){%>
                                                         <tr>
-                                                            <th>Discount</th>
-                                                            <td>
-                                                                <%=product.productOffer%>% Off
+                                                            <th>Price</th>
+                                                            <td>₹<%=product.regularPrice%>
                                                             </td>
                                                         </tr>
                                                         <%}%>
-                                                            <%if(product.salePrice){%>
+
+                                                            <%if(product.productOffer){%>
                                                                 <tr>
-                                                                    <th>Sale Price</th>
-                                                                    <td class="text-success">₹<%=product.salePrice%>
+                                                                    <th>Discount</th>
+                                                                    <td>
+                                                                        <%=product.productOffer%>% Off
                                                                     </td>
                                                                 </tr>
                                                                 <%}%>
-
-                                                                    <%if(category.name){%>
+                                                                    <%if(product.salePrice){%>
                                                                         <tr>
-                                                                            <th>Category</th>
-                                                                            <td>
-                                                                                <%=category.name%>
+                                                                            <th>Sale Price</th>
+                                                                            <td class="text-success">₹
+                                                                                <%=product.salePrice%>
                                                                             </td>
                                                                         </tr>
                                                                         <%}%>
+
+                                                                            <%if(category.name){%>
+                                                                            <tr>
+                                                                                <th>Category</th>
+                                                                                <td>
+                                                                                    <%=category.name%>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <%}%>
 
                                                                             <%if(product.status){%>
                                                                                 <tr>
@@ -207,7 +212,8 @@
 
                                                                                     <%if(product.quantity){%>
                                                                                         <tr>
-                                                                                            <th>Available Quantity</th>
+                                                                                            <th>Available
+                                                                                                Quantity</th>
                                                                                             <td>
                                                                                                 <%=product.quantity%>
                                                                                             </td>
@@ -216,7 +222,8 @@
 
                                                                                             <%if(product.numberPage){%>
                                                                                                 <tr>
-                                                                                                    <th>Number of Pages
+                                                                                                    <th>Number
+                                                                                                        of Pages
                                                                                                     </th>
                                                                                                     <td>
                                                                                                         <%=product.numberPage%>
@@ -260,12 +267,13 @@
                                                                                                                         <%}%>
 
 
-                        </tbody>
-                    </table>
-                    <!-- <button class="btn btn-primary edit-btn">Edit</button> -->
+                                </tbody>
+                            </table>
+                            <!-- <button class="btn btn-primary edit-btn">Edit</button> -->
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <%}%>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

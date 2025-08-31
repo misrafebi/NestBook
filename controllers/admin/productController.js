@@ -322,7 +322,7 @@ const toggleBlock = async (req, res) => {
         res.json('Something went wrong while toggle block/ unblock product. Please try again shortly.')
     }
 }
-module.exports = {
+module.exports = { 
     loadProduct,
     loadAddProduct,
     loadEditProduct,

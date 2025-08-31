@@ -73,22 +73,39 @@ const addCategory = async (req, res) => {
             { message: 'Something went wrong while add category. Please try again shortly.' })
     }
 }
+ 
+// const deleteCategory = async (req, res) => {
+//     try {
+//         const { id } = req.params
+//         const category = await Category.findByIdAndDelete(id)
 
-const deleteCategory = async (req, res) => {
+//         if (!category) {
+//             return res.status(404).json({ message: 'Category not found.' });
+//         }
+//         return res.status(200).json({ message: 'Category deleted successfully.' });
+
+
+//     } catch (error) {
+//         console.error('Error: ', error);
+//         res.render('admin/login',
+//             { message: 'Something went wrong while delete category. Please try again shortly.' })
+//     }
+// }
+
+const deleteCategory=async(req,res)=>{
     try {
-        const { id } = req.params
-        const category = await Category.findByIdAndDelete(id)
+        const id=req.query.id
+        if(!id) return res.json({success:false, message:"Missing params!"})
 
-        if (!category) {
-            return res.status(404).json({ message: 'Category not found.' });
-        }
-        return res.status(200).json({ message: 'Category deleted successfully.' });
+        const category=await Category.findById(id)
+        if(!category) return res.json({success:false,message:'Caregory not found!'})
 
+        await Category.deleteOne({_id:id})
+        res.json({ success: true, message: "Category deleted." });
 
     } catch (error) {
-        console.error('Error: ', error);
-        res.render('admin/login',
-            { message: 'Something went wrong while delete category. Please try again shortly.' })
+        console.log('Error',error);
+        res.json({success:false,message:'Something went wrong while delete category. Please try again shortly.'})
     }
 }
 
