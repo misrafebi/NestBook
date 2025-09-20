@@ -307,6 +307,75 @@
                         <div class="text-danger" id="offer-error"></div>
                     </div>
 
+                    <div class="form-group row" id="offer-dates" style="display:none;">
+                        <!-- Starting Offer -->
+                        <div class="col-md-6">
+                            <label for="startOffer">Starting Offer Date <span class="mandatory">*</span></label>
+                            <input type="date" class="form-control" id="startOffer" name="startOffer">
+                            <div class="text-danger" id="startOffer-error"></div>
+                        </div>
+
+                        <!-- Expire Offer -->
+                        <div class="col-md-6">
+                            <label for="expireOffer">Expire Offer Date <span class="mandatory">*</span></label>
+                            <input type="date" class="form-control" id="expireOffer" name="expireOffer">
+                            <div class="text-danger" id="expireOffer-error"></div>
+                        </div>
+                    </div>
+                    <!-- display and hide input box -->
+                    <script>
+                        document.getElementById('offer').addEventListener('input', function () {
+                            let offerVal = this.value.trim()
+                            var datesContainer = document.getElementById('offer-dates')
+                            if (offerVal > 0) {
+                                datesContainer.style.display = ''
+                            } else {
+                                datesContainer.style.display = 'none'
+                                document.getElementById('startOffer').value = ''
+                                document.getElementById('expireOffer').value = ''
+                            }
+                        })
+                    </script>
+                    <!-- display today and after -->
+                    <script>
+                        window.addEventListener('DOMContentLoaded', function () {
+                            const today = new Date().toISOString().split('T')[0]
+                            document.getElementById('startOffer').setAttribute('min', today)
+                            document.getElementById('expireOffer').setAttribute('min', today)
+                        })
+                    </script>
+                    <!-- Validate Expire Date > Start Date -->
+                    <script>
+                        document.getElementById('expireOffer').addEventListener('change', function () {
+
+                            let expireDate = this.value
+                            let startDate = document.getElementById('startOffer').value
+                            let expireError = document.getElementById('expireOffer-error')
+                            let startError = document.getElementById("startOffer-error")
+
+                            if (expireDate && startDate && expireDate < startDate) {
+                                expireError.textContent = 'Expire date must be after the start date.'
+                                this.value = '';
+                            } else {
+                                expireError.textContent = ''
+                            }
+
+                        })
+                        document.getElementById('startOffer').addEventListener('change', function () {
+                            const startDate = this.value;
+                            const expireDate = document.getElementById('expireOffer').value;
+                            if (startDate && expireDate && expireDate <= startDate) {
+                                document.getElementById('expireOffer-error').textContent = 'Expire date must be after the start date.';
+                                document.getElementById('expireOffer').value = '';
+                            } else {
+                                document.getElementById('expireOffer-error').textContent = '';
+                            }
+                        });
+
+                    </script>
+
+
+
                     <div class="form-group">
                         <label for="noOfPages">No-of Pages</label>
                         <input type="text" class="form-control" id="noOfPages" name="numberPage">
@@ -343,6 +412,8 @@
         const publisher = document.getElementById('publisher')
         const price = document.getElementById('price')
         const offer = document.getElementById('offer')
+        const startOffer = document.getElementById('startOffer')
+        const expireOffer = document.getElementById('expireOffer')
         const numberPage = document.getElementById('noOfPages')
         const quantity = document.getElementById('availableQuantity')
         const description = document.getElementById('description')
@@ -358,6 +429,8 @@
         const numberPageError = document.getElementById("number-page-error")
         const quantityError = document.getElementById('quantity-error')
         const descriptionError = document.getElementById("description-error")
+        const startOfferError = document.getElementById('startOffer-error')
+        const expireOfferError = document.getElementById("expireOffer-error")
 
 
         function nameValidationChecking(isValid) {
@@ -390,6 +463,12 @@
         function offerValidationChecking(isValid) {
             const offerVal = offer.value
             const offerPattern = /\d/
+            const startOfferVal = startOffer.value
+            const expireOfferVal = expireOffer.value
+
+            offerError.textContent = '';
+            expireOfferError.textContent = '';
+
 
             if (!offerPattern.test(offerVal) && offerVal) {
                 offerError.textContent = 'Product offer should be number. Please enter valid price.'
@@ -397,6 +476,12 @@
             } else if (offerVal > 100) {
                 offerError.textContent = 'Product offer should be below 100%'
                 isValid = false
+            } else if (offerVal && !expireOfferVal) {
+                expireOfferError.textContent = 'Expire offer date should not be empty';
+                isValid = false;
+            } else if (offerVal && !startOfferVal) {
+                startOfferError.textContent = 'Start offer date should not be empty';
+                isValid = false;
             }
             return isValid
         }
@@ -441,17 +526,17 @@
         }
 
         addForm.addEventListener('submit', (event) => {
-            let isValid = true
-            isValid = nameValidationChecking(isValid)
-            isValid = priceValidationChecking(isValid)
-            isValid = offerValidationChecking(isValid)
-            isValid = numberOfPagesValidationChecking(isValid)
-            isValid = quantityValidationChecking(isValid)
-
+            let isValid = true;
+            isValid = nameValidationChecking() && isValid;
+            isValid = priceValidationChecking() && isValid;
+            isValid = offerValidationChecking() && isValid;
+            isValid = numberOfPagesValidationChecking() && isValid;
+            isValid = quantityValidationChecking() && isValid;
 
             if (!isValid) {
-                event.preventDefault()
+                event.preventDefault();
             }
+
         })
 
 

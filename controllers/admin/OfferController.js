@@ -1,12 +1,20 @@
+const Product = require('../../models/productSchema')
+const Category = require('../../models/categorySchema');
 
-
-const loadOffer = (req,res) =>{
+const loadOffer =async (req,res) =>{
     try {
-        res.render('admin/offers')
+
+        let products = await Product.find({})
+        
+
+        res.render('admin/offers',{
+            products
+        })
     } catch (error) {
         
     }
 }
+
 
 
 

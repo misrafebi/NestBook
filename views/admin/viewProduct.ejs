@@ -180,91 +180,114 @@
                                                                         </tr>
                                                                         <%}%>
 
-                                                                            <%if(category.name){%>
-                                                                            <tr>
-                                                                                <th>Category</th>
-                                                                                <td>
-                                                                                    <%=category.name%>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <%}%>
-
-                                                                            <%if(product.status){%>
+                                                                            <%if(product.startOfferDate){%>
                                                                                 <tr>
-                                                                                    <th>Status</th>
-                                                                                    <%if(product.status==='Available'){%>
-                                                                                        <td class="text-success">
-                                                                                            <%=product.status%>
-                                                                                        </td>
-                                                                                        <%}else
-                                                                                            if(product.status==='Out Of Stock'
-                                                                                            ){%>
-                                                                                            <td class="text-warning">
-                                                                                                <%=product.status%>
-                                                                                            </td>
-                                                                                            <%}else{%>
-                                                                                                <td class="text-danger">
-                                                                                                    <%=product.status%>
-                                                                                                </td>
-                                                                                                <%}%>
+                                                                                    <th>Offer Starting Date</th>
+                                                                                    <td>
+                                                                                        <%=product.startOfferDate.toISOString().substring(0,10)%>
+                                                                                    </td>
                                                                                 </tr>
                                                                                 <%}%>
-
-                                                                                    <%if(product.quantity){%>
+                                                                                    <%if(product.expireOfferDate){%>
                                                                                         <tr>
-                                                                                            <th>Available
-                                                                                                Quantity</th>
+                                                                                            <th>Offer Expire Date</th>
                                                                                             <td>
-                                                                                                <%=product.quantity%>
+                                                                                                <%=product.expireOfferDate.toISOString().substring(0,10)%>
                                                                                             </td>
                                                                                         </tr>
                                                                                         <%}%>
 
-                                                                                            <%if(product.numberPage){%>
+                                                                                            <%if(category.name){%>
                                                                                                 <tr>
-                                                                                                    <th>Number
-                                                                                                        of Pages
-                                                                                                    </th>
+                                                                                                    <th>Category</th>
                                                                                                     <td>
-                                                                                                        <%=product.numberPage%>
-                                                                                                            Pages
+                                                                                                        <%=category.name%>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                                 <%}%>
 
-                                                                                                    <%if(product.publishDate){%>
+                                                                                                    <%if(product.status){%>
                                                                                                         <tr>
-                                                                                                            <th>Publish
-                                                                                                                Date
+                                                                                                            <th>Status
                                                                                                             </th>
-                                                                                                            <td>
-                                                                                                                <%=product.publishDate%>
-                                                                                                            </td>
+                                                                                                            <%if(product.status==='Available'){%>
+                                                                                                                <td
+                                                                                                                    class="text-success">
+                                                                                                                    <%=product.status%>
+                                                                                                                </td>
+                                                                                                                <%}else
+                                                                                                                    if(product.status==='Out Of Stock'
+                                                                                                                    ){%>
+                                                                                                                    <td
+                                                                                                                        class="text-warning">
+                                                                                                                        <%=product.status%>
+                                                                                                                    </td>
+                                                                                                                    <%}else{%>
+                                                                                                                        <td
+                                                                                                                            class="text-danger">
+                                                                                                                            <%=product.status%>
+                                                                                                                        </td>
+                                                                                                                        <%}%>
                                                                                                         </tr>
                                                                                                         <%}%>
 
-                                                                                                            <%if(product.publisher){%>
+                                                                                                            <%if(product.quantity){%>
                                                                                                                 <tr>
-                                                                                                                    <th>Publisher
+                                                                                                                    <th>Available
+                                                                                                                        Quantity
                                                                                                                     </th>
                                                                                                                     <td>
-                                                                                                                        <%=product.publisher%>
+                                                                                                                        <%=product.quantity%>
                                                                                                                     </td>
                                                                                                                 </tr>
                                                                                                                 <%}%>
 
-                                                                                                                    <%if(product.description){%>
+                                                                                                                    <%if(product.numberPage){%>
                                                                                                                         <tr>
-                                                                                                                            <th>Description
+                                                                                                                            <th>Number
+                                                                                                                                of
+                                                                                                                                Pages
                                                                                                                             </th>
                                                                                                                             <td>
-                                                                                                                                <div
-                                                                                                                                    class="description-box">
-                                                                                                                                    <%=product.description%>
-                                                                                                                                </div>
+                                                                                                                                <%=product.numberPage%>
+                                                                                                                                    Pages
                                                                                                                             </td>
                                                                                                                         </tr>
                                                                                                                         <%}%>
+
+                                                                                                                            <%if(product.publishDate){%>
+                                                                                                                                <tr>
+                                                                                                                                    <th>Publish
+                                                                                                                                        Date
+                                                                                                                                    </th>
+                                                                                                                                    <td>
+                                                                                                                                        <%=product.publishDate.toISOString().substring(0,10)%>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                                <%}%>
+
+                                                                                                                                    <%if(product.publisher){%>
+                                                                                                                                        <tr>
+                                                                                                                                            <th>Publisher
+                                                                                                                                            </th>
+                                                                                                                                            <td>
+                                                                                                                                                <%=product.publisher%>
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <%}%>
+
+                                                                                                                                            <%if(product.description){%>
+                                                                                                                                                <tr>
+                                                                                                                                                    <th>Description
+                                                                                                                                                    </th>
+                                                                                                                                                    <td>
+                                                                                                                                                        <div
+                                                                                                                                                            class="description-box">
+                                                                                                                                                            <%=product.description%>
+                                                                                                                                                        </div>
+                                                                                                                                                    </td>
+                                                                                                                                                </tr>
+                                                                                                                                                <%}%>
 
 
                                 </tbody>

@@ -38,6 +38,12 @@ const productSchema = new Schema({
         type: Number,
         default: 0,
     },
+    startOfferDate:{
+        type:Date,
+    },
+    expireOfferDate:{
+        type:Date,
+    },
     quantity: {
         type: Number,
         default: 1

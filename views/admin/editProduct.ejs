@@ -315,12 +315,64 @@
                     <div class="text-danger" id="price-error"></div>
                 </div>
 
+                <!--  -->
                 <div class="form-group">
                     <label for="offer">Offer</label>
                     <input name="productOffer" type="text" class="form-control" id="offer"
                         value="<%=product.productOffer%> ">
                     <div class="text-danger" id="offer-error"></div>
                 </div>
+                <div class="form-group row" id="offer-dates" >
+                        <!-- Starting Offer -->
+                        <div class="col-md-6">
+                            <label for="startOffer">Starting Offer Date</label>
+                            <input type="date" class="form-control" id="startOffer" name="startOffer" value="<%=product.startOfferDate?product.startOfferDate.toISOString().substring(0,10):''%>">
+                            <div class="text-danger" id="startOffer-error"></div>
+                        </div>
+
+                        <!-- Expire Offer -->
+                        <div class="col-md-6">
+                            <label for="expireOffer">Expire Offer Date</label>
+                            <input type="date" class="form-control" id="expireOffer" name="expireOffer" value="<%=product.expireOfferDate?product.expireOfferDate.toISOString().substring(0,10):''%>">
+                            <div class="text-danger" id="expireOffer-error"></div>
+                        </div>
+                    </div>
+                    <!-- display today and after -->
+                     <script>
+                        window.addEventListener('DOMContentLoaded',function(){
+                            const today=new Date().toISOString().split('T')[0]
+                            document.getElementById('startOffer').setAttribute('min',today)
+                            document.getElementById('expireOffer').setAttribute('min',today)
+                        })
+                     </script>
+                     <!-- Validate Expire Date > Start Date -->
+                      <script>
+                        document.getElementById('expireOffer').addEventListener('change',function(){
+                            let expireDate=this.value
+                            let startDate=document.getElementById('startOffer').value
+                            let expireDateError=document.getElementById('expireOffer-error')
+
+                            if(expireDate&&startDate&&expireDate<startDate){
+                                expireDateError.textContent='Expire date must be after the start date.'
+                                this.value=''
+                            }else{
+                                expireDateError.textContent=''
+                            }
+                        })
+                      </script>
+                     <!-- <script>
+                        document.getElementById('offer').addEventListener('input', function () {
+                            let offerVal = this.value.trim()
+                            var datesContainer = document.getElementById('offer-dates')
+                            if (offerVal > 0) {
+                                datesContainer.style.display = ''
+                            } else {
+                                datesContainer.style.display = 'none'
+                                
+                            }
+                        })
+                    </script> -->
+                    <!--  -->
 
                 <div class="form-group">
                     <label for="noOfPages">No-of Pages</label>
@@ -378,6 +430,8 @@
         const numberPageError = document.getElementById("number-page-error")
         const quantityError = document.getElementById('quantity-error')
         const descriptionError = document.getElementById("description-error")
+        const startOfferError = document.getElementById('startOffer-error')
+        const expireOfferError = document.getElementById("expireOffer-error")
 
 
         function nameValidationChecking(isValid) {
@@ -411,9 +465,29 @@
             return isValid
         }
 
+        // function offerValidationChecking(isValid) {
+        //     const offerVal = offer.value
+        //     const offerPattern = /\d/
+
+        //     if (!offerPattern.test(offerVal) && offerVal) {
+        //         offerError.textContent = 'Product offer should be number. Please enter valid price.'
+        //         isValid = false
+        //     } else if (offerVal > 100) {
+        //         offerError.textContent = 'Product offer should be below 100%'
+        //         isValid = false
+        //     }
+        //     return isValid
+        // }
+
         function offerValidationChecking(isValid) {
             const offerVal = offer.value
             const offerPattern = /\d/
+            const startOfferVal = startOffer.value
+            const expireOfferVal = expireOffer.value
+
+            offerError.textContent = '';
+            expireOfferError.textContent = '';
+
 
             if (!offerPattern.test(offerVal) && offerVal) {
                 offerError.textContent = 'Product offer should be number. Please enter valid price.'
@@ -421,6 +495,12 @@
             } else if (offerVal > 100) {
                 offerError.textContent = 'Product offer should be below 100%'
                 isValid = false
+            } else if (offerVal && !expireOfferVal) {
+                expireOfferError.textContent = 'Expire offer date should not be empty';
+                isValid = false;
+            } else if(offerVal&&!startOfferVal){
+                startOfferError.textContent='Start offer date should not be empty'
+                isValid=false
             }
             return isValid
         }

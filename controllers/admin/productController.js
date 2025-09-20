@@ -31,6 +31,12 @@ const loadProduct = async (req, res) => {
             currentPage: page,
             totalPages
         })
+
+        const now = new Date();
+    await Product.updateMany(
+        { expireOfferDate: { $lte: now } },
+        { $unset: { startOfferDate: "", expireOfferDate: "" } }
+    );
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
@@ -66,7 +72,9 @@ const addProduct = async (req, res) => {
             productOffer,
             numberPage,
             quantity,
-            description
+            description,
+            startOffer,
+            expireOffer
         } = req.body;
 
         // Validate required fields
@@ -126,6 +134,29 @@ const addProduct = async (req, res) => {
         // Calculate sale price
         const salePrice = Math.round(regularPrice - (regularPrice * (productOffer || 0) / 100));
 
+        // check offer greater than 100%
+        if (productOffer > 100) {
+            return res.render('admin/addProduct', {
+                message: 'Product offer should be below 100%',
+                categories
+            })
+        }
+
+        // check if expire date is exists or not
+        if (productOffer && !expireOffer) {
+            return res.render('admin/addProduct', {
+                message: 'Expire offer date should not be empty',
+                categories
+            })
+        }
+        // check if start offer date is exists or not
+        if (productOffer && !startOffer) {
+            return res.render('admin/addProduct', {
+                message: 'Start offer date should not be empty',
+                categories
+            })
+        }
+
         // Create product
         const newProduct = new Product({
             image: images,
@@ -140,7 +171,9 @@ const addProduct = async (req, res) => {
             numberPage,
             quantity,
             description,
-            salePrice
+            salePrice,
+            startOfferDate: startOffer,
+            expireOfferDate: expireOffer
         });
 
         await newProduct.save();
@@ -204,7 +237,7 @@ const editProduct = async (req, res) => {
     try {
 
         const { id } = req.body
-        const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description } = req.body;
+        const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description, startOffer, expireOffer } = req.body;
         const product = await Product.findById(id);
         if (!id) {
             return res.redirect('/admin/product?message=Product ID missing!');
@@ -216,6 +249,33 @@ const editProduct = async (req, res) => {
         }
 
         const salePrice = Math.round(regularPrice - (regularPrice * productOffer) / 100);
+
+        let statusOptions = await Product.schema.path('status').enumValues
+        let categories = await Category.find({})
+        if (productOffer > 100) {
+            return res.render('admin/editProduct', {
+                message: 'Product offer should be below 100%',
+                product,
+                categories,
+                statusOptions
+            })
+        }
+        if (productOffer && !expireOffer) {
+            return res.render('admin/editProduct', {
+                message: 'Expire offer date should not be empty',
+                product,
+                categories,
+                statusOptions
+            })
+        }
+        if (productOffer && !startOffer) {
+            return res.render('admin/editProduct', {
+                message: 'Start offer date should not be empty',
+                product,
+                categories,
+                statusOptions
+            })
+        }
 
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => {
@@ -241,7 +301,9 @@ const editProduct = async (req, res) => {
             numberPage,
             quantity,
             description,
-            salePrice
+            salePrice,
+            startOfferDate: startOffer,
+            expireOfferDate: expireOffer
         },
             { new: true }
         )
@@ -310,7 +372,7 @@ const toggleBlock = async (req, res) => {
         const { id } = req.params
         const product = await Product.findById(id)
 
-        if (!product) return res.json({ success: false, message: 'Product not found' });      
+        if (!product) return res.json({ success: false, message: 'Product not found' });
 
         product.isBlocked = !product.isBlocked
         await product.save()
@@ -322,7 +384,7 @@ const toggleBlock = async (req, res) => {
         res.json('Something went wrong while toggle block/ unblock product. Please try again shortly.')
     }
 }
-module.exports = { 
+module.exports = {
     loadProduct,
     loadAddProduct,
     loadEditProduct,

@@ -260,7 +260,7 @@
 
                                
 
-                                <script>
+                                <!-- <script>
                                     const zoomContainer = document.querySelector('.zoom-container');
                                     const img = document.querySelector('.zoom-img');
                                     const lens = document.querySelector('.zoom-lens');
@@ -298,7 +298,70 @@
                                     });
 
 
-                                </script>
+                                </script> -->
+
+<script>
+$(document).ready(function () {
+    function setZoom() {
+        // Remove any previous zoom containers
+        $('.zoomContainer').remove();
+        // Destroy previous zooms
+        $('.zoom-img').ezPlus('destroy');
+        // Apply zoom only to the visible .zoom-img
+        $('.carousel-item.active .zoom-img').ezPlus({
+            zoomType: 'inner',
+            cursor: 'crosshair'
+        });
+    }
+
+    setZoom();
+
+    // Re-initialize zoom when the carousel changes slides
+    $('#productCarousel').on('slid.bs.carousel', function () {
+        setZoom();
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function zoomHandler(container) {
+        const img = container.querySelector('.zoom-img');
+        const lens = container.querySelector('.zoom-lens');
+        const result = container.querySelector('.zoom-result');
+        const lensSize = 100;
+
+        lens.style.width = `${lensSize}px`;
+        lens.style.height = `${lensSize}px`;
+
+        container.addEventListener('mousemove', function(e) {
+            const imgRect = img.getBoundingClientRect();
+            // Use pageX/Y relative to img
+            const x = e.clientX - imgRect.left;
+            const y = e.clientY - imgRect.top;
+
+            const lensX = Math.max(0, Math.min(x - lensSize / 2, img.width - lensSize));
+            const lensY = Math.max(0, Math.min(y - lensSize / 2, img.height - lensSize));
+
+            lens.style.left = `${lensX}px`;
+            lens.style.top = `${lensY}px`;
+
+            result.style.backgroundImage = `url(${img.src})`;
+            result.style.backgroundPosition = `-${lensX * 2}px -${lensY * 2}px`;
+            result.style.backgroundSize = "200% 200%";
+            result.style.visibility = 'visible';
+            lens.style.visibility = 'visible';
+        });
+
+        container.addEventListener('mouseleave', function() {
+            lens.style.visibility = 'hidden';
+            result.style.visibility = 'hidden';
+        });
+    }
+
+    // Attach zoom handler to all carousel items
+    document.querySelectorAll('.zoom-container').forEach(zoomHandler);
+});
+</script>
 
 
 
