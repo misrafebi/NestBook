@@ -33,10 +33,10 @@ const loadProduct = async (req, res) => {
         })
 
         const now = new Date();
-    await Product.updateMany(
-        { expireOfferDate: { $lte: now } },
-        { $unset: { startOfferDate: "", expireOfferDate: "" } }
-    );
+        await Product.updateMany(
+            { expireOfferDate: { $lte: now } },
+            { $unset: { startOfferDate: "", expireOfferDate: "" , productOffer:''} }
+        );
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',
@@ -157,6 +157,14 @@ const addProduct = async (req, res) => {
             })
         }
 
+        if (productOffer && startOffer && expireOffer && new Date(expireOffer) <= new Date(startOffer)) {
+            return res.render('admin/addProduct', {
+                message: 'Expire offer date must be after or equal to the start offer date.',
+                categories
+            });
+        }
+
+
         // Create product
         const newProduct = new Product({
             image: images,
@@ -202,7 +210,7 @@ const addProduct = async (req, res) => {
     }
 };
 
-module.exports = { addProduct };
+// module.exports = { addProduct };
 
 
 const loadEditProduct = async (req, res) => {
@@ -260,6 +268,7 @@ const editProduct = async (req, res) => {
                 statusOptions
             })
         }
+
         if (productOffer && !expireOffer) {
             return res.render('admin/editProduct', {
                 message: 'Expire offer date should not be empty',
@@ -276,6 +285,15 @@ const editProduct = async (req, res) => {
                 statusOptions
             })
         }
+        if (productOffer && startOffer && expireOffer && new Date(expireOffer) <= new Date(startOffer)) {
+            return res.render('admin/editProduct', {
+                message: 'Expire offer date must be after or equal to the start offer date.',
+                product,
+                categories,
+                statusOptions
+            });
+        }
+
 
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,17 @@
         body {
             font-family: Arial, sans-serif;
         }
-        
+
         .content {
             margin-left: 220px;
             padding: 20px;
         }
-        .table th, .table td {
+
+        .table th,
+        .table td {
             vertical-align: middle;
         }
+
         #search-btn {
             border-radius: 0px 5px 5px 0px;
             border-color: #d6d1d1;
@@ -42,87 +46,145 @@
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/admin/sideBar') %>
 
-    <div class="content">
-        <h4>Offers</h4>
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="content">
+            <h4>Offers</h4>
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <!-- Search Offer -->
-            <div class="input-group  w-25">
-                 <input type="text" class="form-control  w-25" placeholder="Search Product"
-                                aria-label="Recipient's username" aria-describedby="button-addon2" id="searchInput"
-                                onkeyup="searchProduct()">
-                            <button class="btn btn-outline-secondary" id="search-btn" type="button"
-                                id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-             <script>
-                            function searchProduct() {
-                                const input = document.getElementById('searchInput')
-                                const filter = input.value.toLowerCase()
-                                const table = document.getElementById('table-data')
-                                const rows = table.getElementsByTagName('tr')
+                <!-- Search Offer -->
+                <div class="input-group  w-25">
+                    <input type="text" class="form-control  w-25" placeholder="Search Offer"
+                        aria-label="Recipient's username" aria-describedby="button-addon2" id="searchInput"
+                        onkeyup="searchOffer()">
+                    <button class="btn btn-outline-secondary" id="search-btn" type="button" id="button-addon2"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <!---------------------->
+                <!----Search Product---->
+                <script>
+                    function searchOffer() {
+                        const input = document.getElementById('searchInput')
+                        const filter = input.value.toLowerCase()
+                        const table = document.getElementById('table-data')
+                        const rows = table.getElementsByTagName('tr')
 
-                                for (let i = 1; i < rows.length; ++i) {
-                                    const productCell = rows[i].getElementsByTagName('td')[2]
-                                    if (productCell) {
-                                        const productName = productCell.textContent || productCell.innerText
-                                        if (productName.toLowerCase().indexOf(filter) > -1) {
-                                            rows[i].style.display = ''
-                                        } else {
-                                            rows[i].style.display = 'none'
-                                        }
-                                    }
+                        for (let i = 1; i < rows.length; ++i) {
+                            const productCell = rows[i].getElementsByTagName('td')[0]
+                            if (productCell) {
+                                const productName = productCell.textContent || productCell.innerText
+                                if (productName.toLowerCase().indexOf(filter) > -1) {
+                                    rows[i].style.display = ''
+                                } else {
+                                    rows[i].style.display = 'none'
                                 }
                             }
-                        </script>
-                        <!-- ------------- -->
+                        }
+                    }
+                </script>
+                <!--------------------->
 
-            <!-- <input type="text" class="form-control w-25" placeholder="Search Coupon "><span><i class="fa-solid fa-magnifying-glass"></i></span> -->
-            <select class=" sort-box">
-                <option>Sort by</option>
-                <option>Category</option>
-                <option>Book Name</option>
-                <option value="">Starting Date</option>
-                 <option>Expire Date</option>
-            </select>
+
+
+                <select class=" sort-box">
+                    <option>Sort by</option>
+                    <option>Category</option>
+                    <option>Book Name</option>
+                    <option value="">Starting Date</option>
+                    <option>Expire Date</option>
+                </select>
+            </div>
+            <br>
+            <%if(products.length===0){%>
+                <p>No products found</p>
+                <%}else{%>
+                    <table class="table " id="table-data">
+                        <thead>
+                            <tr>
+                                <th>Book Name</th>
+                                <th>Discount</th>
+                                <th>Starting Date</th>
+                                <th>Expire Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%products.forEach((product,i)=>{%>
+                                <tr>
+                                    <%if(product.productOffer){%>
+                                        <td>
+                                            <%=product.productName%>
+                                        </td>
+                                        <td>
+                                            <%=product.productOffer%> %
+                                        </td>
+                                        <%if(product.startOfferDate){%>
+                                            <td>
+                                                <%=product.startOfferDate.toISOString().substring(0,10)%>
+                                            </td>
+                                            <%}%>
+                                                <%if(product.expireOfferDate){%>
+                                                    <td>
+                                                        <%=product.expireOfferDate.toISOString().substring(0,10)%>
+                                                    </td>
+                                                    <%}%>
+                                                        <td>
+<button type="button" class="btn btn-primary btn-sm" onclick="openEditModal()">Edit</button>
+                                                            
+                                                            <button class="btn btn-danger btn-sm">Delete</button>
+                                                        </td>
+                                                        <%}%>
+                                </tr>
+                                <% })%>
+
+                                  
+                        </tbody>
+                    </table>
+
+                    <div class="pagination">
+                        <% if (currentPage> 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>" class="btn btn-outline-secondary">
+                                < </a>
+                                    <% } %>
+
+                                        <% if (currentPage> 4) { %>
+                                            <a href="?page=1" class="btn btn-outline-secondary">1</a>
+                                            <% if (currentPage> 5) { %>
+                                                <span class="dots">...</span>
+                                                <% } %>
+                                                    <% } %>
+
+                                                        <% for (let i=Math.max(1, currentPage - 2); i
+                                                            <=Math.min(totalPages, currentPage + 2); i++) { %>
+                                                            <a href="?page=<%= i %>"
+                                                                class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-secondary' %>">
+                                                                <%= i %>
+                                                            </a>
+                                                            <% } %>
+
+                                                                <% if (currentPage < totalPages - 3) { %>
+                                                                    <% if (currentPage < totalPages - 4) { %>
+                                                                        <span class="dots">...</span>
+                                                                        <% } %>
+                                                                            <a href="?page=<%= totalPages %>"
+                                                                                class="btn btn-outline-secondary">
+                                                                                <%= totalPages %>
+                                                                            </a>
+                                                                            <% } %>
+
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    <a href="?page=<%= currentPage + 1 %>"
+                                                                                        class="btn btn-outline-secondary">></a>
+                                                                                    <% } %>
+                    </div>
+
+                    <%}%>
         </div>
-        <br>
-        <%if(products.length===0){%>
-            <p>No products found</p>
-            <%}else{%>
-        <table class="table ">
-            <thead>
-                <tr>
-                    <th>Book Name</th>
-                    <th>Discount</th>
-                    <th>Starting Date</th>
-                    <th>Expire Date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%products.forEach((product,i)=>{%>
- <tr>
-                    <td><%=product.productName%></td>
-                    <td><%=product.productOffer%> %</td>
-                    <td><%=product.startOfferDate%></td>
-                    <td><%=product.expireOfferDate%></td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
-               <% })%>
-               
-                <!-- Add more rows as needed -->
-            </tbody>
-        </table>
-        <%}%>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
