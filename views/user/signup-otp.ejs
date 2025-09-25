@@ -47,7 +47,8 @@
                 <form action="/user/signupOTP" method="post" id="otpForm" onsubmit="return validateOTPForm()">
                     <div class="form-group">
                         <label for="verification-code">Verification Code</label>
-                        <input type="text" class="form-control" id="otp" maxlength="6" placeholder="Enter code" name="otp">
+                        <input type="text" class="form-control" id="otp" maxlength="6" placeholder="Enter code"
+                            name="otp">
                     </div>
                     <button type="submit" class="btn btn-primary">Continue</button>
                     <div class="form-group text-center d-flex justify-content-center align-items-center mt-3">
@@ -138,11 +139,20 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <%- include('../partials/user/footer')%>
-        <%if(message){%>
-            <script>
-                alert('<%=message%>')
-            </script>
-            <%}%>
+            <%if(message){%>
+                <script>
+                    alert('<%=message%>')
+                </script>
+                <%}%>
+
+
+                    <script>
+                        const urlparams = new URLSearchParams(window.location.search)
+                        const message = urlparams.get('message')
+                        if (message) {
+                            alert(message)
+                        }
+                    </script>
 </body>
 
 </html>

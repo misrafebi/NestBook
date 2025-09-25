@@ -63,7 +63,7 @@
     </style>
 </head>
 
-<body> 
+<body>
     <%- include('../partials/admin/sideBar') %>
 
         <div class="main-content">
@@ -86,7 +86,7 @@
                         <!----Search Product---->
                         <script>
                             function searchProduct() {
-                                 const input = document.getElementById('searchInput')
+                                const input = document.getElementById('searchInput')
                                 const filter = input.value.toLowerCase()
                                 const table = document.getElementById('table-data')
                                 const rows = table.getElementsByTagName('tr')
@@ -154,7 +154,7 @@
                                             href="/admin/editProduct?id=<%=product._id%>">Edit</a>
                                     </td>
                                     <td>
-                                        <button  onclick="toggleBlock('<%=product._id%>')"
+                                        <button onclick="toggleBlock('<%=product._id%>')"
                                             class="btn <%=product.isBlocked?'btn-danger':'btn-success'%>">
                                             <%=product.isBlocked?'Blocked':'UnBlocked'%>
                                         </button>
@@ -226,6 +226,16 @@
                 alert('<%=message%>')
             </script>
             <%}%>
+
+
+                <script>
+                    const urlparams = new URLSearchParams(window.location.search)
+                    const message = urlparams.get('message')
+                    if (message) {
+                        alert(message)
+                    }
+                </script>
+
                 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

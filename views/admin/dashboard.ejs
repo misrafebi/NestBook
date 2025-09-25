@@ -35,162 +35,169 @@
 <body>
     <%- include('../partials/admin/sideBar') %>
 
-    <div class="content">
+        <div class="content">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Profit & Expenses</h5>
-                        <canvas id="profitExpensesChart"></canvas>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Profit & Expenses</h5>
+                            <canvas id="profitExpensesChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Product Sale</h5>
-                        <canvas id="productSaleChart"></canvas>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Sale</h5>
+                            <canvas id="productSaleChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">This Week</h5>
-                        <canvas id="thisWeekChart"></canvas>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">This Week</h5>
+                            <canvas id="thisWeekChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Recent Orders</h5>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Product</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>12345</td>
-                                    <td>John Doe</td>
-                                    <td>Book A</td>
-                                    <td>01-01-2025</td>
-                                    <td>Shipped</td>
-                                </tr>
-                                <tr>
-                                    <td>12346</td>
-                                    <td>Jane Smith</td>
-                                    <td>Book B</td>
-                                    <td>02-01-2025</td>
-                                    <td>Processing</td>
-                                </tr>
-                                <tr>
-                                    <td>12347</td>
-                                    <td>Bob Johnson</td>
-                                    <td>Book C</td>
-                                    <td>03-01-2025</td>
-                                    <td>Delivered</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Recent Orders</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Product</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>12345</td>
+                                        <td>John Doe</td>
+                                        <td>Book A</td>
+                                        <td>01-01-2025</td>
+                                        <td>Shipped</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12346</td>
+                                        <td>Jane Smith</td>
+                                        <td>Book B</td>
+                                        <td>02-01-2025</td>
+                                        <td>Processing</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12347</td>
+                                        <td>Bob Johnson</td>
+                                        <td>Book C</td>
+                                        <td>03-01-2025</td>
+                                        <td>Delivered</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const profitExpensesCtx = document.getElementById('profitExpensesChart').getContext('2d');
-        const profitExpensesChart = new Chart(profitExpensesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Profit',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'Expenses',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const profitExpensesCtx = document.getElementById('profitExpensesChart').getContext('2d');
+            const profitExpensesChart = new Chart(profitExpensesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'Profit',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Expenses',
+                        data: [28, 48, 40, 19, 86, 27, 90],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        const productSaleCtx = document.getElementById('productSaleChart').getContext('2d');
-        const productSaleChart = new Chart(productSaleCtx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Sales',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            const productSaleCtx = document.getElementById('productSaleChart').getContext('2d');
+            const productSaleChart = new Chart(productSaleCtx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        const thisWeekCtx = document.getElementById('thisWeekChart').getContext('2d');
-        const thisWeekChart = new Chart(thisWeekCtx, {
-            type: 'line',
-            data: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                datasets: [{
-                    label: 'This Week',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            const thisWeekCtx = document.getElementById('thisWeekChart').getContext('2d');
+            const thisWeekChart = new Chart(thisWeekCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets: [{
+                        label: 'This Week',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
 
-<script>
-    const urlParams =new URLSearchParams(window.location.search)
-    const message = urlParams.get('message')
-    if(message){
-        alert(message)
-    }
-</script>
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
+
+
+                <script>
+                    const urlparams = new URLSearchParams(window.location.search)
+                    const message = urlparams.get('message')
+                    if (message) {
+                        alert(message)
+                    }
+                </script>
 
 </body>
 

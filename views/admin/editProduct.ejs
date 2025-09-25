@@ -363,17 +363,17 @@
                     })
                 </script>
                 <script>
-                        document.getElementById('offer').addEventListener('input', function () {
-                            let offerVal = this.value.trim()
-                            var datesContainer = document.getElementById('offer-dates')
-                            if (offerVal > 0) {
-                                datesContainer.style.display = ''
-                            } else {
-                                datesContainer.style.display = 'none'
-                                
-                            }
-                        })
-                    </script>
+                    document.getElementById('offer').addEventListener('input', function () {
+                        let offerVal = this.value.trim()
+                        var datesContainer = document.getElementById('offer-dates')
+                        if (offerVal > 0) {
+                            datesContainer.style.display = ''
+                        } else {
+                            datesContainer.style.display = 'none'
+
+                        }
+                    })
+                </script>
                 <!--  -->
 
                 <div class="form-group">
@@ -562,9 +562,25 @@
 
 
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <%if(message){%>
+        <script>
+            alert('<%=message%>')
+        </script>
+        <%}%>
+
+
+            <script>
+                const urlparams = new URLSearchParams(window.location.search)
+                const message = urlparams.get('message')
+                if (message) {
+                    alert(message)
+                }
+            </script>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

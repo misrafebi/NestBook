@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/user/home/style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-        }
-        .book-card {
-            position: relative;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-radius: 8px;
-        }
-        .book-card img {
-            max-width: 100%;
-            height: auto;
-        }
-      .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #fff;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/user/home/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+
+    .book-card {
+      position: relative;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .book-card img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #fff;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
-    <%- include('../partials/user/nav-bar')%>
+  <%- include('../partials/user/nav-bar')%>
 
     <%- include('../partials/user/sidebar')%>
-<br>
-<div class="content">
-    <h4>Wishlist</h4>
-    <div class="row">
-       
-        <!-- <div class="col-md-3">
+      <br>
+      <div class="content">
+        <h4>Wishlist</h4>
+        <div class="row">
+
+          <!-- <div class="col-md-3">
             <div class="book-card">
                 <button class="close-btn">&times;</button>
                 <img src="https://via.placeholder.com/150" alt="Rich Dad Poor Dad">
@@ -59,7 +64,7 @@
         </div> -->
 
 
-        <!-- <main class="col-md-9 col-lg-10">
+          <!-- <main class="col-md-9 col-lg-10">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
            
               
@@ -108,11 +113,11 @@
   
             </div>
           </main> -->
-          
+
 
           <main class="col-md-9 col-lg-10">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-              <% products.forEach(product => { %>
+              <% products.forEach(product=> { %>
                 <div class="product-item">
                   <button class="btn-wishlist active" data-product-id="<%= product._id %>">
                     <svg width="24" height="24">
@@ -122,24 +127,42 @@
                   <figure>
                     <img src="/<%= product.image[0] %>" alt="<%= product.productName %>">
                   </figure>
-                  <h3><%= product.productName %></h3>
+                  <h3>
+                    <%= product.productName %>
+                  </h3>
                   <!-- Add other product details -->
                   <button class="remove-from-wishlist" data-product-id="<%= product._id %>">
                     Remove
                   </button>
                 </div>
-              <% }); %>
+                <% }); %>
             </div>
           </main>
 
-          
-    </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<%- include('../partials/user/footer')%>
+        </div>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <%- include('../partials/user/footer')%>
+
+        <%if(message){%>
+          <script>
+            alert('<%=message%>')
+          </script>
+          <%}%>
+
+
+            <script>
+              const urlparams = new URLSearchParams(window.location.search)
+              const message = urlparams.get('message')
+              if (message) {
+                alert(message)
+              }
+            </script>
 
 </body>
+
 </html>

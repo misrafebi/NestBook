@@ -131,15 +131,252 @@
                                                     </td>
                                                     <%}%>
                                                         <td>
-<button type="button" class="btn btn-primary btn-sm" onclick="openEditModal()">Edit</button>
-                                                            
+                                                            <button type="button" data-id="<%=product._id%>"
+                                                                data-name="<%=product.productName%>"
+                                                                class="btn btn-primary btn-sm edit-btn"
+                                                                data-offer="<%=product.productOffer%>"
+                                                                data-startDate="<%=product.startOfferDate%>"
+                                                                data-expireDate="<%=product.expireOfferDate%>">
+                                                                Edit </button>
+
+                                                            <!-- Edit Offer Modal -->
+                                                            <div class="modal fade" id="editOfferModal" tabindex="-1"
+                                                                aria-labelledby="editOfferModalLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <form id="editOfferForm" method="post">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="editOfferModalLabel">
+                                                                                    Edit Offer
+                                                                                </h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close"><span>&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group">
+                                                                                    <label for="edit-product-name">Book
+                                                                                        Name</label>
+                                                                                    <input type="text"
+                                                                                        id="edit-product-name"
+                                                                                        class="form-control"
+                                                                                        name="productName" readonly>
+                                                                                    <div class="text-danger"
+                                                                                        id="edit-book-name-error"></div>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="edit-offer">Offer
+                                                                                        (%)</label>
+                                                                                    <input type="number"
+                                                                                        id="edit-product-offer"
+                                                                                        name="productOffer"
+                                                                                        class="form-control" min="0"
+                                                                                        max="100">
+                                                                                    <div class="text-danger"
+                                                                                        id="edit-product-offer-error">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        for="edit-start-date">Starting
+                                                                                        Date</label>
+                                                                                    <input type="date"
+                                                                                        id="edit-start-date"
+                                                                                        class="form-control"
+                                                                                        name="startOfferDate">
+                                                                                    <div class="text-danger"
+                                                                                        id="edit-start-date-error">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="edit-expire-date">Expire
+                                                                                        Date</label>
+                                                                                    <input type="date"
+                                                                                        id="edit-expire-date"
+                                                                                        class="form-control"
+                                                                                        name="expireOfferDate">
+                                                                                    <div class="text-danger"
+                                                                                        id="edit-expire-date-error">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-dismiss="modal">Cancel</button>
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">Save</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" id="editProductIndex">
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <!--  -->
+                                                            <script>
+
+
+
+
+                                                                const editOfferForm = document.getElementById('editOfferForm')
+
+                                                                editOfferForm.addEventListener('submit', (e) => {
+                                                                    let isValid = true
+
+                                                                    isValid = editOfferValidation(isValid)
+
+
+                                                                    if (!isValid) {
+                                                                        e.preventDefault()
+                                                                    }
+                                                                })
+
+                                                                function editOfferValidation(isValid) {
+                                                                    const offerVal = document.getElementById('edit-product-offer').value
+                                                                    const startDateVal = document.getElementById('edit-start-date').value
+                                                                    const expireDateOffer = document.getElementById('edit-expire-date').value
+                                                                    const offerError = document.getElementById('edit-product-offer-error')
+                                                                    const startDateError = document.getElementById("edit-start-date-error")
+                                                                    const expireDateError = document.getElementById("edit-expire-date-error")
+
+                                                                    const offerPattern = /\d/
+                                                                    offerError.textContent = ''
+                                                                    startDateError.textContent = ''
+                                                                    expireDateError.textContent = ''
+
+                                                                    if (!offerPattern.test(offerVal) && offerVal) {
+                                                                        offerError.textContent = 'Product offer should be number. Please enter valid price.'
+                                                                        isValid = false
+                                                                    } else if (offerVal > 100) {
+                                                                        offerError.textContent = 'Product offer should be below 100%'
+                                                                        isValid = false
+                                                                    } else if (offerVal && !startDateVal) {
+                                                                        startDateError.textContent = 'Start offer date should not be empty'
+                                                                        isValid = false
+                                                                    }
+                                                                    return isValid
+                                                                }
+
+
+                                                                //   display today and after
+                                                                window.addEventListener('DOMContentLoaded', function () {
+                                                                    const today = new Date().toISOString().split('T')[0]
+                                                                    document.getElementById('edit-start-date').setAttribute('min', today)
+                                                                    document.getElementById('edit-expire-date').setAttribute('min', today)
+                                                                })
+
+                                                                // Validate Expire Date > Start Date
+                                                                document.getElementById('edit-expire-date').addEventListener('change', function () {
+                                                                    let expireDate = this.value
+                                                                    let startDate = document.getElementById('edit-start-date').value
+                                                                    let expireDateError = document.getElementById('edit-expire-date-error')
+
+                                                                    if (expireDate && startDate && expireDate <= startDate) {
+                                                                        expireDateError.textContent = 'Expire date must be after the start date.'
+                                                                        this.value = ''
+                                                                    } else {
+                                                                        expireDateError.textContent = ''
+                                                                    }
+                                                                })
+
+                                                                function formatDate(dateStr) {
+                                                                    // Handles both Date objects and strings
+                                                                    let date = new Date(dateStr);
+                                                                    if (isNaN(date.getTime())) return ""; // invalid date
+                                                                    let month = "" + (date.getMonth() + 1);
+                                                                    let day = "" + date.getDate();
+                                                                    let year = date.getFullYear();
+
+                                                                    if (month.length < 2) month = "0" + month;
+                                                                    if (day.length < 2) day = "0" + day;
+                                                                    return [year, month, day].join("-");
+                                                                }
+                                                                document.addEventListener('DOMContentLoaded', () => {
+                                                                    const editButton = document.querySelectorAll('.edit-btn');
+
+                                                                    editButton.forEach(button => {
+                                                                        button.addEventListener('click', () => {
+                                                                            const id = button.getAttribute('data-id')
+                                                                            const productName = button.getAttribute('data-name')
+                                                                            const productOffer = button.getAttribute('data-offer')
+                                                                            const startOfferDate = button.getAttribute('data-startDate')
+                                                                            const expireOfferDate = button.getAttribute('data-expireDate')
+
+                                                                            document.getElementById('editProductIndex').value = id
+                                                                            document.getElementById('edit-product-name').value = productName
+                                                                            document.getElementById('edit-product-offer').value = productOffer
+                                                                            document.getElementById('edit-start-date').value = formatDate(startOfferDate);
+                                                                            document.getElementById('edit-expire-date').value = formatDate(expireOfferDate)
+
+
+
+                                                                            const form = document.getElementById('editOfferForm')
+                                                                            form.action = `/admin/edit-offer/${id}`
+                                                                            const modal = new bootstrap.Modal(document.getElementById('editOfferModal'))
+
+                                                                            modal.show();
+                                                                        })
+                                                                    })
+
+                                                                })
+                                                            </script>
+
+                                                            <!-- Store product data as JS array -->
+                                                            <!-- const products = [
+                                                            <% products.forEach((product)=> { %>
+                                                                {
+                                                                name: "<%= product.productName %>",
+                                                                    offer: "<%= product.productOffer %>",
+                                                                        startDate: "<%= product.startOfferDate ?
+                                                                            product.startOfferDate.toISOString().substring(0,10)
+                                                                            : '' %>",
+                                                                            expireDate: "<%= product.expireOfferDate ?
+                                                                                product.expireOfferDate.toISOString().substring(0,10)
+                                                                                : '' %>"
+                                                                                },
+                                                                                <% }); %>
+                                                                                    ]; -->
+
+                                                            <!-- <script>
+                                                                function openEditModal(index) {
+                                                                    const product = products[index];
+                                                                    document.getElementById('modalBookName').value = product.name;
+                                                                    document.getElementById('modalOffer').value = product.offer;
+                                                                    document.getElementById('modalStartDate').value = product.startDate;
+                                                                    document.getElementById('modalExpireDate').value = product.expireDate;
+                                                                    document.getElementById('editProductIndex').value = index;
+                                                                    $('#editOfferModal').modal('show');
+                                                                }
+
+                                                                // Optionally, handle the save event to update info
+                                                                document.getElementById('editOfferForm').addEventListener('submit', function (e) {
+                                                                    e.preventDefault();
+                                                                    // Gather updated data
+                                                                    const index = document.getElementById('editProductIndex').value;
+                                                                    const updatedProduct = {
+                                                                        offer: document.getElementById('modalOffer').value,
+                                                                        startDate: document.getElementById('modalStartDate').value,
+                                                                        expireDate: document.getElementById('modalExpireDate').value
+                                                                    };
+                                                                    // For now, just close modal and log; you can send data via AJAX to update backend
+                                                                    $('#editOfferModal').modal('hide');
+                                                                    console.log('Updated Product:', index, updatedProduct);
+                                                                    // TODO: send updated data to your backend via fetch/AJAX
+                                                                });
+
+                                                            </script> -->
+
+
                                                             <button class="btn btn-danger btn-sm">Delete</button>
                                                         </td>
                                                         <%}%>
                                 </tr>
                                 <% })%>
 
-                                  
+
                         </tbody>
                     </table>
 
@@ -182,9 +419,25 @@
 
                     <%}%>
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
+
+
+                <script>
+                    const urlparams = new URLSearchParams(window.location.search)
+                    const message = urlparams.get('message')
+                    if (message) {
+                        alert(message)
+                    }
+                </script>
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

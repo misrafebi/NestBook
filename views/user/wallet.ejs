@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,94 +10,119 @@
         body {
             font-family: Arial, sans-serif;
         }
-        
+
         .content {
             margin-left: 220px;
             padding: 20px;
         }
-        .content h3{
+
+        .content h3 {
             text-align: center;
         }
-        .wallet-box, .transactions-box {
+
+        .wallet-box,
+        .transactions-box {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
+
         .wallet-box .balance {
             font-size: 18px;
             font-weight: bold;
         }
+
         .wallet-box .btn {
             margin-top: 10px;
         }
+
         .transactions-box table {
             width: 100%;
         }
-        .transactions-box table th, .transactions-box table td {
+
+        .transactions-box table th,
+        .transactions-box table td {
             padding: 10px;
             text-align: left;
         }
+
         .transactions-box table th {
             background-color: #f8f9fa;
         }
-     
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <%- include('../partials/user/sidebar')%>
-<br><br>
-<div class="content">
-    <h3>Wallet</h3>
-    <div class="wallet-box">
-        <div class="balance">Current Balance: ₹10000.00</div>
-        <button class="btn btn-primary">Add Money</button>
-        <button class="btn btn-danger">Withdraw Money</button>
-    </div>
-    <br>
-    <div class="transactions-box">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4>Recent Transactions</h4>
-            <button class="btn btn-link">View All</button>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Money Added</td>
-                    <td class="text-success">+ ₹5000</td>
-                    <td>Today</td>
-                </tr>
-                <tr>
-                    <td>Money Added</td>
-                    <td class="text-success">+ ₹1400</td>
-                    <td>10-12-2024</td>
-                </tr>
-                <tr>
-                    <td>Bill Payment</td>
-                    <td class="text-danger">- ₹3000</td>
-                    <td>10-12-2024</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <%- include('../partials/user/sidebar')%>
+            <br><br>
+            <div class="content">
+                <h3>Wallet</h3>
+                <div class="wallet-box">
+                    <div class="balance">Current Balance: ₹10000.00</div>
+                    <button class="btn btn-primary">Add Money</button>
+                    <button class="btn btn-danger">Withdraw Money</button>
+                </div>
+                <br>
+                <div class="transactions-box">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4>Recent Transactions</h4>
+                        <button class="btn btn-link">View All</button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Money Added</td>
+                                <td class="text-success">+ ₹5000</td>
+                                <td>Today</td>
+                            </tr>
+                            <tr>
+                                <td>Money Added</td>
+                                <td class="text-success">+ ₹1400</td>
+                                <td>10-12-2024</td>
+                            </tr>
+                            <tr>
+                                <td>Bill Payment</td>
+                                <td class="text-danger">- ₹3000</td>
+                                <td>10-12-2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-</div>
+            </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<%- include('../partials/user/footer')%>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <%- include('../partials/user/footer')%>
 
+
+                <%if(message){%>
+                    <script>
+                        alert('<%=message%>')
+                    </script>
+                    <%}%>
+
+
+                        <script>
+                            const urlparams = new URLSearchParams(window.location.search)
+                            const message = urlparams.get('message')
+                            if (message) {
+                                alert(message)
+                            }
+                        </script>
 
 </body>
+
 </html>

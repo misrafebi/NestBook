@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +10,12 @@
         body {
             font-family: Arial, sans-serif;
         }
-        
+
         .content {
             margin-left: 220px;
             padding: 20px;
         }
+
         .order-card {
             position: relative;
             /* border: 1px solid #ddd; */
@@ -23,84 +25,108 @@
             display: flex;
             align-items: center;
         }
+
         .order-card img {
             width: 80px;
             height: auto;
         }
+
         .order-card .order-details {
             flex-grow: 1;
             margin-left: 20px;
         }
+
         .order-card h5 {
             margin: 0 0 10px;
         }
+
         .order-status.processing {
             color: #ffc107;
         }
+
         .order-status.completed {
             color: #28a745;
         }
+
         .order-status.cancelled {
             color: #dc3545;
         }
+
         .order-buttons button {
             margin-right: 5px;
         }
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <%- include('../partials/user/sidebar')%>
-<br>
-<div class="content">
-    <h3>Orders</h3>
-    <br>
-    <div class="order-card">
-        <img src="https://via.placeholder.com/80" alt="Product Image">
-        <div class="order-details">
-            <h5>Product Name</h5>
-            <p>₹500</p>
-            <p class="order-status processing">Processing</p>
-        </div>
-        <div class="order-buttons">
-            <button class="btn btn-primary">View</button>
-            <button class="btn btn-warning">Return</button>
-            <button class="btn btn-danger">Cancel</button>
-        </div>
-    </div>
-    <div class="order-card">
-        <img src="https://via.placeholder.com/80" alt="Product Image">
-        <div class="order-details">
-            <h5>Product Name</h5>
-            <p>₹600</p>
-            <p class="order-status completed">Completed</p>
-        </div>
-        <div class="order-buttons">
-            <button class="btn btn-primary">View</button>
-            <button class="btn btn-warning">Return</button>
-            <button class="btn btn-danger">Cancel</button>
-        </div>
-    </div>
-    <div class="order-card">
-        <img src="https://via.placeholder.com/80" alt="Product Image">
-        <div class="order-details">
-            <h5>Product Name</h5>
-            <p>₹700</p>
-            <p class="order-status cancelled">Cancelled</p>
-        </div>
-        <div class="order-buttons">
-            <button class="btn btn-primary">View</button>
-            <button class="btn btn-warning">Return</button>
-            <button class="btn btn-danger">Cancel</button>
-        </div>
-    </div>
-</div>
+        <%- include('../partials/user/sidebar')%>
+            <br>
+            <div class="content">
+                <h3>Orders</h3>
+                <br>
+                <div class="order-card">
+                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <div class="order-details">
+                        <h5>Product Name</h5>
+                        <p>₹500</p>
+                        <p class="order-status processing">Processing</p>
+                    </div>
+                    <div class="order-buttons">
+                        <button class="btn btn-primary">View</button>
+                        <button class="btn btn-warning">Return</button>
+                        <button class="btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <div class="order-details">
+                        <h5>Product Name</h5>
+                        <p>₹600</p>
+                        <p class="order-status completed">Completed</p>
+                    </div>
+                    <div class="order-buttons">
+                        <button class="btn btn-primary">View</button>
+                        <button class="btn btn-warning">Return</button>
+                        <button class="btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <img src="https://via.placeholder.com/80" alt="Product Image">
+                    <div class="order-details">
+                        <h5>Product Name</h5>
+                        <p>₹700</p>
+                        <p class="order-status cancelled">Cancelled</p>
+                    </div>
+                    <div class="order-buttons">
+                        <button class="btn btn-primary">View</button>
+                        <button class="btn btn-warning">Return</button>
+                        <button class="btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+            </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<%- include('../partials/user/footer')%>
+            <%if(message){%>
+                <script>
+                    alert('<%=message%>')
+                </script>
+                <%}%>
+
+
+                    <script>
+                        const urlparams = new URLSearchParams(window.location.search)
+                        const message = urlparams.get('message')
+                        if (message) {
+                            alert(message)
+                        }
+                    </script>
+
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <%- include('../partials/user/footer')%>
 
 </body>
+
 </html>

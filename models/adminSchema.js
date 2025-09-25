@@ -11,25 +11,25 @@ const adminSchema = new Schema({
         required: true,
         unique: true,
     },
-   
+
     password: {
-        type: String, 
+        type: String,
         required: false,
     },
-    
+
     isAdmin: {
         type: Boolean,
         default: true,
     },
-   
+
     createOn: {
         type: Date,
         default: Date.now,
     },
-    
-    
+
+
 })
 
-const Admin = mongoose.model('Admin',adminSchema)
+const Admin = mongoose.model('Admin', adminSchema)
 
 module.exports = Admin

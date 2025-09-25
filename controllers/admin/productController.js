@@ -35,8 +35,14 @@ const loadProduct = async (req, res) => {
         const now = new Date();
         await Product.updateMany(
             { expireOfferDate: { $lte: now } },
-            { $unset: { startOfferDate: "", expireOfferDate: "" , productOffer:''} }
+            { $unset: { startOfferDate: "", expireOfferDate: "", productOffer: '' } }
         );
+
+        await Product.updateMany(
+            { productOffer: { $eq: '' } },
+            { $unset: { startOfferDate: "", expireOfferDate: "", productOffer: "" } }
+        );
+
     } catch (error) {
         console.error('Error: ', error);
         res.render('admin/login',

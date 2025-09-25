@@ -47,7 +47,7 @@
 
         .post-review-form {
             display: none;
-           
+
         }
 
         .star {
@@ -57,14 +57,14 @@
             border: none;
             cursor: pointer;
             color: gray;
-           
+
             padding: 0;
             margin: 0 5px;
         }
 
         .star:hover {
             color: gold;
-            
+
         }
     </style>
 </head>
@@ -86,14 +86,14 @@
 
             </a>
             <br><br>
-        </div>
+            </div>
             <div class="container review-section">
                 <h4>Reviews</h4>
                 <!-- <p><span class="badge badge-secondary">4.2</span> - 72 Reviews</p> -->
                 <button id="write-review-btn" class="btn btn-outline-secondary mb-3">Write Review</button>
                 <div id="post-review-form" class="post-review-form mt-4">
                     <h5>Post a Review</h5>
-                   
+
                     <form action="/user/submitReview" method="POST" id="review-form">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -133,62 +133,71 @@
                         <input type="hidden" name="productId" value="<%= product._id %>">
                         <button type="submit" class="btn btn-primary post-review-btn">Post Review</button>
                     </form>
-                    
+
 
 
 
                 </div>
             </div>
-        </div></div>
+            </div>
+            </div>
 
-               
-<br><br><br>
-                <div class="reviews-section">
-                    <%if(reviews.length!=0){%>
+
+            <br><br><br>
+            <div class="reviews-section">
+                <%if(reviews.length!=0){%>
                     <h5>Customer Reviews</h5>
-                    <% reviews.forEach(review => { %>
+                    <% reviews.forEach(review=> { %>
                         <div class="review-card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <!-- Use a fallback value if reviewerName is undefined -->
-                                    <div class="reviewer-logo"><%= (review.name ? review.name.charAt(0) : 'N/A') %></div>
+                                    <div class="reviewer-logo">
+                                        <%= (review.name ? review.name.charAt(0) : 'N/A' ) %>
+                                    </div>
                                     <div class="ml-3">
                                         <!-- Safeguard for undefined reviewerName -->
-                                        <h6 class="card-title"><%= review.name || 'Anonymous' %></h6>
-                                        <p class="card-subtitle mb-2 text-muted"><%= review.createdAt ? review.createdAt.toLocaleDateString() : 'N/A' %></p>
+                                        <h6 class="card-title">
+                                            <%= review.name || 'Anonymous' %>
+                                        </h6>
+                                        <p class="card-subtitle mb-2 text-muted">
+                                            <%= review.createdAt ? review.createdAt.toLocaleDateString() : 'N/A' %>
+                                        </p>
                                         <div class="rating">
-                                            <%= '★'.repeat(review.rating) %>
-                                            <%= '☆'.repeat(5 - review.rating) %>
+                                            <%= '★' .repeat(review.rating) %>
+                                                <%= '☆' .repeat(5 - review.rating) %>
                                         </div>
                                     </div>
                                 </div>
-                                <p class="card-text"><%= review.review || 'No review text available' %></p>
+                                <p class="card-text">
+                                    <%= review.review || 'No review text available' %>
+                                </p>
                             </div>
                         </div>
-                    <% }); %>
-                </div>
+                        <% }); %>
+            </div>
 
-                <!-- <button class="btn btn-secondary load-more-btn">Load More Reviews</button> -->
-               
-<%}%>
+            <!-- <button class="btn btn-secondary load-more-btn">Load More Reviews</button> -->
 
-<script>
-    let currentPage = 1;
+            <%}%>
 
-    document.querySelector('.load-more-btn').addEventListener('click', async () => {
-        currentPage++;
-        const productId = '<%= product._id %>';
+                <script>
+                    let currentPage = 1;
 
-        try {
-            const response = await fetch(`/load-reviews?id=${productId}&page=${currentPage}`);
-            const data = await response.json();
+                    document.querySelector('.load-more-btn').addEventListener('click', async () => {
+                        currentPage++;
+                        const productId = '<%= product._id %>';
 
-            if (data.reviews && data.reviews.length) {
-                const reviewsSection = document.querySelector('.reviews-section');
-                data.reviews.forEach(review => {
-                    const reviewCard = document.createElement('div');
-                    reviewCard.className = 'review-card';
-                    reviewCard.innerHTML = `
+                        try {
+                            const response = await fetch(`/load-reviews?id=${productId}&page=${currentPage}`);
+                            const data = await response.json();
+
+                            if (data.reviews && data.reviews.length) {
+                                const reviewsSection = document.querySelector('.reviews-section');
+                                data.reviews.forEach(review => {
+                                    const reviewCard = document.createElement('div');
+                                    reviewCard.className = 'review-card';
+                                    reviewCard.innerHTML = `
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="reviewer-logo">${review.name ? review.name.charAt(0) : 'N/A'}</div>
@@ -200,22 +209,22 @@
                             </div>
                             <p class="card-text">${review.review || 'No review text available'}</p>
                         </div>`;
-                    reviewsSection.appendChild(reviewCard);
-                });
+                                    reviewsSection.appendChild(reviewCard);
+                                });
 
-                if (!data.hasMore) {
-                    document.querySelector('.load-more-btn').remove();
-                }
-            }
-        } catch (error) {
-            console.error('Error loading more reviews:', error);
-        }
-    });
-</script>
+                                if (!data.hasMore) {
+                                    document.querySelector('.load-more-btn').remove();
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error loading more reviews:', error);
+                        }
+                    });
+                </script>
 
                 <div id="post-review-form" class="post-review-form mt-4">
                     <h5>Post a Review</h5>
-                   
+
                     <form action="/user/submitReview" method="POST" id="review-form">
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -255,140 +264,158 @@
                         <input type="hidden" name="productId" value="<%= product._id %>">
                         <button type="submit" class="btn btn-primary post-review-btn">Post Review</button>
                     </form>
-                    
+
 
 
 
                 </div>
-            </div>
+                </div>
 
-            <script>
-                const writeReviewBtn = document.getElementById('write-review-btn');
-                const postReviewForm = document.getElementById('post-review-form');
+                <script>
+                    const writeReviewBtn = document.getElementById('write-review-btn');
+                    const postReviewForm = document.getElementById('post-review-form');
 
-                writeReviewBtn.addEventListener('click', () => {
-                    if (postReviewForm.style.display === 'none' || postReviewForm.style.display === '') {
-                        postReviewForm.style.display = 'block';
-                        writeReviewBtn.textContent = 'Hide Review Form';
-                    } else {
-                        postReviewForm.style.display = 'none';
-                        writeReviewBtn.textContent = 'Write Review';
-                    }
-                });
+                    writeReviewBtn.addEventListener('click', () => {
+                        if (postReviewForm.style.display === 'none' || postReviewForm.style.display === '') {
+                            postReviewForm.style.display = 'block';
+                            writeReviewBtn.textContent = 'Hide Review Form';
+                        } else {
+                            postReviewForm.style.display = 'none';
+                            writeReviewBtn.textContent = 'Write Review';
+                        }
+                    });
 
-                const stars = document.querySelectorAll('.star');
-                const ratingValueInput = document.getElementById('ratingValue');
+                    const stars = document.querySelectorAll('.star');
+                    const ratingValueInput = document.getElementById('ratingValue');
 
-               
-                stars.forEach(star => {
-                    star.addEventListener('click', () => {
-                        const rating = star.getAttribute('data-value'); 
 
-                        
-                        ratingValueInput.value = rating;
+                    stars.forEach(star => {
+                        star.addEventListener('click', () => {
+                            const rating = star.getAttribute('data-value');
 
-                        
-                        stars.forEach(s => {
-                            if (parseInt(s.getAttribute('data-value')) <= rating) {
-                                s.style.color = 'gold'; 
-                            } else {
-                                s.style.color = ''; 
+
+                            ratingValueInput.value = rating;
+
+
+                            stars.forEach(s => {
+                                if (parseInt(s.getAttribute('data-value')) <= rating) {
+                                    s.style.color = 'gold';
+                                } else {
+                                    s.style.color = '';
+                                }
+                            });
+                        });
+                    });
+
+
+                    const name = document.getElementById('name')
+                    const email = document.getElementById('email')
+                    const review = document.getElementById("review")
+
+                    const reviewForm = document.getElementById("review-form")
+
+                    const nameError = document.getElementById('name-error')
+                    const emailError = document.getElementById('email-error')
+                    const reviewError = document.getElementById("review-error")
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        reviewForm.addEventListener('submit', function (event) {
+                            nameError.style.display = 'none';
+                            emailError.style.display = 'none';
+                            reviewError.style.display = 'none';
+
+                            emailValidateChecking();
+                            namelValidateChecking();
+                            reviewValidateChecking();
+
+                            if (emailError.innerHTML || passwordError.innerHTML) {
+                                event.preventDefault();
                             }
                         });
                     });
-                });
 
+                    function emailValidateChecking() {
+                        const emailVar = email.value;
+                        const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
 
-                const name = document.getElementById('name')
-                const email = document.getElementById('email')
-                const review = document.getElementById("review")
-
-                const reviewForm = document.getElementById("review-form")
-
-                const nameError = document.getElementById('name-error')
-                const emailError = document.getElementById('email-error')
-                const reviewError = document.getElementById("review-error")
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    reviewForm.addEventListener('submit', function (event) {
-                        nameError.style.display = 'none';
-                        emailError.style.display = 'none';
-                        reviewError.style.display = 'none';
-
-                        emailValidateChecking();
-                        namelValidateChecking();
-                        reviewValidateChecking();
-
-                        if (emailError.innerHTML || passwordError.innerHTML) {
-                            event.preventDefault();
+                        if (!emailVar) {
+                            emailError.style.display = 'block';
+                            emailError.innerHTML = 'Email can not be empty';
+                        } else if (!emailPattern.test(emailVar)) {
+                            emailError.style.display = 'block';
+                            emailError.innerHTML = 'Invalid email format';
+                        } else {
+                            emailError.style.display = 'none';
+                            emailError.innerHTML = '';
                         }
-                    });
-                });
-
-                function emailValidateChecking() {
-                    const emailVar = email.value;
-                    const emailPattern = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,4})$/;
-
-                    if (!emailVar) {
-                        emailError.style.display = 'block';
-                        emailError.innerHTML = 'Email can not be empty';
-                    } else if (!emailPattern.test(emailVar)) {
-                        emailError.style.display = 'block';
-                        emailError.innerHTML = 'Invalid email format';
-                    } else {
-                        emailError.style.display = 'none';
-                        emailError.innerHTML = '';
                     }
-                }
-                function namelValidateChecking() {
+                    function namelValidateChecking() {
 
-                    const nameVar = email.value;
-                    if (!nameVar) {
-                        nameError.style.display = 'block'
-                        nameError.innerHTML = 'Name can not be empty'
-                    } else {
-                        nameError.style.display = 'none'
-                        nameError.innerHTML = ''
+                        const nameVar = email.value;
+                        if (!nameVar) {
+                            nameError.style.display = 'block'
+                            nameError.innerHTML = 'Name can not be empty'
+                        } else {
+                            nameError.style.display = 'none'
+                            nameError.innerHTML = ''
+                        }
                     }
-                }
-                function reviewValidateChecking() {
-                    const reviewlVar = review.value;
+                    function reviewValidateChecking() {
+                        const reviewlVar = review.value;
 
-                    if (!reviewlVar) {
-                        reviewError.style.display = 'block';
-                        reviewError.innerHTML = 'Review cannot be empty';
-                    } else {
-                        reviewError.style.display = 'none';
-                        reviewError.innerHTML = '';
+                        if (!reviewlVar) {
+                            reviewError.style.display = 'block';
+                            reviewError.innerHTML = 'Review cannot be empty';
+                        } else {
+                            reviewError.style.display = 'none';
+                            reviewError.innerHTML = '';
+                        }
                     }
-                }
 
-            </script>
+                </script>
 
-            <!---------------------------->
-            <%- include('../partials/user/product-detail-footer') %>
-
+                <!---------------------------->
+                <%- include('../partials/user/product-detail-footer') %>
 
 
 
-                <!------- FOOTER --------->
-                <%- include('../partials/user/footer')%>
 
-                    <!-- -------------------- -->
+                    <!------- FOOTER --------->
+                    <%- include('../partials/user/footer')%>
 
-                    <script
-                        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+                        <!-- -------------------- -->
+                        <%if(message){%>
+                            <script>
+                                alert('<%=message%>')
+                            </script>
+                            <%}%>
 
-                        <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
-                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                             
-                    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
-                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+                                <script>
+                                    const urlparams = new URLSearchParams(window.location.search)
+                                    const message = urlparams.get('message')
+                                    if (message) {
+                                        alert(message)
+                                    }
+                                </script>
+
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+                                <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                <script
+                                    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                                <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

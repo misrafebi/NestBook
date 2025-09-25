@@ -64,33 +64,33 @@ router.get('/forgotMail', userController.loadForgotMail)
 router.post('/forgotMail', userController.forgotMail);
 router.get('/forgotOTP', userController.loadForgotOTP)
 router.post('/forgotOTP', userController.verifyForgotOTP)
-router.post('/resentForgotOTP',userController.resentForgotOTP)
+router.post('/resentForgotOTP', userController.resentForgotOTP)
 router.get('/resetPassword', userController.loadForgotPassword)
 router.post('/resetPassword', userController.resetPassword)
 
 router.get('/logout', userController.logout)
- 
+
 router.get('/aboutUs', userController.loadAbout)
 
 router.get('/contactUs', userController.loadContactUs)
-router.post('/contactUs',userController.postContactUsForm)
+router.post('/contactUs', userController.postContactUsForm)
 
 router.get('/products', productController.loadProducts)
-router.get('/productDetail', productController.productDetails) 
+router.get('/productDetail', productController.productDetails)
 router.get('/productReview', productController.loadReview)
-router.post('/submitReview',productController.postReview)
+router.post('/submitReview', productController.postReview)
 
 router.get('/profile', profileController.loadProfile)
 
 router.get('/editAddress', profileController.loadEditAddress)
-router.post('/editAddress',profileController.editAddress)
+router.post('/editAddress', profileController.editAddress)
 router.get('/addAddress', profileController.loadAddAddress)
-router.post('/addAddress',profileController.addAddress)
+router.post('/addAddress', profileController.addAddress)
 
 router.get('/checkout', profileController.loadCheckOut)
 
 router.get('/orders', profileController.loadOrders)
- 
+
 router.get('/cart', cartController.loadCart)
 
 router.post('/wishlist', wishlistController.addToWishlist);

@@ -88,7 +88,7 @@
                                 onkeyup="searchUsers()">
                             <button class="btn btn-outline-secondary" id="search-btn" type="button"
                                 id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </div> 
+                        </div>
                         <!----------------------------->
                         <!--------- search ------------>
                         <script>
@@ -166,39 +166,48 @@
 
                         </tbody>
 
-                      
+
 
                         <%}%>
                     </table>
 
                     <div class="pagination">
-                        <% if (currentPage > 1) { %>
-                            <a href="?page=<%= currentPage - 1 %>" class="btn btn-outline-secondary"><</a>
-                        <% } %>
-                    
-                        <% if (currentPage > 4) { %>
-                            <a href="?page=1" class="btn btn-outline-secondary">1</a>
-                            <% if (currentPage > 5) { %>
-                                <span class="dots">...</span>
-                            <% } %>
-                        <% } %>
-                    
-                        <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
-                            <a href="?page=<%= i %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-secondary' %>"><%= i %></a>
-                        <% } %>
-                    
-                        <% if (currentPage < totalPages - 3) { %>
-                            <% if (currentPage < totalPages - 4) { %>
-                                <span class="dots">...</span>
-                            <% } %>
-                            <a href="?page=<%= totalPages %>" class="btn btn-outline-secondary"><%= totalPages %></a>
-                        <% } %>
-                    
-                        <% if (currentPage < totalPages) { %>
-                            <a href="?page=<%= currentPage + 1 %>" class="btn btn-outline-secondary">></a>
-                        <% } %>
+                        <% if (currentPage> 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>" class="btn btn-outline-secondary">
+                                << /a>
+                                    <% } %>
+
+                                        <% if (currentPage> 4) { %>
+                                            <a href="?page=1" class="btn btn-outline-secondary">1</a>
+                                            <% if (currentPage> 5) { %>
+                                                <span class="dots">...</span>
+                                                <% } %>
+                                                    <% } %>
+
+                                                        <% for (let i=Math.max(1, currentPage - 2); i
+                                                            <=Math.min(totalPages, currentPage + 2); i++) { %>
+                                                            <a href="?page=<%= i %>"
+                                                                class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-secondary' %>">
+                                                                <%= i %>
+                                                            </a>
+                                                            <% } %>
+
+                                                                <% if (currentPage < totalPages - 3) { %>
+                                                                    <% if (currentPage < totalPages - 4) { %>
+                                                                        <span class="dots">...</span>
+                                                                        <% } %>
+                                                                            <a href="?page=<%= totalPages %>"
+                                                                                class="btn btn-outline-secondary">
+                                                                                <%= totalPages %>
+                                                                            </a>
+                                                                            <% } %>
+
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    <a href="?page=<%= currentPage + 1 %>"
+                                                                                        class="btn btn-outline-secondary">></a>
+                                                                                    <% } %>
                     </div>
-                    
+
 
 
 
@@ -218,13 +227,13 @@
             </script>
             <%}%>
 
-            <script>
-                const urlParams=new URLSearchParams(window.location.search)
-                const message=urlParams.get('message')
-                if(message){
-                alert(message)
-                }
-            </script>
+                <script>
+                    const urlParams = new URLSearchParams(window.location.search)
+                    const message = urlParams.get('message')
+                    if (message) {
+                        alert(message)
+                    }
+                </script>
 
 </body>
 

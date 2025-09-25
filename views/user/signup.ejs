@@ -85,9 +85,10 @@
         <div class="container">
             <div class="signup-container">
                 <h2>Signup</h2>
-                <a href="/user/auth/google/signup" class="btn  btn-block" id="btn-google"><i class="fa-brands fa-google"></i>
+                <a href="/user/auth/google/signup" class="btn  btn-block" id="btn-google"><i
+                        class="fa-brands fa-google"></i>
                     Signup with Google</a>
- 
+
                 <div class="or">
                     <hr>
                     <div class="text-center">or</div>
@@ -245,11 +246,20 @@
                 })
 
             </script>
- <%if(message){%>
-    <script>
-        alert('<%=message%>')
-    </script>
-    <%}%>
+            <%if(message){%>
+                <script>
+                    alert('<%=message%>')
+                </script>
+                <%}%>
+
+
+                    <script>
+                        const urlparams = new URLSearchParams(window.location.search)
+                        const message = urlparams.get('message')
+                        if (message) {
+                            alert(message)
+                        }
+                    </script>
 </body>
 
 </html>

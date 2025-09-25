@@ -110,61 +110,76 @@
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <div class="container cart-container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="cart-item">
-                    <div class="position-relative">
-                        <img src="https://via.placeholder.com/100x150" alt="Product Image">
-                        <button class="remove-btn">&times;</button>
-                    </div>
-                    <div class="cart-item-details">
-                        <h5>Product Name</h5>
-                        <p class="price">₹660</p>
-
-                        <div class="quantity-control">
-                            <div class="quantity-control-div">
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
-                                    <input type="text" class="form-control " placeholder="1" id="quantity-input"
-                                        aria-label="Example text with two button addons">
-                                    <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
-                                </div>
-                           </div>
+        <div class="container cart-container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="cart-item">
+                        <div class="position-relative">
+                            <img src="https://via.placeholder.com/100x150" alt="Product Image">
+                            <button class="remove-btn">&times;</button>
                         </div>
-                        
+                        <div class="cart-item-details">
+                            <h5>Product Name</h5>
+                            <p class="price">₹660</p>
+
+                            <div class="quantity-control">
+                                <div class="quantity-control-div">
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary decrement-btn" type="button">-</button>
+                                        <input type="text" class="form-control " placeholder="1" id="quantity-input"
+                                            aria-label="Example text with two button addons">
+                                        <button class="btn btn-outline-secondary increment-btn" type="button">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="order-summary">
-                    <h5>Order Summary</h5>
-                    <div class="summary-item">
-                        <span>MRP:</span>
-                        <span>₹1430</span>
+                <div class="col-md-4">
+                    <div class="order-summary">
+                        <h5>Order Summary</h5>
+                        <div class="summary-item">
+                            <span>MRP:</span>
+                            <span>₹1430</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Discount:</span>
+                            <span>₹50</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Shipping fee:</span>
+                            <span>₹60</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total Amount:</span>
+                            <span>₹1440</span>
+                        </div>
+                        <button class="place-order-btn">Place Order</button>
                     </div>
-                    <div class="summary-item">
-                        <span>Discount:</span>
-                        <span>₹50</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Shipping fee:</span>
-                        <span>₹60</span>
-                    </div>
-                    <div class="summary-item total">
-                        <span>Total Amount:</span>
-                        <span>₹1440</span>
-                    </div>
-                    <button class="place-order-btn">Place Order</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <%- include('../partials/user/footer')%>
+        <%if(message){%>
+            <script>
+                alert('<%=message%>')
+            </script>
+            <%}%>
+
+
+                <script>
+                    const urlparams = new URLSearchParams(window.location.search)
+                    const message = urlparams.get('message')
+                    if (message) {
+                        alert(message)
+                    }
+                </script>
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                <%- include('../partials/user/footer')%>
 
 </body>
 
