@@ -215,12 +215,9 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
+
                                                             <!--  -->
                                                             <script>
-
-
-
-
                                                                 const editOfferForm = document.getElementById('editOfferForm')
 
                                                                 editOfferForm.addEventListener('submit', (e) => {
@@ -370,7 +367,27 @@
                                                             </script> -->
 
 
-                                                            <button class="btn btn-danger btn-sm">Delete</button>
+                                                            <button class="btn btn-danger btn-sm delete-btn"
+                                                            onclick="deleteOffer('<%= product._id %>')" data-id="<%=product._id%>">Delete</button>
+
+                                                            <!-- delete offer -->
+<script>
+    function deleteOffer(productID){
+        if(!confirm('Delete this offer')) return
+        fetch(`/admin/delete-offer?id=${productID}`,{
+            method:'POST'
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            if(data.success){
+                buttonEl.parentNode.remove()
+            }
+            else{
+                alert(data.message||'Error while delete offer')
+            }
+        })
+    }
+</script>
                                                         </td>
                                                         <%}%>
                                 </tr>

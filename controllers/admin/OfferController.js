@@ -39,7 +39,8 @@ const loadOffer = async (req, res) => {
             message: ''
         })
     } catch (error) {
-
+        console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while load offer page. Please try again shortly.' })
     }
 }
 
@@ -94,14 +95,39 @@ const editOffer = async (req, res) => {
 
         res.redirect('/admin/offer?message=Offer updated successfully.')
     } catch (error) {
+        console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while edit offer. Please try again shortly.' })
+    }
+}
 
+const deleteOffer = async (req, res) => {
+    try {
+
+        const id = req.query.id
+        if (!id) {
+            return res.json({ success: false, message: 'Id can not found' })
+        }
+
+        const product = await Product.findById(id)
+        if (!product) {
+            return res.json({ success: false, message: 'Product can not found.' })
+        }
+
+        await Product.findByIdAndUpdate(id,{ productOffer: '', startOfferDate: '', expireOfferDate: '' })
+
+        return res.json({ success: true, message: 'Offer deleted successfully.' })
+
+
+    } catch (error) {
+        console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while delete offer. Please try again shortly.' })
     }
 }
 
 
 
-
 module.exports = {
     loadOffer,
-    editOffer
+    editOffer,
+    deleteOffer
 }

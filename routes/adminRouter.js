@@ -114,6 +114,7 @@ router.post('/addCustomer', adminAuth.noCache, adminAuth.checkSession, customerC
 
 router.get('/offer', adminAuth.noCache, adminAuth.checkSession, offerController.loadOffer)
 router.post('/edit-offer/:id', adminAuth.noCache, adminAuth.checkSession, offerController.editOffer)
+router.post('/delete-offer', adminAuth.noCache, adminAuth.checkSession, offerController.deleteOffer)
 
 router.get('/product', adminAuth.noCache, adminAuth.checkSession, productController.loadProduct)
 router.get('/addProduct', adminAuth.noCache, adminAuth.checkSession, productController.loadAddProduct)

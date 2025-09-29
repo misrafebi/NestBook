@@ -103,7 +103,7 @@ const deleteCategory = async (req, res) => {
         await Category.deleteOne({ _id: id })
         res.json({ success: true, message: "Category deleted." });
 
-    } catch (error) {
+    } catch (error) { 
         console.log('Error', error);
         res.json({ success: false, message: 'Something went wrong while delete category. Please try again shortly.' })
     }

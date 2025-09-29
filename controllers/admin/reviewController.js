@@ -8,7 +8,8 @@ const loadReviews = async (req, res) => {
 
         res.render('admin/review', { reviews, message: '' })
     } catch (error) {
-        console.error(error);
+       console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while load review page. Please try again shortly.' })
     }
 }
 
@@ -44,7 +45,8 @@ const loadReply = async (req, res) => {
             message: ''
         })
     } catch (error) {
-        console.error(error);
+       console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while load review replay page. Please try again shortly.' })
     }
 }
 const postReply = async (req, res) => {
@@ -88,7 +90,8 @@ const postReply = async (req, res) => {
             message: 'Replay sended successfully'
         })
     } catch (error) {
-        console.error(error);
+        console.log('Error', error);
+        res.json({ success: false, message: 'Something went wrong while send replay. Please try again shortly.' })
     }
 }
 

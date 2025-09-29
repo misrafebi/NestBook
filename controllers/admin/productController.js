@@ -238,7 +238,8 @@ const loadEditProduct = async (req, res) => {
         res.render('admin/editProduct', {
             product,
             categories,
-            statusOptions
+            statusOptions,
+            message:''
         })
     } catch (error) {
         console.error('Error: ', error);
