@@ -91,7 +91,7 @@ router.get('/checkout', profileController.loadCheckOut)
 
 router.get('/orders', profileController.loadOrders)
 
-router.get('/cart', cartController.loadCart)
+router.get('/cart', cartController.loadCart) 
 
 router.post('/wishlist', wishlistController.addToWishlist);
 router.get('/wishlist', wishlistController.loadWishlist);

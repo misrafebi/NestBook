@@ -522,10 +522,8 @@
         function quantityValidationChecking(isValid) {
             const quantityVal = quantity.value
             const quantityPatt = /\d/
-            if (!quantityVal) {
-                quantityError.textContent = 'Product quantity can not be empty.'
-                isValid = false
-            } else if (!quantityPatt.test(quantityVal)) {
+            
+            if (!quantityPatt.test(quantityVal)) {
                 quantityError.textContent = 'Quantity should be in digit.'
                 isValid = false
             } else {
@@ -534,7 +532,13 @@
             return isValid
         }
 
-
+ stock.addEventListener('change',()=>{
+            if(stock.value==='Available'){
+quantity.setAttribute('required', 'required')
+            }else{
+                quantity.removeAttribute('required')
+            }
+        })
         function categoryValidationChecking(isValid) {
             const categoryVal = category.value
             if (!categoryVal || categoryVal == 'Select category') {

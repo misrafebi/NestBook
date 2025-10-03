@@ -170,6 +170,15 @@ const addProduct = async (req, res) => {
             });
         }
 
+        if (status === 'Available' && (!quantity || quantity <= 0)) {
+            return res.redirect(`/admin/addProduct?message:Quantity is required when status is 'Available'.`)
+        }
+
+        // if (status === 'Available') {
+        //     productExists.isBlocked = false
+        // } else {
+        //     productExists.isBlocked = true
+        // }
 
         // Create product
         const newProduct = new Product({
@@ -187,7 +196,8 @@ const addProduct = async (req, res) => {
             description,
             salePrice,
             startOfferDate: startOffer,
-            expireOfferDate: expireOffer
+            expireOfferDate: expireOffer,
+            isBlocked: status !=='Available'
         });
 
         await newProduct.save();
@@ -239,7 +249,7 @@ const loadEditProduct = async (req, res) => {
             product,
             categories,
             statusOptions,
-            message:''
+            message: ''
         })
     } catch (error) {
         console.error('Error: ', error);
@@ -300,7 +310,9 @@ const editProduct = async (req, res) => {
                 statusOptions
             });
         }
-
+        if (status === 'Available' && (!quantity || quantity <= 0)) {
+            return res.redirect(`/admin/ediProduct?message:Quantity is required when status is 'Available'.`)
+        }
 
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => {
@@ -328,7 +340,8 @@ const editProduct = async (req, res) => {
             description,
             salePrice,
             startOfferDate: startOffer,
-            expireOfferDate: expireOffer
+            expireOfferDate: expireOffer,
+            isBlocked: status !=='Available'
         },
             { new: true }
         )

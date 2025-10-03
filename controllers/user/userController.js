@@ -10,6 +10,7 @@ const Contact = require('../../models/contactSchema')
 const loadHome = async (req, res) => {
     try {
         const newArrivals = await Product.aggregate([
+            {$match:{isBlocked:false}},
             {
                 $lookup: {
                     from: 'reviews',
@@ -20,7 +21,7 @@ const loadHome = async (req, res) => {
                         {
                             $group: {
                                 _id: '$Product',
-                                avgRating: { $avg: '$rating' }
+                                avgRating: { $avg: '$rating' },
                             }
                         }
                     ]

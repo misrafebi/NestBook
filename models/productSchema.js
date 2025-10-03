@@ -46,7 +46,6 @@ const productSchema = new Schema({
     },
     quantity: {
         type: Number,
-        default: 1
     },
     status: {
         type: String,

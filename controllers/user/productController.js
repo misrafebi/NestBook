@@ -17,6 +17,7 @@ const loadProducts = async (req, res) => {
         res.render('user/products', {
             products,
             categories,
+            message:''
         });
     } catch (error) {
         console.error(error);
@@ -68,6 +69,7 @@ const productDetails = async (req, res) => {
             suggestedProducts,
             totalReviews,
             averageRating,
+            message:''
 
         });
     } catch (error) {
