@@ -7,7 +7,7 @@ const productSchema = new Schema({
         required: true
     },
     authorName: {
-        type: String,
+        type: String, 
     },
     numberPage: {
         type: Number,
