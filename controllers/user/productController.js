@@ -139,6 +139,7 @@ const loadReview = async (req, res) => {
             suggestedProducts,
             totalReviews,
             averageRating,
+            message:""
         });
     } catch (error) {
         console.error('Error:', error);

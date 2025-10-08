@@ -236,7 +236,7 @@
                                     </del>
                             </p>
                             <%}%>
-                                <div class="input-group mb-3">
+                                <!-- <div class="input-group mb-3">
                                     <div class="input-group-prepend quality-div ">
                                         <button class="btn  quality-btn" type="button">-</button>
                                     </div>
@@ -244,7 +244,49 @@
                                     <div class="input-group-append quality-div ">
                                         <button class="btn  quality-btn" type="button">+</button>
                                     </div>
+                                </div> -->
+
+                                <!-- <div class="input-group product-qty" style="width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm text-center" value="1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
+                                    </div>
+                                </div> -->
+
+                                <div class="input-group product-qty" style="width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            id="decrease">-</button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm text-center" id="quantity"
+                                        value="1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            id="increase">+</button>
+                                    </div>
                                 </div>
+
+                                <script>
+                                    const increaseBtn = document.getElementById('increase')
+                                    const decreaseBtn = document.getElementById('decrease')
+                                    const quantityInput = document.getElementById('quantity')
+
+                                    increaseBtn.addEventListener('click', () => {
+                                        let currentVal = parseInt(quantityInput.value) || 0
+                                        quantityInput.value = currentVal + 1
+                                    })
+
+                                    decreaseBtn.addEventListener('click', () => {
+                                        let currentVal = parseInt(quantityInput.value) || 0
+                                        if (currentVal > 1) {
+                                            quantityInput.value = currentVal - 1
+                                        }
+                                    })
+                                </script>
+
                                 <br>
                                 <script>
                                     $(document).ready(function () {
@@ -254,6 +296,8 @@
                                         });
                                     });
                                 </script>
+
+
 
 
 
@@ -377,6 +421,7 @@
                                 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                                 <script
                                     src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 

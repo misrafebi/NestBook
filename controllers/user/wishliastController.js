@@ -16,7 +16,8 @@ const loadWishlist = async (req, res) => {
 
         res.render('user/wishlist', {
             categories,
-            products: user.wishlist
+            products: user.wishlist,
+            message:''
         })
     } catch (error) {
         console.error(error);
