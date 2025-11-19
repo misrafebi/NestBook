@@ -8,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="/user/home/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        .product-card {
+        /* ... your existing CSS styles ... */
+        
+        /* Add this new style for showing active filter */
+        
+         .product-card {
             margin-bottom: 30px;
             transition: transform 0.3s;
         }
@@ -71,6 +75,16 @@
             font-weight: bold;
             color: #2c3e50;
         }
+
+        .active-filter-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            margin-right: 5px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -80,8 +94,11 @@
         <div class="row">
             <!-- Filters Sidebar -->
             <aside class="col-md-3 col-lg-2 sidebar">
-                <h5><b>Filters</b></h5>
+               
                 
+               
+                
+
                 <div class="filter-group">
                     <h6>Sort By</h6>
                     <div class="form-check">
@@ -104,15 +121,15 @@
                         <div class="form-check">
                             <input class="form-check-input category-checkbox" type="checkbox" 
                                 value="<%= categories[i]._id %>" 
-                                id="category-<%= categories[i]._id %>">
+                                id="category-<%= categories[i]._id %>"
+                                <%= (typeof selectedCategory !== 'undefined' && selectedCategory === categories[i]._id) ? 'checked' : '' %>>
                             <label for="category-<%= categories[i]._id %>" class="form-check-label">
                                 <%= categories[i].name %>
                             </label>
                         </div>
                     <% } %>
                 </div>
-
-                <div class="filter-group">
+<div class="filter-group">
                     <h6>Price</h6>
                     <div class="form-check">
                         <input class="form-check-input price-checkbox" type="checkbox" value="0-100" id="price-0-100">
@@ -179,10 +196,26 @@
                 <button class="btn btn-outline-secondary btn-sm btn-block" id="clear-filters">
                     Clear All Filters
                 </button>
+                <!-- ... rest of your filter groups ... -->
             </aside>
 
             <!-- Products Grid -->
             <main class="col-md-9 col-lg-10">
+                <!-- Page Header with Active Filters -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>All Products</h4>
+                    <div id="active-filters">
+                        <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { 
+                            const selectedCat = categories.find(cat => cat._id === selectedCategory);
+                        %>
+                            <span class="active-filter-badge">
+                                Category: <%= selectedCat ? selectedCat.name : 'Selected' %>
+                                <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removeCategoryFilter()"></button>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+
                 <div id="products-container">
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="products-grid">
                         <!-- Product Cards will be rendered here by JavaScript -->
@@ -214,17 +247,30 @@
             <% } %>
         ];
 
-        // Filter state
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlCategory = urlParams.get('category');
+
+        // Filter state - initialize with URL category if present
         let filterState = {
             sort: '',
-            categories: [],
+            categories: urlCategory ? [urlCategory] : [],
             priceRanges: [],
             discountRanges: []
         };
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            renderProducts(allProducts);
+            // If URL has category, automatically check the corresponding checkbox
+            if (urlCategory) {
+                const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
+                if (categoryCheckbox) {
+                    categoryCheckbox.checked = true;
+                }
+            }
+            
+            // Apply filters on page load
+            applyFilters();
             setupEventListeners();
         });
 
@@ -241,11 +287,14 @@
             document.querySelectorAll('.category-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     if (this.checked) {
-                        filterState.categories.push(this.value);
+                        if (!filterState.categories.includes(this.value)) {
+                            filterState.categories.push(this.value);
+                        }
                     } else {
                         filterState.categories = filterState.categories.filter(cat => cat !== this.value);
                     }
                     applyFilters();
+                    updateURL();
                 });
             });
 
@@ -343,6 +392,103 @@
             }
 
             renderProducts(filteredProducts);
+            updateActiveFiltersDisplay();
+        }
+
+        function updateURL() {
+            // Update URL without page reload to reflect current category filter
+            const currentUrl = new URL(window.location);
+            
+            if (filterState.categories.length === 1) {
+                currentUrl.searchParams.set('category', filterState.categories[0]);
+            } else if (filterState.categories.length === 0) {
+                currentUrl.searchParams.delete('category');
+            }
+            // For multiple categories, we don't update URL to keep it simple
+            
+            window.history.replaceState({}, '', currentUrl);
+        }
+
+        function updateActiveFiltersDisplay() {
+            const activeFiltersContainer = document.getElementById('active-filters');
+            let activeFiltersHTML = '';
+
+            // Category filters
+            filterState.categories.forEach(categoryId => {
+                const category = allCategories.find(cat => cat._id === categoryId);
+                if (category) {
+                    activeFiltersHTML += `
+                        <span class="active-filter-badge">
+                            Category: ${category.name}
+                            <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removeSpecificCategoryFilter('${categoryId}')"></button>
+                        </span>
+                    `;
+                }
+            });
+
+            // Price filters
+            filterState.priceRanges.forEach(range => {
+                activeFiltersHTML += `
+                    <span class="active-filter-badge">
+                        Price: ${range}
+                        <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removePriceFilter('${range}')"></button>
+                    </span>
+                `;
+            });
+
+            activeFiltersContainer.innerHTML = activeFiltersHTML;
+        }
+
+        // Function to remove category filter from URL
+        function removeCategoryFilter() {
+            // Remove category from URL and filter state
+            filterState.categories = filterState.categories.filter(cat => cat !== urlCategory);
+            
+            // Uncheck the category checkbox
+            if (urlCategory) {
+                const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
+                if (categoryCheckbox) {
+                    categoryCheckbox.checked = false;
+                }
+            }
+            
+            // Update URL
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete('category');
+            window.history.replaceState({}, '', currentUrl);
+            
+            applyFilters();
+        }
+
+        function removeSpecificCategoryFilter(categoryId) {
+            filterState.categories = filterState.categories.filter(cat => cat !== categoryId);
+            
+            // Uncheck the checkbox
+            const categoryCheckbox = document.querySelector(`.category-checkbox[value="${categoryId}"]`);
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = false;
+            }
+            
+            // Update URL if this was the URL category
+            if (urlCategory === categoryId) {
+                const currentUrl = new URL(window.location);
+                currentUrl.searchParams.delete('category');
+                window.history.replaceState({}, '', currentUrl);
+            }
+            
+            applyFilters();
+        }
+
+        function removePriceFilter(range) {
+            filterState.priceRanges = filterState.priceRanges.filter(r => r !== range);
+            
+            // Uncheck the checkbox
+            const priceCheckbox = document.querySelector(`.price-checkbox[value="${range}"]`);
+            if (priceCheckbox) {
+                priceCheckbox.checked = false;
+            }
+            
+            applyFilters();
         }
 
         function renderProducts(products) {
@@ -427,29 +573,27 @@
                 input.checked = false;
             });
 
+            // Clear URL parameters
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete('category');
+            window.history.replaceState({}, '', currentUrl);
+
             // Render all products
             renderProducts(allProducts);
+            updateActiveFiltersDisplay();
         }
+
+        // Create a categories array for JavaScript use
+        const allCategories = [
+            <% for(let i=0; i<categories.length; i++) { %>
+            {
+                _id: '<%= categories[i]._id %>',
+                name: '<%= categories[i].name %>'
+            },
+            <% } %>
+        ];
     </script>
 
     <%- include('../partials/user/footer')%>
-
-    <% if(message) { %>
-        <script>
-            alert('<%= message %>');
-        </script>
-    <% } %>
-
-    <script>
-        const urlparams = new URLSearchParams(window.location.search);
-        const message = urlparams.get('message');
-        if (message) {
-            alert(message);
-        }
-    </script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -613,7 +613,7 @@
               <div class="category-carousel swiper">
                 <div class="swiper-wrapper">
                   <%categories.forEach((category)=>{%>
-                    <a href="user/home" class="nav-link category-item swiper-slide">
+                    <a href="/user/products?category=<%=category._id%>" class="nav-link category-item swiper-slide">
                       <img src="/assets/category-icon-3.png" alt="Category Thumbnail" id="category-icon">
                       <h3 class="category-title">
                         <%=category.name%>

@@ -44,13 +44,13 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <%categories.forEach((category)=>{%>
-                                    <li><a class="dropdown-item" href="#">
+                                    <li><a class="dropdown-item" href="/user/products?category=<%=category._id%>">
                                             <%=category.name%>
                                         </a></li>
                                     <%})%>
                             </ul>
                         </li>
-                        <%}%>
+                        <%}%> 
                             <li class="nav-item">
                                 <a class="nav-link" href="/user/aboutUs">About</a>
                             </li>
@@ -63,9 +63,11 @@
                 <ul class="navbar-nav ms-auto d-none d-lg-flex">
                     <!--Search -->
                     <li class="nav-item">
-                        <form class="form-inline">
-                            <input class="form-control me-2" type="search" placeholder="Search Product"
-                                aria-label="Search">
+                        <form class="form-inline" action="/search" method="get">
+                            <div class="input-group">
+                            <input class="form-control" type="search" name="q" placeholder="Search Product"
+                aria-label="Search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                                </div>
                         </form>
                     </li>
                     <!--Cart-->

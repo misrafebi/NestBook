@@ -14,10 +14,12 @@ const loadProducts = async (req, res) => {
             return res.status(404).send('Products not found');
         }
         const categories = await Category.find();
+        const selectedCategory = req.query.category || ''
         res.render('user/products', {
             products,
             categories,
-            message:''
+            message:'',
+            selectedCategory
         });
     } catch (error) {
         console.error(error);
@@ -146,6 +148,14 @@ const loadReview = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+const searchProduct= async(req,res)=>{
+    try {
+        
+    } catch (error) {
+         
+    }
+}
 
 const postReview = async (req, res) => {
     try {
