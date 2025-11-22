@@ -85,6 +85,23 @@
             margin-right: 5px;
             display: inline-block;
         }
+        
+        /* New styles for quantity controls */
+        .quantity-message {
+            font-size: 0.75rem;
+            color: #dc3545;
+            margin-top: 5px;
+            height: 15px;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -242,7 +259,8 @@
                 regularPrice: <%= products[i].regularPrice %>,
                 productOffer: <%= products[i].productOffer %>,
                 isNewRelease: <%= products[i].isNewRelease || false %>,
-                createdAt: '<%= products[i].createdAt %>'
+                createdAt: '<%= products[i].createdAt %>',
+                quantity: <%= products[i].quantity %>  // Add quantity to product data
             },
             <% } %>
         ];
@@ -504,7 +522,14 @@
             productsGrid.style.display = 'flex';
             noProducts.style.display = 'none';
 
-            productsGrid.innerHTML = products.map(product => `
+            productsGrid.innerHTML = products.map(product => {
+                // Determine initial button states based on product quantity
+                const isOutOfStock = product.quantity === 0;
+                const initialQuantity = isOutOfStock ? 0 : 1;
+                const decreaseDisabled = isOutOfStock || initialQuantity <= 1;
+                const increaseDisabled = isOutOfStock || initialQuantity >= product.quantity;
+
+                return `
                 <div class="col mb-4">
                     <div class="card product-card h-100">
                         <div class="position-relative">
@@ -525,38 +550,118 @@
                                 <span class="regular-price"><del>₹${product.regularPrice}</del></span>
                                 <span class="offer-price">(${product.productOffer}% Off)</span>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div class="mb-2">
+                                <small class="text-muted">Available: ${product.quantity}</small>
+                            </div>
+                            <div class="quantity-controls">
                                 <div class="input-group product-qty" style="width: 120px;">
                                     <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                                        <button class="btn btn-outline-secondary btn-sm decrease-btn" type="button" 
+                                            ${decreaseDisabled ? 'disabled' : ''}>-</button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center" value="1">
+                                    <input type="text" class="form-control form-control-sm text-center quantity-input" 
+                                        value="${initialQuantity}" 
+                                        ${isOutOfStock ? 'disabled' : ''}
+                                        data-product-id="${product.id}"
+                                        data-max-quantity="${product.quantity}">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
+                                        <button class="btn btn-outline-secondary btn-sm increase-btn" type="button" 
+                                            ${increaseDisabled ? 'disabled' : ''}>+</button>
                                     </div>
                                 </div>
-                                <a href="#" class="btn btn-primary btn-sm">Add to Cart</a>
+                                <div class="quantity-message" id="message-${product.id}"></div>
+                            </div>
+                            <div class="mt-2">
+                                <a href="#" class="btn btn-primary btn-sm ${isOutOfStock ? 'disabled' : ''}" 
+                                   style="width: 100%">${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
 
             // Add event listeners for quantity buttons
-            productsGrid.querySelectorAll('.product-qty .btn').forEach(button => {
+            setupQuantityEventListeners();
+        }
+
+        function setupQuantityEventListeners() {
+            // Increase button event listeners
+            document.querySelectorAll('.increase-btn').forEach(button => {
                 button.addEventListener('click', function() {
-                    const input = this.closest('.product-qty').querySelector('input');
-                    let value = parseInt(input.value);
+                    const input = this.closest('.product-qty').querySelector('.quantity-input');
+                    const productId = input.getAttribute('data-product-id');
+                    const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+                    const messageElement = document.getElementById(`message-${productId}`);
                     
-                    if (this.textContent === '+') {
-                        value++;
-                    } else if (this.textContent === '-' && value > 1) {
-                        value--;
+                    let currentValue = parseInt(input.value) || 0;
+                    
+                    if (currentValue < maxQuantity) {
+                        input.value = currentValue + 1;
+                        messageElement.textContent = "";
+                        
+                        // Update button states
+                        updateQuantityButtons(input);
+                    } else {
+                        messageElement.textContent = "Maximum quantity reached!";
                     }
-                    
-                    input.value = value;
                 });
             });
+
+            // Decrease button event listeners
+            document.querySelectorAll('.decrease-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.closest('.product-qty').querySelector('.quantity-input');
+                    const productId = input.getAttribute('data-product-id');
+                    const messageElement = document.getElementById(`message-${productId}`);
+                    
+                    let currentValue = parseInt(input.value) || 0;
+                    
+                    if (currentValue > 1) {
+                        input.value = currentValue - 1;
+                        messageElement.textContent = "";
+                        
+                        // Update button states
+                        updateQuantityButtons(input);
+                    }
+                });
+            });
+
+            // Manual input validation
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const productId = this.getAttribute('data-product-id');
+                    const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
+                    const messageElement = document.getElementById(`message-${productId}`);
+                    
+                    let value = parseInt(this.value) || 0;
+                    
+                    if (value < 1) {
+                        this.value = 1;
+                        messageElement.textContent = "";
+                    } else if (value > maxQuantity) {
+                        this.value = maxQuantity;
+                        messageElement.textContent = "Maximum quantity reached!";
+                    } else {
+                        messageElement.textContent = "";
+                    }
+                    
+                    // Update button states
+                    updateQuantityButtons(this);
+                });
+            });
+        }
+
+        function updateQuantityButtons(input) {
+            const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+            const currentValue = parseInt(input.value) || 0;
+            const parentDiv = input.closest('.product-qty');
+            const increaseBtn = parentDiv.querySelector('.increase-btn');
+            const decreaseBtn = parentDiv.querySelector('.decrease-btn');
+            
+            // Update button states
+            increaseBtn.disabled = currentValue >= maxQuantity;
+            decreaseBtn.disabled = currentValue <= 1;
         }
 
         function clearAllFilters() {

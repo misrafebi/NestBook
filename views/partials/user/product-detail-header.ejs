@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookNest - Product Details </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <style>
         /*head*/
         .product-detail-page {
@@ -64,14 +63,12 @@
         }
 
         .mb-3 {
-
             width: 190px;
             margin-bottom: 1rem !important;
         }
 
         #cart-btn {
             background-color: #FF9F00;
-
             border-color: #FF9F00;
             width: 145px;
         }
@@ -101,7 +98,6 @@
 
         .quality-btn {
             border: none;
-
         }
 
         .quality-div {
@@ -145,26 +141,32 @@
             visibility: hidden;
             background-repeat: no-repeat;
             background-size: 200% 200%;
-            /* Apply 2x zoom */
+        }
+
+        .max-quantity-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
 </head>
 
 <body>
-
-
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-
                 <div class="container product-detail-page">
                     <div class="row">
                         <!-- Product Images Carousel -->
                         <div class="col-md-6">
                             <div>
                                 <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-
-
                                     <div class="carousel-inner" id="img-size">
                                         <% for (let i=0; i < product.image.length; i++) { %>
                                             <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
@@ -178,10 +180,8 @@
                                                     <div class="zoom-result" id="zoomResult"></div>
                                                 </div>
                                             </div>
-                                            <% } %>
+                                        <% } %>
                                     </div>
-
-
                                     <br>
                                     <!-- Carousel Controls -->
                                     <button class="btn btn-primary" id="cart-btn">Add to Cart</button>
@@ -201,11 +201,8 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-
             </div>
 
             <div class="col-md-8">
@@ -224,205 +221,114 @@
                     <p>Stock:
                         <% if (product.quantity> 0) { %>
                             In Stock
-                            <% } else { %>
-                                Out of Stock
-                                <% } %>
-                    </p>
-                    <%if(product.salePrice==product.regularPrice){%>
-                        <p>Price: ₹ <%=product.salePrice%>
-                        </p>
                         <% } else { %>
-                            <p>Price: ₹ <%=product.salePrice%> <del id="orginal-price">₹<%= product.regularPrice %>
-                                    </del>
-                            </p>
-                            <%}%>
-                                <!-- <div class="input-group mb-3">
-                                    <div class="input-group-prepend quality-div ">
-                                        <button class="btn  quality-btn" type="button">-</button>
-                                    </div>
-                                    <input type="text" id="form-control" class=" text-center quantity-form" value="1">
-                                    <div class="input-group-append quality-div ">
-                                        <button class="btn  quality-btn" type="button">+</button>
-                                    </div>
-                                </div> -->
+                            Out of Stock
+                        <% } %>
+                    </p>
+                    <p>Available Quantity: <span id="maxQuantityDisplay"><%= product.quantity %></span></p>
+                    
+                    <%if(product.salePrice==product.regularPrice){%>
+                        <p>Price: ₹ <%=product.salePrice%></p>
+                    <% } else { %>
+                        <p>Price: ₹ <%=product.salePrice%> <del id="orginal-price">₹<%= product.regularPrice %></del></p>
+                    <%}%>
 
-                                <!-- <div class="input-group product-qty" style="width: 120px;">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center" value="1">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
-                                    </div>
-                                </div> -->
+                    <!-- Quantity Input with Maximum Limit -->
+                    <div class="input-group product-qty" style="width: 120px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" id="decrease">-</button>
+                        </div>
+                        <input type="text" class="form-control form-control-sm text-center" id="quantity" value="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" id="increase">+</button>
+                        </div>
+                    </div>
+                    <div id="quantityMessage" class="max-quantity-message"></div>
 
-                                <div class="input-group product-qty" style="width: 120px;">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button"
-                                            id="decrease">-</button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center" id="quantity"
-                                        value="1">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button"
-                                            id="increase">+</button>
-                                    </div>
-                                </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                <script>
-                                    const increaseBtn = document.getElementById('increase')
-                                    const decreaseBtn = document.getElementById('decrease')
-                                    const quantityInput = document.getElementById('quantity')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.ez-plus.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
 
-                                    increaseBtn.addEventListener('click', () => {
-                                        let currentVal = parseInt(quantityInput.value) || 0
-                                        quantityInput.value = currentVal + 1
-                                    })
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get product max quantity from EJS variable
+            const maxQuantity = <%= product.quantity %>;
+            const increaseBtn = document.getElementById('increase');
+            const decreaseBtn = document.getElementById('decrease');
+            const quantityInput = document.getElementById('quantity');
+            const quantityMessage = document.getElementById('quantityMessage');
+            
+            // If product is out of stock, disable the quantity controls
+            if (maxQuantity === 0) {
+                quantityInput.value = 0;
+                increaseBtn.disabled = true;
+                decreaseBtn.disabled = true;
+                quantityMessage.textContent = "Product is out of stock";
+                return;
+            }
 
-                                    decreaseBtn.addEventListener('click', () => {
-                                        let currentVal = parseInt(quantityInput.value) || 0
-                                        if (currentVal > 1) {
-                                            quantityInput.value = currentVal - 1
-                                        }
-                                    })
-                                </script>
+            // Update quantity function with max limit validation
+            function updateQuantity(change) {
+                let currentVal = parseInt(quantityInput.value) || 0;
+                const newValue = currentVal + change;
+                
+                // Validate minimum (1) and maximum (product.quantity)
+                if (newValue < 1) {
+                    quantityInput.value = 1;
+                    quantityMessage.textContent = "";
+                } else if (newValue > maxQuantity) {
+                    quantityInput.value = maxQuantity;
+                    quantityMessage.textContent = "Maximum quantity reached!";
+                    increaseBtn.disabled = true;
+                } else {
+                    quantityInput.value = newValue;
+                    quantityMessage.textContent = "";
+                    increaseBtn.disabled = false;
+                }
+                
+                // Enable/disable decrease button based on value
+                decreaseBtn.disabled = quantityInput.value <= 1;
+            }
 
-                                <br>
-                                <script>
-                                    $(document).ready(function () {
-                                        $('.zoom-img').ezPlus({
-                                            zoomType: 'inner',
-                                            cursor: 'crosshair'
-                                        });
-                                    });
-                                </script>
+            // Event listeners for buttons
+            increaseBtn.addEventListener('click', () => {
+                updateQuantity(1);
+            });
 
+            decreaseBtn.addEventListener('click', () => {
+                updateQuantity(-1);
+            });
 
+            // Validate manual input
+            quantityInput.addEventListener('change', function() {
+                let value = parseInt(this.value) || 0;
+                
+                if (value < 1) {
+                    this.value = 1;
+                    quantityMessage.textContent = "";
+                } else if (value > maxQuantity) {
+                    this.value = maxQuantity;
+                    quantityMessage.textContent = "Maximum quantity reached!";
+                } else {
+                    quantityMessage.textContent = "";
+                }
+                
+                // Update button states
+                increaseBtn.disabled = this.value >= maxQuantity;
+                decreaseBtn.disabled = this.value <= 1;
+            });
 
-
-
-
-
-
-                                <!-- <script>
-                                    const zoomContainer = document.querySelector('.zoom-container');
-                                    const img = document.querySelector('.zoom-img');
-                                    const lens = document.querySelector('.zoom-lens');
-                                    const result = document.querySelector('.zoom-result');
-
-
-                                    const lensSize = 100;
-                                    lens.style.width = `${lensSize}px`;
-                                    lens.style.height = `${lensSize}px`;
-
-
-                                    zoomContainer.addEventListener('mousemove', (e) => {
-                                        const imgRect = img.getBoundingClientRect();
-                                        const x = e.pageX - imgRect.left;
-                                        const y = e.pageY - imgRect.top;
-
-
-                                        const lensX = Math.max(0, Math.min(x - lensSize / 2, img.width - lensSize));
-                                        const lensY = Math.max(0, Math.min(y - lensSize / 2, img.height - lensSize));
-
-                                        lens.style.left = `${lensX}px`;
-                                        lens.style.top = `${lensY}px`;
-
-
-                                        result.style.backgroundImage = `url(${img.src})`;
-                                        result.style.backgroundPosition = `-${lensX * 2}px -${lensY * 2}px`;
-                                        result.style.visibility = 'visible';
-                                        lens.style.visibility = 'visible';
-                                    });
-
-
-                                    zoomContainer.addEventListener('mouseleave', () => {
-                                        lens.style.visibility = 'hidden';
-                                        result.style.visibility = 'hidden';
-                                    });
-
-
-                                </script> -->
-
-                                <!-- <script>
-                                    $(document).ready(function () {
-                                        function setZoom() {
-                                            // Remove any previous zoom containers
-                                            $('.zoomContainer').remove();
-                                            // Destroy previous zooms
-                                            $('.zoom-img').ezPlus('destroy');
-                                            // Apply zoom only to the visible .zoom-img
-                                            $('.carousel-item.active .zoom-img').ezPlus({
-                                                zoomType: 'inner',
-                                                cursor: 'crosshair'
-                                            });
-                                        }
-
-                                        setZoom();
-
-                                        // Re-initialize zoom when the carousel changes slides
-                                        $('#productCarousel').on('slid.bs.carousel', function () {
-                                            setZoom();
-                                        });
-                                    });
-                                </script> -->
-                                <!-- <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        function zoomHandler(container) {
-                                            const img = container.querySelector('.zoom-img');
-                                            const lens = container.querySelector('.zoom-lens');
-                                            const result = container.querySelector('.zoom-result');
-                                            const lensSize = 100;
-
-                                            lens.style.width = `${lensSize}px`;
-                                            lens.style.height = `${lensSize}px`;
-
-                                            container.addEventListener('mousemove', function (e) {
-                                                const imgRect = img.getBoundingClientRect();
-                                                // Use pageX/Y relative to img
-                                                const x = e.clientX - imgRect.left;
-                                                const y = e.clientY - imgRect.top;
-
-                                                const lensX = Math.max(0, Math.min(x - lensSize / 2, img.width - lensSize));
-                                                const lensY = Math.max(0, Math.min(y - lensSize / 2, img.height - lensSize));
-
-                                                lens.style.left = `${lensX}px`;
-                                                lens.style.top = `${lensY}px`;
-
-                                                result.style.backgroundImage = `url(${img.src})`;
-                                                result.style.backgroundPosition = `-${lensX * 2}px -${lensY * 2}px`;
-                                                result.style.backgroundSize = "200% 200%";
-                                                result.style.visibility = 'visible';
-                                                lens.style.visibility = 'visible';
-                                            });
-
-                                            container.addEventListener('mouseleave', function () {
-                                                lens.style.visibility = 'hidden';
-                                                result.style.visibility = 'hidden';
-                                            });
-                                        }
-
-                                        // Attach zoom handler to all carousel items
-                                        document.querySelectorAll('.zoom-container').forEach(zoomHandler);
-                                    });
-                                </script> -->
-
-
-
-                                <script
-                                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-                                <script
-                                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                                <script
-                                    src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.ez-plus.min.js"></script>
-                                <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
-
-                                <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
-                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                                <script
-                                    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
+            // Initialize button states
+            decreaseBtn.disabled = quantityInput.value <= 1;
+            increaseBtn.disabled = quantityInput.value >= maxQuantity;
+        });
+    </script>
 </body>
-
 </html>
