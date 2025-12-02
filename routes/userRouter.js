@@ -100,6 +100,7 @@ router.post('/add-to-wishlist', wishlistController.addToWishlist);
 router.get('/wishlist', wishlistController.loadWishlist);
 router.post('/remove-from-wishlist',wishlistController.removeFromWishlist)
 router.get('/check-wishlist/:productId', wishlistController.checkWishlistStatus)
+router.get('/get-wishlist-item/:productId', wishlistController.getWishlistItemId);
 
 router.get('/wallet', walletController.loadWallet)
 router.get('/addMoney', walletController.loadAddMoney)

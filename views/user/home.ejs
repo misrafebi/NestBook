@@ -445,6 +445,8 @@
                                   </div>
                                 </div>
                                 <% } %>
+
+
                             </div>
                           </div>
                         </div>
@@ -452,55 +454,7 @@
                     </div>
                   </section>
 
-                  <!-- <script>
-                    document.addEventListener('DOMContentLoaded',function(){
-                      const addToWishlistButton=document.querySelectorAll('add-to-wishlist')
-                      addToWishlistButton.forEach(button=>{
-                        button.addEventListener('click',async function(e){
-                          e.preventDefault()
-
-                           const productId = this.getAttribute('data-product-id');
-                          const productItem = this.closest('.product-item');
-
-                          if (!productId) {
-                            alert('Product ID not found');
-                            return;
-                          }
-
-                          try {
-                             const response = await fetch('/user/add-to-wishlist', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              credentials: 'include',
-                              body: JSON.stringify({
-                                productId: productId,
-                                
-                              })
-                            });
-
-
-                            const data = await response.json();
-
-                            if (data.success) {
-                              alert('Product added to wishlist successfully!');
-                             
-                            } else {
-                              if (data.redirect) {
-                                window.location.href = data.redirect;
-                              } else {
-                                alert('Error: ' + data.message);
-                              }
-                            }
-                          } catch (error) {
-                             console.error('Error:', error);
-                            alert('Error adding product to cart');
-                          }
-                        })
-                      })
-                    })
-                  </script> -->
+                 
                   <script>
                     document.addEventListener('DOMContentLoaded', function () {
                       // Initialize wishlist buttons with correct state
@@ -534,6 +488,7 @@
                       }
                     }
 
+     
                     function setupWishlistFunctionality() {
                       const wishlistButtons = document.querySelectorAll('.add-to-wishlist');
 
@@ -549,11 +504,21 @@
                           }
 
                           try {
-                            // Toggle active class immediately for better UX
+                            // First, check if item is in wishlist to get the itemId
+                            const checkResponse = await fetch(`/user/get-wishlist-item/${productId}`, {
+                              credentials: 'include'
+                            });
+                            const checkData = await checkResponse.json();
+
                             const isActive = this.classList.contains('active');
 
                             if (isActive) {
-                              // Remove from wishlist
+                              // Remove from wishlist - we need the wishlist item ID
+                              if (!checkData.itemId) {
+                                alert('Cannot find wishlist item ID');
+                                return;
+                              }
+
                               this.classList.remove('active');
                               const response = await fetch('/user/remove-from-wishlist', {
                                 method: 'POST',
@@ -562,14 +527,15 @@
                                 },
                                 credentials: 'include',
                                 body: JSON.stringify({
-                                  productId: productId  // Note: Using productId instead of itemId
+                                  itemId: checkData.itemId  // Send itemId, not productId
                                 })
                               });
 
                               const data = await response.json();
 
                               if (data.success) {
-                                // Button already updated
+                                // Success - button already updated
+                                console.log('Removed from wishlist');
                               } else {
                                 this.classList.add('active'); // Revert if failed
                                 alert('Error: ' + data.message);
@@ -591,9 +557,10 @@
                               const data = await response.json();
 
                               if (data.success) {
-                                // Button already updated
+                                // Success - button already updated
+                                console.log('Added to wishlist');
                               } else {
-                                this.classList.remove('active'); // Revert if failed
+                                this.classList.remove('active');
                                 alert('Error: ' + data.message);
                               }
                             }
@@ -603,7 +570,10 @@
                           }
                         });
                       });
+
+                      
                     }
+
                   </script>
 
 

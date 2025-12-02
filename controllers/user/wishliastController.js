@@ -143,7 +143,7 @@ const addToWishlist = async (req, res) => {
 
 const removeFromWishlist = async (req, res) => {
     try {
-        const { itemId } = req.body;
+        const { itemId, productId } = req.body;
         const userEmail = req.session.userData?.email;
 
         if (!userEmail) {
@@ -170,10 +170,12 @@ const removeFromWishlist = async (req, res) => {
             });
         }
 
-        // Find and remove the item
-        const itemIndex = wishlist.items.findIndex(item =>
-            item._id.toString() === itemId
-        );
+        let itemIndex = -1;
+        if (itemId) {
+            itemIndex = wishlist.items.findIndex(item => item._id.toString() === itemId);
+        } else if (productId) {
+            itemIndex = wishlist.items.findIndex(item => item.ProductId.toString() === productId);
+        }
 
         if (itemIndex === -1) {
             return res.status(404).json({
@@ -235,9 +237,64 @@ const checkWishlistStatus = async (req, res) => {
         return res.json({ inWishlist: false });
     }
 };
+
+// Add to wishlistController.js
+const getWishlistItemId = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const userEmail = req.session.userData?.email;
+
+        if (!userEmail) {
+            return res.json({ 
+                success: false, 
+                itemId: null 
+            });
+        }
+
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return res.json({ 
+                success: false, 
+                itemId: null 
+            });
+        }
+
+        const wishlist = await Wishlist.findOne({ 
+            userId: user._id,
+            'items.ProductId': productId 
+        });
+
+        if (!wishlist) {
+            return res.json({ 
+                success: false, 
+                itemId: null 
+            });
+        }
+
+        // Find the specific item
+        const wishlistItem = wishlist.items.find(item => 
+            item.ProductId.toString() === productId
+        );
+
+        return res.json({ 
+            success: true, 
+            itemId: wishlistItem?._id || null 
+        });
+
+    } catch (error) {
+        console.error('Error getting wishlist item ID:', error);
+        return res.json({ 
+            success: false, 
+            itemId: null 
+        });
+    }
+};
+
+
 module.exports = {
     loadWishlist,
     addToWishlist,
     removeFromWishlist,
-    checkWishlistStatus
+    checkWishlistStatus,
+    getWishlistItemId
 }
