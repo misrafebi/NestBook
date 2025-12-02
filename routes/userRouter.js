@@ -92,12 +92,18 @@ router.get('/checkout', profileController.loadCheckOut)
 router.get('/orders', profileController.loadOrders)
 
 router.get('/cart', cartController.loadCart) 
+router.post('/add-to-cart',cartController .addToCart)
+router.post('/remove-from-cart', cartController.removeFromCart);
+router.post('/update-cart-quantity', cartController.updateCartQuantity);
 
-router.post('/wishlist', wishlistController.addToWishlist);
+router.post('/add-to-wishlist', wishlistController.addToWishlist);
 router.get('/wishlist', wishlistController.loadWishlist);
+router.post('/remove-from-wishlist',wishlistController.removeFromWishlist)
+router.get('/check-wishlist/:productId', wishlistController.checkWishlistStatus)
 
 router.get('/wallet', walletController.loadWallet)
 router.get('/addMoney', walletController.loadAddMoney)
 router.get('/withdrawMoney', walletController.loadWithdrawMoney)
 
 module.exports = router
+ 

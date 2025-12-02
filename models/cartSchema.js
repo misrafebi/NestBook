@@ -11,7 +11,7 @@ const cartShema = new Schema({
     items: [{
         ProductId: {
             type: Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: 'Product', 
             required: true,
         },
         quantity: {
@@ -19,7 +19,7 @@ const cartShema = new Schema({
             default: 1,
         },
         price: {
-            type: Number,
+            type: Number, 
             required: true,
         },
         totalPrice: {

@@ -6,54 +6,152 @@ const bcrypt = require('bcrypt')
 const Category = require('../../models/categorySchema')
 const Product = require('../../models/productSchema')
 const Contact = require('../../models/contactSchema')
+const Wishlist = require('../../models/wishlistSchema')
+
+
+// const loadHome = async (req, res) => {
+//     try {
+//         const newArrivals = await Product.aggregate([
+//             { $match: { isBlocked: false } },
+//             {
+//                 $lookup: {
+//                     from: 'reviews',
+//                     localField: '_id',
+//                     foreignField: 'Product',
+//                     as: 'reviewData',
+//                     pipeline: [
+//                         {
+//                             $group: {
+//                                 _id: '$Product',
+//                                 avgRating: { $avg: '$rating' },
+//                             }
+//                         }
+//                     ]
+//                 }
+//             },
+//             {
+//                 $addFields: {
+//                     avgRating: {
+
+//                         $ifNull: [{ $arrayElemAt: ['$reviewData.avgRating', 0] }, 0]
+//                     }
+//                 }
+//             },
+//             { $sort: { createdAt: -1 } },
+//             { $limit: 10 }
+//         ]);
+//         const categories = await Category.find({})
+
+
+//         const email = req.session.userData?.email
+//         const user = await User.findOne({ email })
+        
+
+
+//         res.render('user/home', { message: '', user, categories, newArrivals })
+//     } catch (error) {
+//         console.log(error);
+//         res.render('user/pageNotFound',
+//             { message: 'Something went wrong while loading the home page. Please try again shortly.' })
+//     }
+// }
+
+///////////////
+//LOGIN
 
 const loadHome = async (req, res) => {
     try {
+        // Get categories first
+        const categories = await Category.find({});
+        
+        // Get new arrivals with average ratings
         const newArrivals = await Product.aggregate([
-            {$match:{isBlocked:false}},
+            { 
+                $match: { 
+                    isBlocked: false,
+                    status: 'Available' // Only show available products
+                } 
+            },
             {
                 $lookup: {
                     from: 'reviews',
                     localField: '_id',
-                    foreignField: 'Product',
-                    as: 'reviewData',
-                    pipeline: [
-                        {
-                            $group: {
-                                _id: '$Product',
-                                avgRating: { $avg: '$rating' },
-                            }
-                        }
-                    ]
+                    foreignField: 'productId', // Make sure this field name is correct in your Review model
+                    as: 'reviews'
                 }
             },
             {
                 $addFields: {
                     avgRating: {
-
-                        $ifNull: [{ $arrayElemAt: ['$reviewData.avgRating', 0] }, 0]
-                    }
+                        $cond: {
+                            if: { $gt: [{ $size: '$reviews' }, 0] },
+                            then: { $avg: '$reviews.rating' },
+                            else: 0
+                        }
+                    },
+                    reviewCount: { $size: '$reviews' }
                 }
             },
             { $sort: { createdAt: -1 } },
             { $limit: 10 }
         ]);
-        const categories = await Category.find({})
-    
 
-        const email = req.session.userData?.email
-        const user = await User.findOne({ email })
+        // Initialize variables
+        let user = null;
+        let wishlistProductIds = [];
 
-        res.render('user/home', { message: '', user, categories, newArrivals })
+        // Check if user is logged in
+        const email = req.session.userData?.email;
+        
+        if (email) {
+            try {
+                // Find user
+                user = await User.findOne({ email });
+                
+                if (user) {
+                    // Get wishlist with only the product IDs
+                    const wishlist = await Wishlist.findOne(
+                        { userId: user._id },
+                        { 'items.ProductId': 1 } // Only get the ProductId field
+                    );
+                    
+                    // Extract product IDs from wishlist
+                    if (wishlist && wishlist.items && Array.isArray(wishlist.items)) {
+                        wishlistProductIds = wishlist.items
+                            .map(item => item.ProductId?.toString?.())
+                            .filter(id => id && typeof id === 'string');
+                    }
+                }
+            } catch (userError) {
+                console.error('Error fetching user/wishlist data:', userError);
+                // Continue without user/wishlist data
+            }
+        }
+
+        // Check which products are in wishlist
+        const newArrivalsWithWishlistStatus = newArrivals.map(product => {
+            const productId = product._id.toString();
+            return {
+                ...product,
+                isInWishlist: wishlistProductIds.includes(productId)
+            };
+        });
+
+        res.render('user/home', { 
+            message: '', 
+            user, 
+            categories, 
+            newArrivals: newArrivalsWithWishlistStatus,
+            wishlistProductIds // Still pass for any other use
+        });
     } catch (error) {
-        console.log(error);
-        res.render('user/pageNotFound',
-            { message: 'Something went wrong while loading the home page. Please try again shortly.' })
+        console.error('Error in loadHome:', error);
+        res.render('user/pageNotFound', {
+            message: 'Something went wrong while loading the home page. Please try again shortly.'
+        });
     }
-}
+};
 
-///////////////
-//LOGIN
 
 const loadLogin = async (req, res) => {
     try {
@@ -91,7 +189,13 @@ const login = async (req, res) => {
             { message: 'Your account has been blocked. Please contact support.', categories })
     }
 
-    req.session.userData = email
+   // In your login controller
+req.session.userData = {
+    email: user.email,
+    name: user.name,
+    userId: user._id, // Store user ID
+    isAdmin: user.isAdmin
+};
     return res.redirect('/user/home?message=User logged in successfully.')
 }
 
@@ -180,6 +284,7 @@ const signup = async (req, res) => {
         }
 
         req.session.userOtp = otp
+        
         req.session.userData = { name, email, password, mobile }
 
         res.render('user/signup-otp', { message: '', categories })
@@ -423,14 +528,14 @@ const loadContactUs = async (req, res) => {
 
 const postContactUsForm = async (req, res) => {
     try {
-        const categories=await Category.find({})
-      
+        const categories = await Category.find({})
+
 
 
         const user = req.session.userData
 
         if (!user) {
-          return  res.render('user/contactUs', {
+            return res.render('user/contactUs', {
                 message: 'Cannot found user. ',
                 categories
             })
@@ -438,18 +543,18 @@ const postContactUsForm = async (req, res) => {
 
         const { name, email, message } = req.body
         if (!name || !email || !message) {
-          return  res.render('user/contactUs', {
+            return res.render('user/contactUs', {
                 message: 'name, email and message requied. ',
                 categories
             })
         }
         const newContact = new Contact({
             name, email, message,
-            user:  req.session.userData
+            user: req.session.userData
         })
 
         await newContact.save()
-        res.render('user/contactUs', { message: 'Message sent successfully'  ,categories})
+        res.render('user/contactUs', { message: 'Message sent successfully', categories })
     } catch (error) {
         console.error('Error to load contact us', error);
         res.render('user/pageNotFound',
@@ -460,13 +565,15 @@ const postContactUsForm = async (req, res) => {
 ////////////
 //LOGOUT
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
+     const categories = await Category.find({})
     req.session.destroy((err) => {
         if (err) {
             console.error('Error destroying session:', err);
             return res.redirect('/user/home?message=Some issues to logout. Please try again.')
         }
-        res.render('user/login', { message: 'You have logged out successfully' })
+       
+        res.render('user/login', { message: 'You have logged out successfully', categories })
     })
 
 }

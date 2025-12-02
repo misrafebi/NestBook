@@ -54,13 +54,72 @@
       fill: red;
       stroke: red;
     }
+
+    .add-to-cart-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .add-to-cart-btn:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .btn-wishlist {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-wishlist:hover {
+      background: white;
+      transform: scale(1.1);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-wishlist svg {
+      width: 20px;
+      height: 20px;
+      fill: #ccc;
+      transition: fill 0.3s ease;
+    }
+
+    .btn-wishlist.active svg {
+      fill: #e74c3c;
+      /* Red color for active state */
+    }
+
+    .btn-wishlist:hover svg {
+      fill: #e74c3c;
+    }
   </style>
 
 
 <body>
   <%- include('../partials/user/nav-bar')%>
 
-    
+
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <defs>
@@ -126,7 +185,7 @@
       </defs>
     </svg>
 
-    
+
 
 
 
@@ -273,7 +332,7 @@
                       </h3>
                     </a>
                     <%})%>
-                      
+
 
 
                 </div>
@@ -286,7 +345,7 @@
       <%}%>
 
 
-        
+
 
         <section class="py-5">
           <div class="container-fluid">
@@ -294,271 +353,459 @@
             <div class="row">
               <div class="col-md-12">
 
-                
-                              
-                         
-        
-     
-       <%if(newArrivals.length>0){%>
-          <section class="py-5 overflow-hidden">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-12">
 
-                  <div class="section-header d-flex justify-content-between">
 
-                    <h2 class="section-title">Just arrived</h2>
 
-                    <div class="d-flex align-items-center">
-                      <a href="/user/products" class="btn-link text-decoration-none">View All Books →</a>
-                      <div class="swiper-buttons">
-                        <button class="swiper-prev products-carousel-prev btn btn-primary">❮</button>
-                        <button class="swiper-next products-carousel-next btn btn-primary">❯</button>
-                      </div>
-                    </div>
-                  </div>
 
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
 
-                  <div class="products-carousel swiper">
-                    <div class="swiper-wrapper">
-
-                      <% for(let i=0; i < newArrivals.length; ++i) { %>
-                        <div class="product-item swiper-slide">
-                          <!-- Change wishlist button to use data attributes -->
-                          <button class="btn-wishlist" data-product-id="<%= newArrivals[i]._id %>">
-                            <svg width="24" height="24">
-                              <use xlink:href="#heart"></use>
-                            </svg>
-                          </button>
-                          <figure>
-                            <a href="/user/productDetail?id=<%= newArrivals[i]._id %>" title="Product Title">
-                              <img src="/<%=newArrivals[i].image[0]%>" alt="<%=newArrivals[i].productName%>"
-                                class="tab-image">
-                            </a>
-                          </figure>
-                          <h3>
-                            <%=newArrivals[i].productName%>
-                          </h3>
-                          <span class="rating"><svg width="24" height="24" class="text-primary">
-                              <use xlink:href="#star-solid"></use>
-                            </svg>
-                            <%= newArrivals[i].avgRating.toFixed(1) %>
-                          </span>
-                          <div>
-                            <span class="sale-price">₹<%=newArrivals[i].salePrice%></span>&nbsp;
-                            <span class="regular-price"><del>₹<%=newArrivals[i].regularPrice%></del></span>&nbsp;
-                            <span class="offer-price">(<%=newArrivals[i].productOffer%>% Off)</span>
-                          </div>
-                          <div class="d-flex align-items-center justify-content-between">
-                            <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                <button type="button" class="quantity-left-minus btn btn-danger btn-number"
-                                  data-type="minus" data-product-id="<%= newArrivals[i]._id %>">
-                                  <svg width="16" height="16">
-                                    <use xlink:href="#minus"></use>
-                                  </svg>
-                                </button>
-                              </span>
-                              <input type="text"
-                           
-                                name="quantity" 
-                                class="form-control input-number quantity-input"
-                                 data-product-id="<%= newArrivals[i]._id %>"
-                                  data-max-quantity="<%= newArrivals[i].quantity %>"
-                                value="1">
-                                 <!-- <input type="text" 
-                                     name="quantity" 
-                                     class="form-control input-number quantity-input"
-                                     value="1"
-                                     data-product-id="<%= newArrivals[i]._id %>"
-                                     data-max-quantity="<%= newArrivals[i].quantity %>"> -->
-
-                              <span class="input-group-btn">
-                                <button type="button" class="quantity-right-plus btn btn-success btn-number"
-                                  data-type="plus" data-product-id="<%= newArrivals[i]._id %>">
-                                  <svg width="16" height="16">
-                                    <use xlink:href="#plus"></use>
-                                  </svg>
-                                </button>
-                              </span>
+                <%if(newArrivals.length>0){%>
+                  <section class="py-5 overflow-hidden">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="section-header d-flex justify-content-between">
+                            <h2 class="section-title">Just arrived</h2>
+                            <div class="d-flex align-items-center">
+                              <a href="/user/products" class="btn-link text-decoration-none">View All Books →</a>
+                              <div class="swiper-buttons">
+                                <button class="swiper-prev products-carousel-prev btn btn-primary">❮</button>
+                                <button class="swiper-next products-carousel-next btn btn-primary">❯</button>
+                              </div>
                             </div>
-                            <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
                           </div>
                         </div>
-                      <% } %>
-
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="products-carousel swiper">
+                            <div class="swiper-wrapper">
+                              <% for(let i=0; i < newArrivals.length; ++i) { %>
+                                <div class="product-item swiper-slide">
+                                  <!-- <button class="btn-wishlist add-to-wishlist" data-product-id="<%= newArrivals[i]._id %>">
+                                    <svg width="24" height="24">
+                                      <use xlink:href="#heart"></use>
+                                    </svg>
+                                  </button> -->
+                                  <button
+                                    class="btn-wishlist add-to-wishlist <%= wishlistProductIds.includes(newArrivals[i]._id) ? 'active' : '' %>"
+                                    data-product-id="<%= newArrivals[i]._id %>">
+                                    <svg width="24" height="24">
+                                      <use xlink:href="#heart"></use>
+                                    </svg>
+                                  </button>
+                                  <figure>
+                                    <a href="/user/productDetail?id=<%= newArrivals[i]._id %>" title="Product Title">
+                                      <img src="/<%=newArrivals[i].image[0]%>" alt="<%=newArrivals[i].productName%>"
+                                        class="tab-image">
+                                    </a>
+                                  </figure>
+                                  <h3>
+                                    <%=newArrivals[i].productName%>
+                                  </h3>
+                                  <span class="rating">
+                                    <svg width="24" height="24" class="text-primary">
+                                      <use xlink:href="#star-solid"></use>
+                                    </svg>
+                                    <%= newArrivals[i].avgRating.toFixed(1) %>
+                                  </span>
+                                  <div>
+                                    <span class="sale-price">₹<%=newArrivals[i].salePrice%></span>&nbsp;
+                                    <span class="regular-price"><del>₹<%=newArrivals[i].regularPrice%>
+                                      </del></span>&nbsp;
+                                    <span class="offer-price">(<%=newArrivals[i].productOffer%>% Off)</span>
+                                  </div>
+                                  <div class="d-flex align-items-center justify-content-between">
+                                    <div class="input-group product-qty">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="quantity-left-minus btn btn-danger btn-number"
+                                          data-type="minus" data-product-id="<%= newArrivals[i]._id %>">
+                                          <svg width="16" height="16">
+                                            <use xlink:href="#minus"></use>
+                                          </svg>
+                                        </button>
+                                      </span>
+                                      <input type="text" name="quantity"
+                                        class="form-control input-number quantity-input"
+                                        data-product-id="<%= newArrivals[i]._id %>"
+                                        data-max-quantity="<%= newArrivals[i].quantity %>" value="1">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="quantity-right-plus btn btn-success btn-number"
+                                          data-type="plus" data-product-id="<%= newArrivals[i]._id %>">
+                                          <svg width="16" height="16">
+                                            <use xlink:href="#plus"></use>
+                                          </svg>
+                                        </button>
+                                      </span>
+                                    </div>
+                                    <!-- CHANGED: Add to Cart button with proper attributes -->
+                                    <button class="btn btn-primary add-to-cart-btn"
+                                      data-product-id="<%= newArrivals[i]._id %>">
+                                      Add to Cart <iconify-icon icon="uil:shopping-cart"></iconify-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                                <% } %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </section>
 
-                </div>
-              </div>
-            </div>
-          </section>
+                  <!-- <script>
+                    document.addEventListener('DOMContentLoaded',function(){
+                      const addToWishlistButton=document.querySelectorAll('add-to-wishlist')
+                      addToWishlistButton.forEach(button=>{
+                        button.addEventListener('click',async function(e){
+                          e.preventDefault()
 
-          <script>
-            // Add this script in your main layout or product listing page
-            document.querySelectorAll('.btn-wishlist').forEach(button => {
-              button.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const productId = e.currentTarget.dataset.productId;
+                           const productId = this.getAttribute('data-product-id');
+                          const productItem = this.closest('.product-item');
 
-                try {
-                  const response = await fetch('/user/wishlist', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ productId })
-                  });
+                          if (!productId) {
+                            alert('Product ID not found');
+                            return;
+                          }
 
-                  const data = await response.json();
-
-                  if (data.success) {
-                    e.currentTarget.classList.toggle('active', data.inWishlist);
-                  } else {
-                    window.location.href = '/login'; // Redirect if not logged in
-                  }
-                } catch (error) {
-                  console.error('Error:', error);
-                }
-              });
-            });
-
-            // Quantity control functionality for carousel products
-            document.addEventListener('DOMContentLoaded', function() {
-              // Setup event listeners for quantity buttons in carousel
-              setupCarouselQuantityControls();
-            });
-
-            function setupCarouselQuantityControls() {
-              // Increase button event listeners
-              document.querySelectorAll('.quantity-right-plus').forEach(button => {
-                button.addEventListener('click', function() {
-                  const productId = this.getAttribute('data-product-id');
-                  const input = this.closest('.product-qty').querySelector('.quantity-input');
-                  const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
-                  
-                  let currentValue = parseInt(input.value) || 0;
-                  
-                  if (currentValue < maxQuantity) {
-                    input.value = currentValue + 1;
-                  } else {
-                    // Optional: Show a subtle notification or tooltip
-                    console.log("Maximum quantity reached");
-                  }
-                  
-                  // Update button states
-                  updateCarouselQuantityButtons(productId);
-                });
-              });
-
-              // Decrease button event listeners
-              document.querySelectorAll('.quantity-left-minus').forEach(button => {
-                button.addEventListener('click', function() {
-                  const productId = this.getAttribute('data-product-id');
-                  const input = this.closest('.product-qty').querySelector('.quantity-input');
-                  
-                  let currentValue = parseInt(input.value) || 0;
-                  
-                  if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                  }
-                  
-                  // Update button states
-                  updateCarouselQuantityButtons(productId);
-                });
-              });
-
-              // Manual input validation
-              document.querySelectorAll('.quantity-input').forEach(input => {
-                input.addEventListener('change', function() {
-                  const productId = this.getAttribute('data-product-id');
-                  const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
-                  
-                  let value = parseInt(this.value) || 0;
-                  
-                  if (value < 1) {
-                    this.value = 1;
-                  } else if (value > maxQuantity) {
-                    this.value = maxQuantity;
-                  }
-                  
-                  // Update button states
-                  updateCarouselQuantityButtons(productId);
-                });
-              });
-            }
-
-            function updateCarouselQuantityButtons(productId) {
-              const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
-              const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
-              const currentValue = parseInt(input.value) || 0;
-              const increaseBtn = document.querySelector(`.quantity-right-plus[data-product-id="${productId}"]`);
-              const decreaseBtn = document.querySelector(`.quantity-left-minus[data-product-id="${productId}"]`);
-              
-              // Update button states visually without changing design
-              if (increaseBtn) {
-                if (currentValue >= maxQuantity) {
-                  increaseBtn.style.opacity = "0.5";
-                  increaseBtn.style.cursor = "not-allowed";
-                } else {
-                  increaseBtn.style.opacity = "1";
-                  increaseBtn.style.cursor = "pointer";
-                }
-              }
-              
-              if (decreaseBtn) {
-                if (currentValue <= 1) {
-                  decreaseBtn.style.opacity = "0.5";
-                  decreaseBtn.style.cursor = "not-allowed";
-                } else {
-                  decreaseBtn.style.opacity = "1";
-                  decreaseBtn.style.cursor = "pointer";
-                }
-              }
-            }
-
-            // Initialize button states on page load
-            document.addEventListener('DOMContentLoaded', function() {
-              document.querySelectorAll('.quantity-input').forEach(input => {
-                const productId = input.getAttribute('data-product-id');
-                updateCarouselQuantityButtons(productId);
-              });
-            });
-          </script>
-          <%}%>
-            <%- include('../partials/user/footer')%>
-
-              
-
-              <%if(message){%>
-                <script>
-                  alert('<%=message%>')
-                </script>
-                <%}%>
+                          try {
+                             const response = await fetch('/user/add-to-wishlist', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              credentials: 'include',
+                              body: JSON.stringify({
+                                productId: productId,
+                                
+                              })
+                            });
 
 
+                            const data = await response.json();
+
+                            if (data.success) {
+                              alert('Product added to wishlist successfully!');
+                             
+                            } else {
+                              if (data.redirect) {
+                                window.location.href = data.redirect;
+                              } else {
+                                alert('Error: ' + data.message);
+                              }
+                            }
+                          } catch (error) {
+                             console.error('Error:', error);
+                            alert('Error adding product to cart');
+                          }
+                        })
+                      })
+                    })
+                  </script> -->
                   <script>
-                    const urlparams = new URLSearchParams(window.location.search)
-                    const message = urlparams.get('message')
-                    if (message) {
-                      alert(message)
+                    document.addEventListener('DOMContentLoaded', function () {
+                      // Initialize wishlist buttons with correct state
+                      initializeWishlistButtons();
+
+                      // Setup wishlist click handlers
+                      setupWishlistFunctionality();
+                    });
+
+                    async function initializeWishlistButtons() {
+                      // Check wishlist status for each product
+                      const wishlistButtons = document.querySelectorAll('.add-to-wishlist');
+
+                      for (const button of wishlistButtons) {
+                        const productId = button.getAttribute('data-product-id');
+
+                        try {
+                          const response = await fetch(`/user/check-wishlist/${productId}`, {
+                            credentials: 'include'
+                          });
+                          const data = await response.json();
+
+                          if (data.inWishlist) {
+                            button.classList.add('active');
+                          } else {
+                            button.classList.remove('active');
+                          }
+                        } catch (error) {
+                          console.error('Error checking wishlist status:', error);
+                        }
+                      }
+                    }
+
+                    function setupWishlistFunctionality() {
+                      const wishlistButtons = document.querySelectorAll('.add-to-wishlist');
+
+                      wishlistButtons.forEach(button => {
+                        button.addEventListener('click', async function (e) {
+                          e.preventDefault();
+
+                          const productId = this.getAttribute('data-product-id');
+
+                          if (!productId) {
+                            alert('Product ID not found');
+                            return;
+                          }
+
+                          try {
+                            // Toggle active class immediately for better UX
+                            const isActive = this.classList.contains('active');
+
+                            if (isActive) {
+                              // Remove from wishlist
+                              this.classList.remove('active');
+                              const response = await fetch('/user/remove-from-wishlist', {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({
+                                  productId: productId  // Note: Using productId instead of itemId
+                                })
+                              });
+
+                              const data = await response.json();
+
+                              if (data.success) {
+                                // Button already updated
+                              } else {
+                                this.classList.add('active'); // Revert if failed
+                                alert('Error: ' + data.message);
+                              }
+                            } else {
+                              // Add to wishlist
+                              this.classList.add('active');
+                              const response = await fetch('/user/add-to-wishlist', {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({
+                                  productId: productId
+                                })
+                              });
+
+                              const data = await response.json();
+
+                              if (data.success) {
+                                // Button already updated
+                              } else {
+                                this.classList.remove('active'); // Revert if failed
+                                alert('Error: ' + data.message);
+                              }
+                            }
+                          } catch (error) {
+                            console.error('Error:', error);
+                            alert('Error updating wishlist');
+                          }
+                        });
+                      });
                     }
                   </script>
 
-                  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-                  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                  <script src="js/jquery-1.11.0.min.js"></script>
-                  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-                  <script
-                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-                  <script src="js/plugins.js"></script>
-                  <script src="js/script.js"></script>
+
+                  <script>
+                    // Add to Cart functionality
+                    document.addEventListener('DOMContentLoaded', function () {
+                      const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+                      addToCartButtons.forEach(button => {
+                        button.addEventListener('click', async function (e) {
+                          e.preventDefault();
+
+                          const productId = this.getAttribute('data-product-id');
+                          const productItem = this.closest('.product-item');
+                          const quantityInput = productItem.querySelector('.quantity-input');
+                          const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+                          if (!productId) {
+                            alert('Product ID not found');
+                            return;
+                          }
+
+                          try {
+                            // Show loading state
+                            const originalHTML = this.innerHTML;
+                            this.innerHTML = 'Adding...';
+                            this.disabled = true;
+
+                            const response = await fetch('/user/add-to-cart', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              credentials: 'include',
+                              body: JSON.stringify({
+                                productId: productId,
+                                quantity: quantity
+                              })
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                              alert('Product added to cart successfully!');
+                              updateCartCount();
+                            } else {
+                              if (data.redirect) {
+                                window.location.href = data.redirect;
+                              } else {
+                                alert('Error: ' + data.message);
+                              }
+                            }
+
+                          } catch (error) {
+                            console.error('Error:', error);
+                            alert('Error adding product to cart');
+                          } finally {
+                            // Reset button state
+                            this.innerHTML = 'Add to Cart <iconify-icon icon="uil:shopping-cart"></iconify-icon>';
+                            this.disabled = false;
+                          }
+                        });
+                      });
+
+                      // Update cart count in navbar
+                      function updateCartCount() {
+                        const cartCountElement = document.getElementById('cart-count');
+                        if (cartCountElement) {
+                          const currentCount = parseInt(cartCountElement.textContent) || 0;
+                          cartCountElement.textContent = currentCount + 1;
+                        }
+                      }
+
+                      // Your existing quantity control functionality
+                      setupCarouselQuantityControls();
+                    });
+
+                    // Your existing quantity control functions (keep them as they are)
+                    function setupCarouselQuantityControls() {
+                      // Increase button event listeners
+                      document.querySelectorAll('.quantity-right-plus').forEach(button => {
+                        button.addEventListener('click', function () {
+                          const productId = this.getAttribute('data-product-id');
+                          const input = this.closest('.product-qty').querySelector('.quantity-input');
+                          const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+
+                          let currentValue = parseInt(input.value) || 0;
+
+                          if (currentValue < maxQuantity) {
+                            input.value = currentValue + 1;
+                          } else {
+                            console.log("Maximum quantity reached");
+                          }
+
+                          updateCarouselQuantityButtons(productId);
+                        });
+                      });
+
+                      // Decrease button event listeners
+                      document.querySelectorAll('.quantity-left-minus').forEach(button => {
+                        button.addEventListener('click', function () {
+                          const productId = this.getAttribute('data-product-id');
+                          const input = this.closest('.product-qty').querySelector('.quantity-input');
+
+                          let currentValue = parseInt(input.value) || 0;
+
+                          if (currentValue > 1) {
+                            input.value = currentValue - 1;
+                          }
+
+                          updateCarouselQuantityButtons(productId);
+                        });
+                      });
+
+                      // Manual input validation
+                      document.querySelectorAll('.quantity-input').forEach(input => {
+                        input.addEventListener('change', function () {
+                          const productId = this.getAttribute('data-product-id');
+                          const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
+
+                          let value = parseInt(this.value) || 0;
+
+                          if (value < 1) {
+                            this.value = 1;
+                          } else if (value > maxQuantity) {
+                            this.value = maxQuantity;
+                          }
+
+                          updateCarouselQuantityButtons(productId);
+                        });
+                      });
+                    }
+
+                    function updateCarouselQuantityButtons(productId) {
+                      const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+                      if (!input) return;
+
+                      const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+                      const currentValue = parseInt(input.value) || 0;
+                      const increaseBtn = document.querySelector(`.quantity-right-plus[data-product-id="${productId}"]`);
+                      const decreaseBtn = document.querySelector(`.quantity-left-minus[data-product-id="${productId}"]`);
+
+                      if (increaseBtn) {
+                        if (currentValue >= maxQuantity) {
+                          increaseBtn.style.opacity = "0.5";
+                          increaseBtn.style.cursor = "not-allowed";
+                        } else {
+                          increaseBtn.style.opacity = "1";
+                          increaseBtn.style.cursor = "pointer";
+                        }
+                      }
+
+                      if (decreaseBtn) {
+                        if (currentValue <= 1) {
+                          decreaseBtn.style.opacity = "0.5";
+                          decreaseBtn.style.cursor = "not-allowed";
+                        } else {
+                          decreaseBtn.style.opacity = "1";
+                          decreaseBtn.style.cursor = "pointer";
+                        }
+                      }
+                    }
+
+
+                    // Initialize button states on page load
+                    document.addEventListener('DOMContentLoaded', function () {
+                      document.querySelectorAll('.quantity-input').forEach(input => {
+                        const productId = input.getAttribute('data-product-id');
+                        updateCarouselQuantityButtons(productId);
+                      });
+                    });
+                  </script>
+                  <%}%>
+                    <%- include('../partials/user/footer')%>
+
+
+
+                      <%if(message){%>
+                        <script>
+                          alert('<%=message%>')
+                        </script>
+                        <%}%>
+
+
+                          <script>
+                            const urlparams = new URLSearchParams(window.location.search)
+                            const message = urlparams.get('message')
+                            if (message) {
+                              alert(message)
+                            }
+                          </script>
+
+                          <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                          <script
+                            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                          <script src="js/jquery-1.11.0.min.js"></script>
+                          <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+                          <script
+                            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+                          <script src="js/plugins.js"></script>
+                          <script src="js/script.js"></script>
 </body>
 
 </html>

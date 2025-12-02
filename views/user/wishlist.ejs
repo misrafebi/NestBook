@@ -4,165 +4,558 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wishlist</title>
+  <title>My Wishlist - BookNest</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/user/home/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
     }
 
-    .content {
-      margin-left: 220px;
+    .wishlist-container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 20px;
     }
 
-    .book-card {
+    .wishlist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #eaeaea;
+    }
+
+    .wishlist-header h1 {
+      color: #2c3e50;
+      font-weight: 700;
+    }
+
+    .wishlist-count {
+      background-color: #3498db;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .wishlist-item {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 20px;
+    }
+
+    .wishlist-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .wishlist-image {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .wishlist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .wishlist-item:hover .wishlist-image img {
+      transform: scale(1.05);
+    }
+
+    .wishlist-details {
+      padding: 20px;
+    }
+
+    .wishlist-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      line-height: 1.4;
+      height: 45px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .wishlist-price {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .current-price {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #e74c3c;
+    }
+
+    .original-price {
+      color: #95a5a6;
+      text-decoration: line-through;
+      font-size: 0.9em;
+    }
+
+    .discount-badge {
+      background-color: #2ecc71;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+
+    .wishlist-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+
+    .rating {
+      color: #f39c12;
+    }
+
+    .stock {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    .out-of-stock {
+      color: #e74c3c;
+    }
+
+    .wishlist-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-remove {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9em;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-remove:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-add-to-cart {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9em;
+      flex: 2;
+      justify-content: center;
+    }
+
+    .btn-add-to-cart:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-add-to-cart:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .empty-wishlist {
       text-align: center;
-      border-radius: 8px;
+      padding: 60px 20px;
     }
 
-    .book-card img {
-      max-width: 100%;
-      height: auto;
+    .empty-wishlist i {
+      font-size: 4em;
+      color: #bdc3c7;
+      margin-bottom: 20px;
     }
 
-    .close-btn {
+    .empty-wishlist h3 {
+      color: #7f8c8d;
+      margin-bottom: 10px;
+    }
+
+    .empty-wishlist p {
+      color: #95a5a6;
+      margin-bottom: 25px;
+    }
+
+    .btn-shop {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .btn-shop:hover {
+      background-color: #1a252f;
+      color: white;
+      text-decoration: none;
+    }
+
+    .wishlist-icon {
       position: absolute;
       top: 10px;
       right: 10px;
-      background-color: #fff;
-      border: none;
-      font-size: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      z-index: 10;
+    }
+
+    .wishlist-icon i {
+      color: #e74c3c;
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 768px) {
+      .wishlist-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .wishlist-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
     }
   </style>
 </head>
 
 <body>
-  <%- include('../partials/user/nav-bar')%>
+  <%- include('../partials/user/nav-bar') %>
 
-    <%- include('../partials/user/sidebar')%>
-      <br>
-      <div class="content">
-        <h4>Wishlist</h4>
-        <div class="row">
-
-          <!-- <div class="col-md-3">
-            <div class="book-card">
-                <button class="close-btn">&times;</button>
-                <img src="https://via.placeholder.com/150" alt="Rich Dad Poor Dad">
-                <br><br>
-                <h6>Rich Dad Poor Dad</h6>
-                <p>₹540</p>
-                <button class="btn btn-outline-warning btn-block">Move to Cart</button>
-            </div>
-        </div> -->
-
-
-          <!-- <main class="col-md-9 col-lg-10">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-           
-              
-                <div class="product-item" date-category="">
-     
-                        <button class="close-btn">&times;</button>
-                  
-                    <a href="" title="Product Title">
-                      <img src="" class="tab-image" alt="">
-                    </a>
-                  </figure>
-                  <h3>
-                   
-                  </h3>
-                  <span class="rating">
-  
-                    <i class="fa-solid fa-star" style="color: rgb(74, 74, 189);"></i>
-  
-                    4.5</span><br>
-                  <span class="sale-price">₹</span>&nbsp;
-                  <span class="regular-price"><del>₹</del></span>&nbsp;
-                  <span class="offer-price">( Off)</span>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div class="input-group product-qty" id="product-qty">
-                      <span class="input-group-btn" id="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-  
-                          <i class="fa-solid fa-minus"></i>
-  
-                        </button>
-                      </span>
-                      <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
-                      <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                         
-                          <i class="fa-solid fa-plus"></i>
-                        
-                        </button>
-                      </span>
-                    </div>
-                    <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
-                  </div>
-                </div>
-                
-  
-  
-            </div>
-          </main> -->
-
-
-          <main class="col-md-9 col-lg-10">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-              <% products.forEach(product=> { %>
-                <div class="product-item">
-                  <button class="btn-wishlist active" data-product-id="<%= product._id %>">
-                    <svg width="24" height="24">
-                      <use xlink:href="#heart"></use>
-                    </svg>
-                  </button>
-                  <figure>
-                    <img src="/<%= product.image[0] %>" alt="<%= product.productName %>">
-                  </figure>
-                  <h3>
-                    <%= product.productName %>
-                  </h3>
-                  <!-- Add other product details -->
-                  <button class="remove-from-wishlist" data-product-id="<%= product._id %>">
-                    Remove
-                  </button>
-                </div>
-                <% }); %>
-            </div>
-          </main>
-
-
+    <div class="wishlist-container mt-4">
+      <div class="wishlist-header">
+        <h1><i class="fas fa-heart text-danger mr-2"></i> My Wishlist</h1>
+        <div class="wishlist-count">
+          <i class="fas fa-box mr-1"></i>
+          <% if (wishlist && wishlist.items.length> 0) { %>
+            <%= wishlist.items.length %>
+              <%= wishlist.items.length===1 ? 'item' : 'items' %>
+                <% } else { %>
+                  0 items
+                  <% } %>
         </div>
       </div>
 
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-      <%- include('../partials/user/footer')%>
+      <% if (products && products.length> 0) { %>
+        <div class="wishlist-grid">
+          <% products.forEach(product=> { %>
+            <div class="wishlist-item" id="wishlist-item-<%= product.wishlistItemId %>">
+              <div class="wishlist-icon">
+                <i class="fas fa-heart"></i>
+              </div>
 
-        <%if(message){%>
-          <script>
-            alert('<%=message%>')
-          </script>
-          <%}%>
+              <div class="wishlist-image">
+                <img src="/<%= product.image[0] %>" alt="<%= product.productName %>">
+              </div>
+
+              <div class="wishlist-details">
+                <h3 class="wishlist-title">
+                  <%= product.productName %>
+                </h3>
+
+                <% if(product.authorName) { %>
+                  <p class="text-muted mb-2">
+                    <small>By <%= product.authorName %></small>
+                  </p>
+                  <% } %>
+
+                    <div class="wishlist-price">
+                      <span class="current-price">₹<%= product.salePrice %></span>
+                      <% if(product.regularPrice> product.salePrice) { %>
+                        <span class="original-price">₹<%= product.regularPrice %></span>
+                        <span class="discount-badge">
+                          <%= Math.round((product.regularPrice - product.salePrice) / product.regularPrice * 100) %>%
+                            OFF
+                        </span>
+                        <% } %>
+                    </div>
+
+                    <div class="wishlist-meta">
+                      <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <%= product.avgRating || '0.0' %>
+                          <% if(product.totalReviews && product.totalReviews> 0) { %>
+                            <span class="text-muted">(<%= product.totalReviews %>)</span>
+                            <% } %>
+                      </div>
+                      <div class="<%= product.quantity > 0 ? 'stock' : 'out-of-stock' %>">
+                        <%= product.quantity> 0 ? `${product.quantity} in stock` : 'Out of stock' %>
+                      </div>
+                    </div>
+
+                    <div class="wishlist-actions">
+                      <button class="btn-remove remove-from-wishlist" data-item-id="<%= product.wishlistItemId %>">
+                        <i class="fas fa-trash"></i> Remove
+                      </button>
+
+                      <% if(product.quantity> 0) { %>
+                        <button class="btn-add-to-cart add-to-cart-wishlist add-to-cart-btn" data-product-id="<%= product._id %>">
+                          <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <% } else { %>
+                          <button class="btn-add-to-cart" disabled>
+                            <i class="fas fa-ban"></i> Out of Stock
+                          </button>
+                          <% } %>
+                    </div>
+              </div>
+            </div>
+            <% }); %>
+        </div>
+        <% } else { %>
+          <div class="empty-wishlist">
+            <i class="fas fa-heart-broken"></i>
+            <h3>Your wishlist is empty</h3>
+            <p>Start adding your favorite books to your wishlist</p>
+            <a href="/user/products" class="btn-shop">
+              <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+            </a>
+          </div>
+          <% } %>
+    </div>
 
 
-            <script>
-              const urlparams = new URLSearchParams(window.location.search)
-              const message = urlparams.get('message')
-              if (message) {
-                alert(message)
+<!-- Add to wishlist -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        initializeWishlistPage();
+      });
+
+      function initializeWishlistPage() {
+        setupRemoveButtons();
+        setupAddToCartButtons();
+      }
+
+      function setupRemoveButtons() {
+        document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+          button.addEventListener('click', function () {
+            const itemId = this.getAttribute('data-item-id');
+            removeFromWishlist(itemId, this.closest('.wishlist-item'));
+          });
+        });
+      }
+
+      async function removeFromWishlist(itemId, wishlistItem) {
+        if (!confirm('Are you sure you want to remove this item from your wishlist?')) {
+          return;
+        }
+
+        try {
+          // Show loading
+          const originalText = this.innerHTML;
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Removing...';
+          this.disabled = true;
+
+          const response = await fetch('/user/remove-from-wishlist', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              itemId: itemId
+            })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Remove item from DOM with animation
+            wishlistItem.style.opacity = '0';
+            wishlistItem.style.transform = 'scale(0.8)';
+
+            setTimeout(() => {
+              wishlistItem.remove();
+
+              // Update wishlist count
+              updateWishlistCount();
+
+              // Show success message
+              showNotification('Item removed from wishlist!', 'success');
+
+              // If no items left, show empty message
+              if (document.querySelectorAll('.wishlist-item').length === 0) {
+                showEmptyWishlistMessage();
               }
-            </script>
+            }, 300);
+          } else {
+            alert('Error: ' + data.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error removing item from wishlist');
+        }
+      }
 
+      function setupAddToCartButtons() {
+        document.querySelectorAll('.add-to-cart-wishlist').forEach(button => {
+          button.addEventListener('click', async function () {
+            const productId = this.getAttribute('data-product-id');
+            await addToCartFromWishlist(productId, this);
+          });
+        });
+      }
+
+      async function addToCartFromWishlist(productId, button) {
+        try {
+          // Show loading
+          const originalText = button.innerHTML;
+          button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+          button.disabled = true;
+
+          const response = await fetch('/user/add-to-cart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              productId: productId,
+              quantity: 1
+            })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showNotification('Added to cart successfully!', 'success');
+            updateCartCount(1);
+          } else {
+            if (data.redirect) {
+              window.location.href = data.redirect;
+            } else {
+              showNotification('Error: ' + data.message, 'error');
+            }
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          showNotification('Error adding to cart', 'error');
+        } finally {
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }
+      }
+
+      function updateWishlistCount() {
+        const wishlistCountElement = document.querySelector('.wishlist-count');
+        if (wishlistCountElement) {
+          const currentCount = parseInt(wishlistCountElement.textContent) || 0;
+          const newCount = Math.max(0, currentCount - 1);
+
+          const itemText = newCount === 1 ? 'item' : 'items';
+          wishlistCountElement.innerHTML = `<i class="fas fa-box mr-1"></i> ${newCount} ${itemText}`;
+        }
+      }
+
+      function updateCartCount(quantity) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+          const currentCount = parseInt(cartCountElement.textContent) || 0;
+          cartCountElement.textContent = currentCount + quantity;
+
+          // Add animation
+          cartCountElement.classList.add('cart-updated');
+          setTimeout(() => {
+            cartCountElement.classList.remove('cart-updated');
+          }, 500);
+        }
+      }
+
+      function showEmptyWishlistMessage() {
+        const wishlistContainer = document.querySelector('.wishlist-container');
+        wishlistContainer.innerHTML = `
+                <div class="wishlist-header">
+                    <h1><i class="fas fa-heart text-danger mr-2"></i> My Wishlist</h1>
+                    <div class="wishlist-count">
+                        <i class="fas fa-box mr-1"></i> 0 items
+                    </div>
+                </div>
+                <div class="empty-wishlist">
+                    <i class="fas fa-heart-broken"></i>
+                    <h3>Your wishlist is empty</h3>
+                    <p>Start adding your favorite books to your wishlist</p>
+                    <a href="/user/products" class="btn-shop">
+                        <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+                    </a>
+                </div>
+            `;
+      }
+
+      function showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+                ${message}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+            `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+
+        notification.querySelector('.close').addEventListener('click', () => {
+          notification.remove();
+        });
+      }
+    </script>
+
+    <%- include('../partials/user/footer') %>
 </body>
 
 </html>

@@ -260,7 +260,7 @@ const loadEditProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
     try {
-
+ 
         const { id } = req.body
         const { productName, authorName, category, status, publishDate, publisher, regularPrice, productOffer, numberPage, quantity, description, startOffer, expireOffer } = req.body;
         const product = await Product.findById(id);

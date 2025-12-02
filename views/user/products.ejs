@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +10,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         /* ... your existing CSS styles ... */
-        
+
         /* Add this new style for showing active filter */
-        
-         .product-card {
+
+        .product-card {
             margin-bottom: 30px;
             transition: transform 0.3s;
         }
+
         .product-card:hover {
             transform: translateY(-5px);
         }
+
         .product-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
+
         .wishlist-icon {
             position: absolute;
             top: 10px;
@@ -31,10 +35,12 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
+
         .price {
             font-weight: bold;
             color: #2c3e50;
         }
+
         .sidebar {
             background-color: #f8f9fa;
             padding: 20px;
@@ -42,6 +48,7 @@
             position: sticky;
             top: 80px;
         }
+
         #whishlist-container {
             text-decoration: none;
             display: flex;
@@ -50,26 +57,33 @@
             width: 50px;
             margin: 0 auto;
         }
+
         #whishlist-icon {
             margin-right: 15px;
         }
+
         .sale-price {
             font-weight: bold;
         }
+
         .regular-price {
             color: rgb(118, 114, 106);
         }
+
         .offer-price {
             color: rgb(188, 147, 65);
         }
+
         .no-products {
             text-align: center;
             padding: 50px;
             color: #6c757d;
         }
+
         .filter-group {
             margin-bottom: 20px;
         }
+
         .filter-group h6 {
             margin-bottom: 10px;
             font-weight: bold;
@@ -85,7 +99,7 @@
             margin-right: 5px;
             display: inline-block;
         }
-        
+
         /* New styles for quantity controls */
         .quantity-message {
             font-size: 0.75rem;
@@ -93,163 +107,201 @@
             margin-top: 5px;
             height: 15px;
         }
+
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
+
         .quantity-controls {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+         .add-to-cart-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #0056b3;
+}
+
+.add-to-cart-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
     </style>
 </head>
+
 <body>
     <%- include('../partials/user/nav-bar')%>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <!-- Filters Sidebar -->
-            <aside class="col-md-3 col-lg-2 sidebar">
-               
-                
-               
-                
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <!-- Filters Sidebar -->
+                <aside class="col-md-3 col-lg-2 sidebar">
 
-                <div class="filter-group">
-                    <h6>Sort By</h6>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input sort-radio" name="sort" value="newest" id="sort-newest">
-                        <label class="form-check-label" for="sort-newest">New Releases</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input sort-radio" name="sort" value="price-low" id="sort-price-low">
-                        <label class="form-check-label" for="sort-price-low">Price: Low to High</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input sort-radio" name="sort" value="price-high" id="sort-price-high">
-                        <label class="form-check-label" for="sort-price-high">Price: High to Low</label>
-                    </div>
-                </div>
 
-                <div class="filter-group">
-                    <h6>Category</h6>
-                    <% for(let i=0; i<categories.length; i++) { %>
+
+
+
+                    <div class="filter-group">
+                        <h6>Sort By</h6>
                         <div class="form-check">
-                            <input class="form-check-input category-checkbox" type="checkbox" 
-                                value="<%= categories[i]._id %>" 
-                                id="category-<%= categories[i]._id %>"
-                                <%= (typeof selectedCategory !== 'undefined' && selectedCategory === categories[i]._id) ? 'checked' : '' %>>
-                            <label for="category-<%= categories[i]._id %>" class="form-check-label">
-                                <%= categories[i].name %>
-                            </label>
+                            <input type="radio" class="form-check-input sort-radio" name="sort" value="newest"
+                                id="sort-newest">
+                            <label class="form-check-label" for="sort-newest">New Releases</label>
                         </div>
-                    <% } %>
-                </div>
-<div class="filter-group">
-                    <h6>Price</h6>
-                    <div class="form-check">
-                        <input class="form-check-input price-checkbox" type="checkbox" value="0-100" id="price-0-100">
-                        <label class="form-check-label" for="price-0-100">Under ₹100</label>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input sort-radio" name="sort" value="price-low"
+                                id="sort-price-low">
+                            <label class="form-check-label" for="sort-price-low">Price: Low to High</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input sort-radio" name="sort" value="price-high"
+                                id="sort-price-high">
+                            <label class="form-check-label" for="sort-price-high">Price: High to Low</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input price-checkbox" type="checkbox" value="100-300" id="price-100-300">
-                        <label class="form-check-label" for="price-100-300">₹100 - ₹300</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input price-checkbox" type="checkbox" value="300-500" id="price-300-500">
-                        <label class="form-check-label" for="price-300-500">₹300 - ₹500</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input price-checkbox" type="checkbox" value="500+" id="price-500+">
-                        <label class="form-check-label" for="price-500+">Over ₹500</label>
-                    </div>
-                </div>
 
-                <div class="filter-group">
-                    <h6>Discount</h6>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="0-10" id="discount-0-10">
-                        <label class="form-check-label" for="discount-0-10">10% Off or less</label>
+                    <div class="filter-group">
+                        <h6>Category</h6>
+                        <% for(let i=0; i<categories.length; i++) { %>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox"
+                                    value="<%= categories[i]._id %>" id="category-<%= categories[i]._id %>" <%=(typeof
+                                    selectedCategory !=='undefined' && selectedCategory===categories[i]._id) ? 'checked'
+                                    : '' %>>
+                                <label for="category-<%= categories[i]._id %>" class="form-check-label">
+                                    <%= categories[i].name %>
+                                </label>
+                            </div>
+                            <% } %>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="10-20" id="discount-10-20">
-                        <label class="form-check-label" for="discount-10-20">10% - 20% Off</label>
+                    <div class="filter-group">
+                        <h6>Price</h6>
+                        <div class="form-check">
+                            <input class="form-check-input price-checkbox" type="checkbox" value="0-100"
+                                id="price-0-100">
+                            <label class="form-check-label" for="price-0-100">Under ₹100</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input price-checkbox" type="checkbox" value="100-300"
+                                id="price-100-300">
+                            <label class="form-check-label" for="price-100-300">₹100 - ₹300</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input price-checkbox" type="checkbox" value="300-500"
+                                id="price-300-500">
+                            <label class="form-check-label" for="price-300-500">₹300 - ₹500</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input price-checkbox" type="checkbox" value="500+" id="price-500+">
+                            <label class="form-check-label" for="price-500+">Over ₹500</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="20-30" id="discount-20-30">
-                        <label class="form-check-label" for="discount-20-30">20% - 30% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="30-40" id="discount-30-40">
-                        <label class="form-check-label" for="discount-30-40">30% - 40% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="40-50" id="discount-40-50">
-                        <label class="form-check-label" for="discount-40-50">40% - 50% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="50-60" id="discount-50-60">
-                        <label class="form-check-label" for="discount-50-60">50% - 60% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="60-70" id="discount-60-70">
-                        <label class="form-check-label" for="discount-60-70">60% - 70% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="70-80" id="discount-70-80">
-                        <label class="form-check-label" for="discount-70-80">70% - 80% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="80-90" id="discount-80-90">
-                        <label class="form-check-label" for="discount-80-90">80% - 90% Off</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input discount-checkbox" type="checkbox" value="90-100" id="discount-90-100">
-                        <label class="form-check-label" for="discount-90-100">Over 90% Off</label>
-                    </div>
-                </div>
 
-                <button class="btn btn-outline-secondary btn-sm btn-block" id="clear-filters">
-                    Clear All Filters
-                </button>
-                <!-- ... rest of your filter groups ... -->
-            </aside>
+                    <div class="filter-group">
+                        <h6>Discount</h6>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="0-10"
+                                id="discount-0-10">
+                            <label class="form-check-label" for="discount-0-10">10% Off or less</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="10-20"
+                                id="discount-10-20">
+                            <label class="form-check-label" for="discount-10-20">10% - 20% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="20-30"
+                                id="discount-20-30">
+                            <label class="form-check-label" for="discount-20-30">20% - 30% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="30-40"
+                                id="discount-30-40">
+                            <label class="form-check-label" for="discount-30-40">30% - 40% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="40-50"
+                                id="discount-40-50">
+                            <label class="form-check-label" for="discount-40-50">40% - 50% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="50-60"
+                                id="discount-50-60">
+                            <label class="form-check-label" for="discount-50-60">50% - 60% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="60-70"
+                                id="discount-60-70">
+                            <label class="form-check-label" for="discount-60-70">60% - 70% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="70-80"
+                                id="discount-70-80">
+                            <label class="form-check-label" for="discount-70-80">70% - 80% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="80-90"
+                                id="discount-80-90">
+                            <label class="form-check-label" for="discount-80-90">80% - 90% Off</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input discount-checkbox" type="checkbox" value="90-100"
+                                id="discount-90-100">
+                            <label class="form-check-label" for="discount-90-100">Over 90% Off</label>
+                        </div>
+                    </div>
 
-            <!-- Products Grid -->
-            <main class="col-md-9 col-lg-10">
-                <!-- Page Header with Active Filters -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>All Products</h4>
-                    <div id="active-filters">
-                        <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { 
-                            const selectedCat = categories.find(cat => cat._id === selectedCategory);
-                        %>
-                            <span class="active-filter-badge">
-                                Category: <%= selectedCat ? selectedCat.name : 'Selected' %>
-                                <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removeCategoryFilter()"></button>
-                            </span>
-                        <% } %>
-                    </div>
-                </div>
+                    <button class="btn btn-outline-secondary btn-sm btn-block" id="clear-filters">
+                        Clear All Filters
+                    </button>
+                    <!-- ... rest of your filter groups ... -->
+                </aside>
 
-                <div id="products-container">
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="products-grid">
-                        <!-- Product Cards will be rendered here by JavaScript -->
+                <!-- Products Grid -->
+                <main class="col-md-9 col-lg-10">
+                    <!-- Page Header with Active Filters -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>All Products</h4>
+                        <div id="active-filters">
+                            <% if (typeof selectedCategory !=='undefined' && selectedCategory) { const
+                                selectedCat=categories.find(cat=> cat._id === selectedCategory);
+                                %>
+                                <span class="active-filter-badge">
+                                    Category: <%= selectedCat ? selectedCat.name : 'Selected' %>
+                                        <button type="button" class="btn-close btn-close-white ms-2"
+                                            style="font-size: 0.7rem;" onclick="removeCategoryFilter()"></button>
+                                </span>
+                                <% } %>
+                        </div>
                     </div>
-                    <div id="no-products" class="no-products" style="display: none;">
-                        <h4>No products found</h4>
-                        <p>Try adjusting your filters to see more products.</p>
+
+                    <div id="products-container">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="products-grid">
+                            <!-- Product Cards will be rendered here by JavaScript -->
+                        </div>
+                        <div id="no-products" class="no-products" style="display: none;">
+                            <h4>No products found</h4>
+                            <p>Try adjusting your filters to see more products.</p>
+                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
-    </div>
 
-    <script>
-        // Store all products data
-        const allProducts = [
-            <% for(let i=0; i<products.length; i++) { %>
+        <script>
+            // Store all products data
+            const allProducts = [
+            <% for (let i = 0; i < products.length; i++) { %>
             {
                 id: '<%= products[i]._id %>',
                 name: '<%= products[i].productName %>',
@@ -265,440 +317,814 @@
             <% } %>
         ];
 
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlCategory = urlParams.get('category');
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlCategory = urlParams.get('category');
 
-        // Filter state - initialize with URL category if present
-        let filterState = {
-            sort: '',
-            categories: urlCategory ? [urlCategory] : [],
-            priceRanges: [],
-            discountRanges: []
-        };
+            // Filter state - initialize with URL category if present
+            let filterState = {
+                sort: '',
+                categories: urlCategory ? [urlCategory] : [],
+                priceRanges: [],
+                discountRanges: []
+            };
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // If URL has category, automatically check the corresponding checkbox
-            if (urlCategory) {
-                const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
-                if (categoryCheckbox) {
-                    categoryCheckbox.checked = true;
+            // Initialize the page
+            document.addEventListener('DOMContentLoaded', function () {
+                // If URL has category, automatically check the corresponding checkbox
+                if (urlCategory) {
+                    const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
+                    if (categoryCheckbox) {
+                        categoryCheckbox.checked = true;
+                    }
                 }
-            }
-            
-            // Apply filters on page load
-            applyFilters();
-            setupEventListeners();
-        });
 
-        function setupEventListeners() {
-            // Sort radio buttons
-            document.querySelectorAll('.sort-radio').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    filterState.sort = this.value;
-                    applyFilters();
-                });
+                // Apply filters on page load
+                applyFilters();
+                setupEventListeners();
             });
 
-            // Category checkboxes
-            document.querySelectorAll('.category-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        if (!filterState.categories.includes(this.value)) {
-                            filterState.categories.push(this.value);
-                        }
-                    } else {
-                        filterState.categories = filterState.categories.filter(cat => cat !== this.value);
-                    }
-                    applyFilters();
-                    updateURL();
-                });
-            });
-
-            // Price checkboxes
-            document.querySelectorAll('.price-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        filterState.priceRanges.push(this.value);
-                    } else {
-                        filterState.priceRanges = filterState.priceRanges.filter(range => range !== this.value);
-                    }
-                    applyFilters();
-                });
-            });
-
-            // Discount checkboxes
-            document.querySelectorAll('.discount-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (this.checked) {
-                        filterState.discountRanges.push(this.value);
-                    } else {
-                        filterState.discountRanges = filterState.discountRanges.filter(range => range !== this.value);
-                    }
-                    applyFilters();
-                });
-            });
-
-            // Clear filters button
-            document.getElementById('clear-filters').addEventListener('click', function() {
-                clearAllFilters();
-            });
-        }
-
-        function applyFilters() {
-            let filteredProducts = [...allProducts];
-
-            // Apply category filter
-            if (filterState.categories.length > 0) {
-                filteredProducts = filteredProducts.filter(product => 
-                    filterState.categories.includes(product.category)
-                );
-            }
-
-            // Apply price filter
-            if (filterState.priceRanges.length > 0) {
-                filteredProducts = filteredProducts.filter(product => {
-                    return filterState.priceRanges.some(range => {
-                        const salePrice = product.salePrice;
-                        switch(range) {
-                            case '0-100': return salePrice < 100;
-                            case '100-300': return salePrice >= 100 && salePrice <= 300;
-                            case '300-500': return salePrice >= 300 && salePrice <= 500;
-                            case '500+': return salePrice > 500;
-                            default: return true;
-                        }
+            function setupEventListeners() {
+                // Sort radio buttons
+                document.querySelectorAll('.sort-radio').forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        filterState.sort = this.value;
+                        applyFilters();
                     });
                 });
-            }
 
-            // Apply discount filter
-            if (filterState.discountRanges.length > 0) {
-                filteredProducts = filteredProducts.filter(product => {
-                    return filterState.discountRanges.some(range => {
-                        const discount = product.productOffer;
-                        switch(range) {
-                            case '0-10': return discount <= 10;
-                            case '10-20': return discount > 10 && discount <= 20;
-                            case '20-30': return discount > 20 && discount <= 30;
-                            case '30-40': return discount > 30 && discount <= 40;
-                            case '40-50': return discount > 40 && discount <= 50;
-                            case '50-60': return discount > 50 && discount <= 60;
-                            case '60-70': return discount > 60 && discount <= 70;
-                            case '70-80': return discount > 70 && discount <= 80;
-                            case '80-90': return discount > 80 && discount <= 90;
-                            case '90-100': return discount > 90;
-                            default: return true;
+                // Category checkboxes
+                document.querySelectorAll('.category-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        if (this.checked) {
+                            if (!filterState.categories.includes(this.value)) {
+                                filterState.categories.push(this.value);
+                            }
+                        } else {
+                            filterState.categories = filterState.categories.filter(cat => cat !== this.value);
                         }
+                        applyFilters();
+                        updateURL();
                     });
+                });
+
+                // Price checkboxes
+                document.querySelectorAll('.price-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        if (this.checked) {
+                            filterState.priceRanges.push(this.value);
+                        } else {
+                            filterState.priceRanges = filterState.priceRanges.filter(range => range !== this.value);
+                        }
+                        applyFilters();
+                    });
+                });
+
+                // Discount checkboxes
+                document.querySelectorAll('.discount-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        if (this.checked) {
+                            filterState.discountRanges.push(this.value);
+                        } else {
+                            filterState.discountRanges = filterState.discountRanges.filter(range => range !== this.value);
+                        }
+                        applyFilters();
+                    });
+                });
+
+                // Clear filters button
+                document.getElementById('clear-filters').addEventListener('click', function () {
+                    clearAllFilters();
                 });
             }
 
-            // Apply sorting
-            if (filterState.sort) {
-                switch(filterState.sort) {
-                    case 'newest':
-                        filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                        break;
-                    case 'price-low':
-                        filteredProducts.sort((a, b) => a.salePrice - b.salePrice);
-                        break;
-                    case 'price-high':
-                        filteredProducts.sort((a, b) => b.salePrice - a.salePrice);
-                        break;
+            function applyFilters() {
+                let filteredProducts = [...allProducts];
+
+                // Apply category filter
+                if (filterState.categories.length > 0) {
+                    filteredProducts = filteredProducts.filter(product =>
+                        filterState.categories.includes(product.category)
+                    );
                 }
+
+                // Apply price filter
+                if (filterState.priceRanges.length > 0) {
+                    filteredProducts = filteredProducts.filter(product => {
+                        return filterState.priceRanges.some(range => {
+                            const salePrice = product.salePrice;
+                            switch (range) {
+                                case '0-100': return salePrice < 100;
+                                case '100-300': return salePrice >= 100 && salePrice <= 300;
+                                case '300-500': return salePrice >= 300 && salePrice <= 500;
+                                case '500+': return salePrice > 500;
+                                default: return true;
+                            }
+                        });
+                    });
+                }
+
+                // Apply discount filter
+                if (filterState.discountRanges.length > 0) {
+                    filteredProducts = filteredProducts.filter(product => {
+                        return filterState.discountRanges.some(range => {
+                            const discount = product.productOffer;
+                            switch (range) {
+                                case '0-10': return discount <= 10;
+                                case '10-20': return discount > 10 && discount <= 20;
+                                case '20-30': return discount > 20 && discount <= 30;
+                                case '30-40': return discount > 30 && discount <= 40;
+                                case '40-50': return discount > 40 && discount <= 50;
+                                case '50-60': return discount > 50 && discount <= 60;
+                                case '60-70': return discount > 60 && discount <= 70;
+                                case '70-80': return discount > 70 && discount <= 80;
+                                case '80-90': return discount > 80 && discount <= 90;
+                                case '90-100': return discount > 90;
+                                default: return true;
+                            }
+                        });
+                    });
+                }
+
+                // Apply sorting
+                if (filterState.sort) {
+                    switch (filterState.sort) {
+                        case 'newest':
+                            filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                            break;
+                        case 'price-low':
+                            filteredProducts.sort((a, b) => a.salePrice - b.salePrice);
+                            break;
+                        case 'price-high':
+                            filteredProducts.sort((a, b) => b.salePrice - a.salePrice);
+                            break;
+                    }
+                }
+
+                renderProducts(filteredProducts);
+                updateActiveFiltersDisplay();
             }
 
-            renderProducts(filteredProducts);
-            updateActiveFiltersDisplay();
-        }
+            function updateURL() {
+                // Update URL without page reload to reflect current category filter
+                const currentUrl = new URL(window.location);
 
-        function updateURL() {
-            // Update URL without page reload to reflect current category filter
-            const currentUrl = new URL(window.location);
-            
-            if (filterState.categories.length === 1) {
-                currentUrl.searchParams.set('category', filterState.categories[0]);
-            } else if (filterState.categories.length === 0) {
-                currentUrl.searchParams.delete('category');
+                if (filterState.categories.length === 1) {
+                    currentUrl.searchParams.set('category', filterState.categories[0]);
+                } else if (filterState.categories.length === 0) {
+                    currentUrl.searchParams.delete('category');
+                }
+                // For multiple categories, we don't update URL to keep it simple
+
+                window.history.replaceState({}, '', currentUrl);
             }
-            // For multiple categories, we don't update URL to keep it simple
-            
-            window.history.replaceState({}, '', currentUrl);
-        }
 
-        function updateActiveFiltersDisplay() {
-            const activeFiltersContainer = document.getElementById('active-filters');
-            let activeFiltersHTML = '';
+            function updateActiveFiltersDisplay() {
+                const activeFiltersContainer = document.getElementById('active-filters');
+                let activeFiltersHTML = '';
 
-            // Category filters
-            filterState.categories.forEach(categoryId => {
-                const category = allCategories.find(cat => cat._id === categoryId);
-                if (category) {
-                    activeFiltersHTML += `
+                // Category filters
+                filterState.categories.forEach(categoryId => {
+                    const category = allCategories.find(cat => cat._id === categoryId);
+                    if (category) {
+                        activeFiltersHTML += `
                         <span class="active-filter-badge">
                             Category: ${category.name}
                             <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removeSpecificCategoryFilter('${categoryId}')"></button>
                         </span>
                     `;
-                }
-            });
+                    }
+                });
 
-            // Price filters
-            filterState.priceRanges.forEach(range => {
-                activeFiltersHTML += `
+                // Price filters
+                filterState.priceRanges.forEach(range => {
+                    activeFiltersHTML += `
                     <span class="active-filter-badge">
                         Price: ${range}
                         <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7rem;" onclick="removePriceFilter('${range}')"></button>
                     </span>
                 `;
-            });
+                });
 
-            activeFiltersContainer.innerHTML = activeFiltersHTML;
-        }
+                activeFiltersContainer.innerHTML = activeFiltersHTML;
+            }
 
-        // Function to remove category filter from URL
-        function removeCategoryFilter() {
-            // Remove category from URL and filter state
-            filterState.categories = filterState.categories.filter(cat => cat !== urlCategory);
-            
-            // Uncheck the category checkbox
-            if (urlCategory) {
-                const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
-                if (categoryCheckbox) {
-                    categoryCheckbox.checked = false;
+            // Function to remove category filter from URL
+            function removeCategoryFilter() {
+                // Remove category from URL and filter state
+                filterState.categories = filterState.categories.filter(cat => cat !== urlCategory);
+
+                // Uncheck the category checkbox
+                if (urlCategory) {
+                    const categoryCheckbox = document.querySelector(`.category-checkbox[value="${urlCategory}"]`);
+                    if (categoryCheckbox) {
+                        categoryCheckbox.checked = false;
+                    }
                 }
-            }
-            
-            // Update URL
-            const currentUrl = new URL(window.location);
-            currentUrl.searchParams.delete('category');
-            window.history.replaceState({}, '', currentUrl);
-            
-            applyFilters();
-        }
 
-        function removeSpecificCategoryFilter(categoryId) {
-            filterState.categories = filterState.categories.filter(cat => cat !== categoryId);
-            
-            // Uncheck the checkbox
-            const categoryCheckbox = document.querySelector(`.category-checkbox[value="${categoryId}"]`);
-            if (categoryCheckbox) {
-                categoryCheckbox.checked = false;
-            }
-            
-            // Update URL if this was the URL category
-            if (urlCategory === categoryId) {
+                // Update URL
                 const currentUrl = new URL(window.location);
                 currentUrl.searchParams.delete('category');
                 window.history.replaceState({}, '', currentUrl);
-            }
-            
-            applyFilters();
-        }
 
-        function removePriceFilter(range) {
-            filterState.priceRanges = filterState.priceRanges.filter(r => r !== range);
-            
-            // Uncheck the checkbox
-            const priceCheckbox = document.querySelector(`.price-checkbox[value="${range}"]`);
-            if (priceCheckbox) {
-                priceCheckbox.checked = false;
-            }
-            
-            applyFilters();
-        }
-
-        function renderProducts(products) {
-            const productsGrid = document.getElementById('products-grid');
-            const noProducts = document.getElementById('no-products');
-
-            if (products.length === 0) {
-                productsGrid.style.display = 'none';
-                noProducts.style.display = 'block';
-                return;
+                applyFilters();
             }
 
-            productsGrid.style.display = 'flex';
-            noProducts.style.display = 'none';
+            function removeSpecificCategoryFilter(categoryId) {
+                filterState.categories = filterState.categories.filter(cat => cat !== categoryId);
 
-            productsGrid.innerHTML = products.map(product => {
-                // Determine initial button states based on product quantity
-                const isOutOfStock = product.quantity === 0;
-                const initialQuantity = isOutOfStock ? 0 : 1;
-                const decreaseDisabled = isOutOfStock || initialQuantity <= 1;
-                const increaseDisabled = isOutOfStock || initialQuantity >= product.quantity;
+                // Uncheck the checkbox
+                const categoryCheckbox = document.querySelector(`.category-checkbox[value="${categoryId}"]`);
+                if (categoryCheckbox) {
+                    categoryCheckbox.checked = false;
+                }
 
-                return `
-                <div class="col mb-4">
-                    <div class="card product-card h-100">
-                        <div class="position-relative">
-                            <a href="/user/wishlist" class="btn-wishlist position-absolute" style="top: 10px; right: 10px;">
-                                <i class="fas fa-heart text-danger"></i>
-                            </a>
-                          <a href="/user/productDetail?id=${product.id}" title="Product Title">
-                            <img src="${product.image}" class="card-img-top" alt="${product.name}" style="height: 200px; object-fit: cover;"></a>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">${product.name}</h5>
-                            <div class="mb-2">
-                                <i class="fa-solid fa-star text-warning"></i>
-                                <span>4.5</span>
-                            </div>
-                            <div class="mb-2">
-                                <span class="sale-price">₹${product.salePrice}</span>
-                                <span class="regular-price"><del>₹${product.regularPrice}</del></span>
-                                <span class="offer-price">(${product.productOffer}% Off)</span>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Available: ${product.quantity}</small>
-                            </div>
-                            <div class="quantity-controls">
-                                <div class="input-group product-qty" style="width: 120px;">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary btn-sm decrease-btn" type="button" 
-                                            ${decreaseDisabled ? 'disabled' : ''}>-</button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center quantity-input" 
-                                        value="${initialQuantity}" 
-                                        ${isOutOfStock ? 'disabled' : ''}
-                                        data-product-id="${product.id}"
-                                        data-max-quantity="${product.quantity}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary btn-sm increase-btn" type="button" 
-                                            ${increaseDisabled ? 'disabled' : ''}>+</button>
-                                    </div>
-                                </div>
-                                <div class="quantity-message" id="message-${product.id}"></div>
-                            </div>
-                            <div class="mt-2">
-                                <a href="#" class="btn btn-primary btn-sm ${isOutOfStock ? 'disabled' : ''}" 
-                                   style="width: 100%">${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}</a>
-                            </div>
-                        </div>
+                // Update URL if this was the URL category
+                if (urlCategory === categoryId) {
+                    const currentUrl = new URL(window.location);
+                    currentUrl.searchParams.delete('category');
+                    window.history.replaceState({}, '', currentUrl);
+                }
+
+                applyFilters();
+            }
+
+            function removePriceFilter(range) {
+                filterState.priceRanges = filterState.priceRanges.filter(r => r !== range);
+
+                // Uncheck the checkbox
+                const priceCheckbox = document.querySelector(`.price-checkbox[value="${range}"]`);
+                if (priceCheckbox) {
+                    priceCheckbox.checked = false;
+                }
+
+                applyFilters();
+            }
+
+            function renderProducts(products) {
+                const productsGrid = document.getElementById('products-grid');
+                const noProducts = document.getElementById('no-products');
+
+                if (products.length === 0) {
+                    productsGrid.style.display = 'none';
+                    noProducts.style.display = 'block';
+                    return;
+                }
+
+                productsGrid.style.display = 'flex';
+                noProducts.style.display = 'none';
+
+                productsGrid.innerHTML = products.map(product => {
+                    // Determine initial button states based on product quantity
+                    const isOutOfStock = product.quantity === 0;
+                    const initialQuantity = isOutOfStock ? 0 : 1;
+                    const decreaseDisabled = isOutOfStock || initialQuantity <= 1;
+                    const increaseDisabled = isOutOfStock || initialQuantity >= product.quantity;
+
+                   return `
+<div class="col mb-4">
+    <div class="card product-card h-100 product-item" data-product-id="${product.id}" id="product-${product.id}">
+        <div class="position-relative">
+            <a href="/user/wishlist" class="btn-wishlist position-absolute" style="top: 10px; right: 10px;">
+                <i class="fas fa-heart text-danger"></i>
+            </a>
+            <a href="/user/productDetail?id=${product.id}" title="Product Title">
+                <img src="${product.image}" class="card-img-top" alt="${product.name}" style="height: 200px; object-fit: cover;">
+            </a>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <div class="mb-2">
+                <i class="fa-solid fa-star text-warning"></i>
+                <span>4.5</span>
+            </div>
+            <div class="mb-2">
+                <span class="sale-price">₹${product.salePrice}</span>
+                <span class="regular-price"><del>₹${product.regularPrice}</del></span>
+                <span class="offer-price">(${product.productOffer}% Off)</span>
+            </div>
+            <div class="mb-2">
+                <small class="text-muted">Available: ${product.quantity}</small>
+            </div>
+            <div class="quantity-controls">
+                <div class="input-group product-qty" style="width: 120px;">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary btn-sm decrease-btn" type="button" 
+                            data-product-id="${product.id}"
+                            ${decreaseDisabled ? 'disabled' : ''}>-</button>
+                    </div>
+                    <input type="text" class="form-control form-control-sm text-center quantity-input" 
+                        value="${initialQuantity}" 
+                        ${isOutOfStock ? 'disabled' : ''}
+                        data-product-id="${product.id}"
+                        id="input-${product.id}"
+                        data-max-quantity="${product.quantity}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-sm increase-btn" type="button" 
+                            data-product-id="${product.id}"
+                            ${increaseDisabled ? 'disabled' : ''}>+</button>
                     </div>
                 </div>
-                `;
-            }).join('');
+                <div class="quantity-message" id="message-${product.id}"></div>
+            </div>
+            <div class="mt-2">
+                <button class="btn btn-primary btn-block add-to-cart-btn" 
+                        data-product-id="${product.id}"
+                        id="cart-btn-${product.id}"
+                        ${isOutOfStock ? 'disabled' : ''}>
+                    ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+                }).join('');
 
-            // Add event listeners for quantity buttons
-            setupQuantityEventListeners();
-        }
+                // Add event listeners for quantity buttons
+                setupQuantityEventListeners();
+            }
 
-        function setupQuantityEventListeners() {
-            // Increase button event listeners
-            document.querySelectorAll('.increase-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const input = this.closest('.product-qty').querySelector('.quantity-input');
-                    const productId = input.getAttribute('data-product-id');
-                    const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
-                    const messageElement = document.getElementById(`message-${productId}`);
-                    
-                    let currentValue = parseInt(input.value) || 0;
-                    
-                    if (currentValue < maxQuantity) {
-                        input.value = currentValue + 1;
-                        messageElement.textContent = "";
-                        
-                        // Update button states
-                        updateQuantityButtons(input);
-                    } else {
-                        messageElement.textContent = "Maximum quantity reached!";
-                    }
+            // function setupQuantityEventListeners() {
+                // Increase button event listeners
+                // document.querySelectorAll('.increase-btn').forEach(button => {
+                //     button.addEventListener('click', function () {
+                //         const input = this.closest('.product-qty').querySelector('.quantity-input');
+                //         const productId = input.getAttribute('data-product-id');
+                //         const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+                //         const messageElement = document.getElementById(`message-${productId}`);
+
+                //         let currentValue = parseInt(input.value) || 0;
+
+                //         if (currentValue < maxQuantity) {
+                //             input.value = currentValue + 1;
+                //             messageElement.textContent = "";
+
+                //             // Update button states
+                //             updateQuantityButtons(input);
+                //         } else {
+                //             messageElement.textContent = "Maximum quantity reached!";
+                //         }
+                //     });
+                // });
+
+                // Decrease button event listeners
+                // document.querySelectorAll('.decrease-btn').forEach(button => {
+                //     button.addEventListener('click', function () {
+                //         const input = this.closest('.product-qty').querySelector('.quantity-input');
+                //         const productId = input.getAttribute('data-product-id');
+                //         const messageElement = document.getElementById(`message-${productId}`);
+
+                //         let currentValue = parseInt(input.value) || 0;
+
+                //         if (currentValue > 1) {
+                //             input.value = currentValue - 1;
+                //             messageElement.textContent = "";
+
+                //             // Update button states
+                //             updateQuantityButtons(input);
+                //         }
+                //     });
+                // });
+
+                // Manual input validation
+                // document.querySelectorAll('.quantity-input').forEach(input => {
+                //     input.addEventListener('change', function () {
+                //         const productId = this.getAttribute('data-product-id');
+                //         const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
+                //         const messageElement = document.getElementById(`message-${productId}`);
+
+                //         let value = parseInt(this.value) || 0;
+
+                //         if (value < 1) {
+                //             this.value = 1;
+                //             messageElement.textContent = "";
+                //         } else if (value > maxQuantity) {
+                //             this.value = maxQuantity;
+                //             messageElement.textContent = "Maximum quantity reached!";
+                //         } else {
+                //             messageElement.textContent = "";
+                //         }
+
+                //         // Update button states
+                //         updateQuantityButtons(this);
+                //     });
+                // });
+            // }
+
+            // function updateQuantityButtons(input) {
+            //     const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+            //     const currentValue = parseInt(input.value) || 0;
+            //     const parentDiv = input.closest('.product-qty');
+            //     const increaseBtn = parentDiv.querySelector('.increase-btn');
+            //     const decreaseBtn = parentDiv.querySelector('.decrease-btn');
+
+            //     // Update button states
+            //     increaseBtn.disabled = currentValue >= maxQuantity;
+            //     decreaseBtn.disabled = currentValue <= 1;
+            // }
+
+            function clearAllFilters() {
+                // Reset filter state
+                filterState = {
+                    sort: '',
+                    categories: [],
+                    priceRanges: [],
+                    discountRanges: []
+                };
+
+                // Uncheck all checkboxes and radios
+                document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+                    input.checked = false;
                 });
-            });
 
-            // Decrease button event listeners
-            document.querySelectorAll('.decrease-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const input = this.closest('.product-qty').querySelector('.quantity-input');
-                    const productId = input.getAttribute('data-product-id');
-                    const messageElement = document.getElementById(`message-${productId}`);
-                    
-                    let currentValue = parseInt(input.value) || 0;
-                    
-                    if (currentValue > 1) {
-                        input.value = currentValue - 1;
-                        messageElement.textContent = "";
-                        
-                        // Update button states
-                        updateQuantityButtons(input);
-                    }
-                });
-            });
+                // Clear URL parameters
+                const currentUrl = new URL(window.location);
+                currentUrl.searchParams.delete('category');
+                window.history.replaceState({}, '', currentUrl);
 
-            // Manual input validation
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                input.addEventListener('change', function() {
-                    const productId = this.getAttribute('data-product-id');
-                    const maxQuantity = parseInt(this.getAttribute('data-max-quantity'));
-                    const messageElement = document.getElementById(`message-${productId}`);
-                    
-                    let value = parseInt(this.value) || 0;
-                    
-                    if (value < 1) {
-                        this.value = 1;
-                        messageElement.textContent = "";
-                    } else if (value > maxQuantity) {
-                        this.value = maxQuantity;
-                        messageElement.textContent = "Maximum quantity reached!";
-                    } else {
-                        messageElement.textContent = "";
-                    }
-                    
-                    // Update button states
-                    updateQuantityButtons(this);
-                });
-            });
-        }
+                // Render all products
+                renderProducts(allProducts);
+                updateActiveFiltersDisplay();
+            }
 
-        function updateQuantityButtons(input) {
-            const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
-            const currentValue = parseInt(input.value) || 0;
-            const parentDiv = input.closest('.product-qty');
-            const increaseBtn = parentDiv.querySelector('.increase-btn');
-            const decreaseBtn = parentDiv.querySelector('.decrease-btn');
-            
-            // Update button states
-            increaseBtn.disabled = currentValue >= maxQuantity;
-            decreaseBtn.disabled = currentValue <= 1;
-        }
-
-        function clearAllFilters() {
-            // Reset filter state
-            filterState = {
-                sort: '',
-                categories: [],
-                priceRanges: [],
-                discountRanges: []
-            };
-
-            // Uncheck all checkboxes and radios
-            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
-                input.checked = false;
-            });
-
-            // Clear URL parameters
-            const currentUrl = new URL(window.location);
-            currentUrl.searchParams.delete('category');
-            window.history.replaceState({}, '', currentUrl);
-
-            // Render all products
-            renderProducts(allProducts);
-            updateActiveFiltersDisplay();
-        }
-
-        // Create a categories array for JavaScript use
-        const allCategories = [
-            <% for(let i=0; i<categories.length; i++) { %>
+            // Create a categories array for JavaScript use
+            const allCategories = [
+            <% for (let i = 0; i < categories.length; i++) { %>
             {
                 _id: '<%= categories[i]._id %>',
                 name: '<%= categories[i].name %>'
             },
             <% } %>
         ];
-    </script>
+        </script>
 
-    <%- include('../partials/user/footer')%>
+        <!-- <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', async function (e) {
+                        e.preventDefault()
+
+                        const productId = this.getAttribute('data-product-id');
+                        const productItem = this.closest('.product-item');
+                        const quantityInput = productItem.querySelector('.quantity-input');
+                        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+                        if (!productId) {
+                            alert('Product ID not found');
+                            return;
+                        }
+
+                        try {
+                            const originalHTML = this.innerHTML;
+                            this.innerHTML = 'Adding...';
+                            this.disabled = true;
+
+                            const response = await fetch('/user/add-to-cart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({
+                                    productId: productId,
+                                    quantity: quantity
+                                })
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                alert('Product added to cart successfully!');
+                                updateCartCount();
+                            } else {
+                                if (data.redirect) {
+                                    window.location.href = data.redirect;
+                                } else {
+                                    alert('Error: ' + data.message);
+                                }
+                            }
+
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('Error adding product to cart');
+                        } finally {
+                            // Reset button state
+                            this.innerHTML = 'Add to Cart <iconify-icon icon="uil:shopping-cart"></iconify-icon>';
+                            this.disabled = false;
+                        }
+
+
+                    })
+                })
+                function updateCartCount() {
+                    const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) {
+                        const currentCount = parseInt(cartCountElement.textContent) || 0;
+                        cartCountElement.textContent = currentCount + 1;
+                    }
+                }
+
+            })
+        </script> -->
+
+
+        <script>
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('Product listing page loaded');
+        
+        // Setup event delegation for add-to-cart buttons
+        setupAddToCartEventDelegation();
+        
+        // Setup event delegation for quantity controls
+        setupQuantityEventDelegation();
+    });
+    
+    // Event delegation for add-to-cart buttons (works for dynamically created elements)
+    function setupAddToCartEventDelegation() {
+        // Use event delegation on the products grid container
+        document.getElementById('products-grid').addEventListener('click', async function(e) {
+            // Check if the clicked element or its parent is an add-to-cart button
+            const addToCartBtn = e.target.closest('.add-to-cart-btn');
+            
+            if (addToCartBtn && !addToCartBtn.disabled) {
+                e.preventDefault();
+                
+                const productId = addToCartBtn.getAttribute('data-product-id');
+                const productCard = addToCartBtn.closest('.product-item');
+                const quantityInput = productCard.querySelector('.quantity-input');
+                const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+                
+                console.log('Add to cart clicked - Product ID:', productId, 'Quantity:', quantity);
+                
+                if (!productId) {
+                    alert('Product ID not found');
+                    return;
+                }
+                
+                await addToCart(productId, quantity, addToCartBtn);
+            }
+        });
+    }
+    
+    // Event delegation for quantity controls
+    function setupQuantityEventDelegation() {
+        const productsGrid = document.getElementById('products-grid');
+        
+        // Handle increase button clicks
+        productsGrid.addEventListener('click', function(e) {
+            if (e.target.classList.contains('increase-btn') || 
+                e.target.closest('.increase-btn')) {
+                
+                const increaseBtn = e.target.classList.contains('increase-btn') ? 
+                    e.target : e.target.closest('.increase-btn');
+                
+                if (increaseBtn.disabled) return;
+                
+                const productId = increaseBtn.getAttribute('data-product-id');
+                const input = document.querySelector(`#input-${productId}`);
+                
+                if (!input) return;
+                
+                const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+                let currentValue = parseInt(input.value) || 0;
+                
+                if (currentValue < maxQuantity) {
+                    input.value = currentValue + 1;
+                    updateQuantityButtons(productId);
+                } else {
+                    const messageElement = document.getElementById(`message-${productId}`);
+                    if (messageElement) {
+                        messageElement.textContent = "Maximum quantity reached!";
+                    }
+                }
+            }
+            
+            // Handle decrease button clicks
+            if (e.target.classList.contains('decrease-btn') || 
+                e.target.closest('.decrease-btn')) {
+                
+                const decreaseBtn = e.target.classList.contains('decrease-btn') ? 
+                    e.target : e.target.closest('.decrease-btn');
+                
+                if (decreaseBtn.disabled) return;
+                
+                const productId = decreaseBtn.getAttribute('data-product-id');
+                const input = document.querySelector(`#input-${productId}`);
+                
+                if (!input) return;
+                
+                let currentValue = parseInt(input.value) || 0;
+                
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                    updateQuantityButtons(productId);
+                    
+                    // Clear any message
+                    const messageElement = document.getElementById(`message-${productId}`);
+                    if (messageElement) {
+                        messageElement.textContent = "";
+                    }
+                }
+            }
+        });
+        
+        // Handle manual input changes
+        productsGrid.addEventListener('change', function(e) {
+            if (e.target.classList.contains('quantity-input')) {
+                const input = e.target;
+                const productId = input.getAttribute('data-product-id');
+                const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+                const messageElement = document.getElementById(`message-${productId}`);
+                
+                let value = parseInt(input.value) || 1;
+                
+                if (value < 1) {
+                    input.value = 1;
+                    if (messageElement) messageElement.textContent = "";
+                } else if (value > maxQuantity) {
+                    input.value = maxQuantity;
+                    if (messageElement) messageElement.textContent = "Maximum quantity reached!";
+                } else {
+                    if (messageElement) messageElement.textContent = "";
+                }
+                
+                updateQuantityButtons(productId);
+            }
+        });
+    }
+    
+    // Add to cart function
+    async function addToCart(productId, quantity, buttonElement) {
+        try {
+            // Show loading state
+            const originalHTML = buttonElement.innerHTML;
+            buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Adding...';
+            buttonElement.disabled = true;
+            
+            console.log('Sending add-to-cart request for product:', productId);
+            
+            const response = await fetch('/user/add-to-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: quantity
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Add to cart response:', data);
+            
+            if (data.success) {
+                // Show success message (you can use a toast notification instead of alert)
+                showNotification('Product added to cart successfully!', 'success');
+                updateCartCount(quantity);
+                
+                // Update product quantity in UI if needed
+                updateProductQuantity(productId, quantity);
+            } else {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            showNotification('Error adding product to cart. Please try again.', 'error');
+        } finally {
+            // Reset button state
+            buttonElement.innerHTML = 'Add to Cart';
+            buttonElement.disabled = false;
+        }
+    }
+    
+    // Update quantity buttons state
+    function updateQuantityButtons(productId) {
+        const input = document.querySelector(`#input-${productId}`);
+        if (!input) return;
+        
+        const maxQuantity = parseInt(input.getAttribute('data-max-quantity'));
+        const currentValue = parseInt(input.value) || 0;
+        const increaseBtn = document.querySelector(`.increase-btn[data-product-id="${productId}"]`);
+        const decreaseBtn = document.querySelector(`.decrease-btn[data-product-id="${productId}"]`);
+        const addToCartBtn = document.querySelector(`#cart-btn-${productId}`);
+        
+        if (increaseBtn) {
+            increaseBtn.disabled = currentValue >= maxQuantity;
+        }
+        
+        if (decreaseBtn) {
+            decreaseBtn.disabled = currentValue <= 1;
+        }
+        
+        // Enable/disable add to cart button based on stock
+        if (addToCartBtn) {
+            const isOutOfStock = maxQuantity === 0 || currentValue === 0;
+            addToCartBtn.disabled = isOutOfStock;
+            addToCartBtn.textContent = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
+        }
+    }
+    
+    // Update cart count in navbar
+    function updateCartCount(quantity = 1) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            const currentCount = parseInt(cartCountElement.textContent) || 0;
+            cartCountElement.textContent = currentCount + quantity;
+            console.log('Cart count updated to:', cartCountElement.textContent);
+            
+            // Add animation effect
+            cartCountElement.classList.add('cart-updated');
+            setTimeout(() => {
+                cartCountElement.classList.remove('cart-updated');
+            }, 500);
+        }
+    }
+    
+    // Update product quantity after adding to cart
+    function updateProductQuantity(productId, quantityAdded) {
+        // Find the product in allProducts array
+        const productIndex = allProducts.findIndex(p => p.id === productId);
+        if (productIndex !== -1) {
+            // Update the quantity in the array
+            allProducts[productIndex].quantity -= quantityAdded;
+            
+            // Update the UI if the product is currently displayed
+            const quantityElement = document.querySelector(`#product-${productId} .text-muted`);
+            if (quantityElement) {
+                const newQuantity = allProducts[productIndex].quantity;
+                quantityElement.textContent = `Available: ${newQuantity}`;
+                
+                // Update max quantity attribute
+                const quantityInput = document.querySelector(`#input-${productId}`);
+                if (quantityInput) {
+                    quantityInput.setAttribute('data-max-quantity', newQuantity);
+                    
+                    // Update button states
+                    updateQuantityButtons(productId);
+                }
+            }
+        }
+    }
+    
+    // Show notification function (better than alert)
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        `;
+        
+        // Add to body
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+        
+        // Close button functionality
+        notification.querySelector('.close').addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+    
+    // Initialize quantity buttons for existing products
+    function initializeQuantityButtons() {
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            const productId = input.getAttribute('data-product-id');
+            updateQuantityButtons(productId);
+        });
+    }
+</script>
+
+<style>
+    /* Add animation for cart count update */
+    .cart-updated {
+        animation: cartBounce 0.5s ease;
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    @keyframes cartBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+    }
+</style>
+        <%- include('../partials/user/footer')%>
 </body>
+
 </html>

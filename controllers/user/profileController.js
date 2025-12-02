@@ -164,7 +164,7 @@ const addAddress = async (req, res) => {
 
         const { name, mobile, houseAddress, pin, post, city, district, state } = req.body
 
-        const userEmail = req.session.userData
+        const userEmail = req.session.userData 
         if (!userEmail) {
             return res.render('user/add-address', {
                 categories,
