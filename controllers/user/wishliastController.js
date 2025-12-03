@@ -209,32 +209,80 @@ const removeFromWishlist = async (req, res) => {
 };
 
 // Check if product is in wishlist (for showing red heart)
+// const checkWishlistStatus = async (req, res) => {
+//     try {
+//         const { productId } = req.params;
+//         const userEmail = req.session.userData?.email;
+
+//         if (!userEmail) {
+//             return res.json({ inWishlist: false });
+//         }
+
+//         const user = await User.findOne({ email: userEmail });
+//         if (!user) {
+//             return res.json({ inWishlist: false });
+//         }
+
+//         const wishlist = await Wishlist.findOne({
+//             userId: user._id,
+//             'items.ProductId': productId
+//         });
+
+//         return res.json({ 
+//             inWishlist: !!wishlist 
+//         });
+
+//     } catch (error) {
+//         console.error('Error checking wishlist status:', error);
+//         return res.json({ inWishlist: false });
+//     }
+// };
+
 const checkWishlistStatus = async (req, res) => {
     try {
         const { productId } = req.params;
         const userEmail = req.session.userData?.email;
 
         if (!userEmail) {
-            return res.json({ inWishlist: false });
+            return res.json({ 
+                inWishlist: false 
+            });
         }
 
         const user = await User.findOne({ email: userEmail });
         if (!user) {
-            return res.json({ inWishlist: false });
+            return res.json({ 
+                inWishlist: false 
+            });
         }
 
+        // Find wishlist that contains this product
         const wishlist = await Wishlist.findOne({
             userId: user._id,
             'items.ProductId': productId
         });
 
+        if (!wishlist) {
+            return res.json({ 
+                inWishlist: false 
+            });
+        }
+
+        // Find the specific item to get its ID
+        const wishlistItem = wishlist.items.find(item => 
+            item.ProductId.toString() === productId
+        );
+
         return res.json({ 
-            inWishlist: !!wishlist 
+            inWishlist: true,
+            itemId: wishlistItem ? wishlistItem._id : null
         });
 
     } catch (error) {
         console.error('Error checking wishlist status:', error);
-        return res.json({ inWishlist: false });
+        return res.json({ 
+            inWishlist: false 
+        });
     }
 };
 

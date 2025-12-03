@@ -154,7 +154,7 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-        
+
         .add-to-cart-btn {
             background-color: #007bff;
             color: white;
@@ -173,18 +173,96 @@
             background-color: #6c757d;
             cursor: not-allowed;
         }
-        
+
         /* Animation for cart count */
         .cart-updated {
             animation: cartBounce 0.5s ease;
             color: #28a745;
             font-weight: bold;
         }
-        
+
         @keyframes cartBounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
         }
+
+        .btn-wishlist.active svg {
+            fill: red;
+            stroke: red;
+        }
+
+        .btn-wishlist {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-wishlist:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-wishlist svg {
+            width: 20px;
+            height: 20px;
+            fill: #ccc;
+            transition: fill 0.3s ease;
+        }
+
+        .btn-wishlist.active svg {
+            fill: #e74c3c;
+        }
+
+        .btn-wishlist:hover svg {
+            fill: #e74c3c;
+        }
+        .btn-wishlist.active {
+        border: 2px solid #e74c3c !important;
+    }
+    
+    .btn-wishlist.active svg {
+        fill: #e74c3c !important;
+        stroke: #e74c3c !important;
+    }
+    
+    /* Make sure the SVG fills properly */
+    svg {
+        fill: inherit;
+        stroke: inherit;
+    }
+    
+    /* Debug class visualization */
+    .debug-wishlist {
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 5px;
+        font-size: 10px;
+        border-radius: 3px;
+        z-index: 100;
+    }
     </style>
 </head>
 
@@ -204,27 +282,51 @@
                                                 <div class="zoom-container">
                                                     <img src="/<%= product.image[i] %>" class="d-block w-100 zoom-img"
                                                         alt="Product Image <%= i + 1 %>" id="productImage" />
-                                                    <a href="/user/wishlist?id=<%=product._id%>" class="wishlist-btn">
-                                                        <i class="fas fa-heart" style="color: #ddd;"></i>
-                                                    </a>
+                                                   
+                                                  <!-- <button class="btn-wishlist add-to-wishlist <%= (wishlistProductIds && Array.isArray(wishlistProductIds) && wishlistProductIds.includes(product._id.toString())) ? 'active' : '' %>"
+        data-product-id="<%= product._id %>">
+    <svg width="24" height="24">
+        <use xlink:href="#heart"></use>
+    </svg>
+</button> -->
+<!-- <button class="btn-wishlist add-to-wishlist 
+    <%= wishlistProductIds && wishlistProductIds.includes(product._id.toString()) ? 'active' : '' %>"
+    data-product-id="<%= product._id %>"
+    id="wishlist-btn-<%= product._id %>">
+    <svg width="24" height="24">
+        <use xlink:href="#heart"></use>
+    </svg>
+</button> -->
+
+<button class="btn-wishlist add-to-wishlist" 
+        data-product-id="<%= product._id %>"
+        id="wishlist-btn-<%= product._id %>">
+    <svg width="24" height="24">
+        <use xlink:href="#heart"></use>
+    </svg>
+</button>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="heart" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </symbol>
+</svg>
                                                     <div class="zoom-lens" id="zoomLens"></div>
                                                     <div class="zoom-result" id="zoomResult"></div>
                                                 </div>
                                             </div>
-                                        <% } %>
+                                            <% } %>
                                     </div>
                                     <br>
                                     <!-- Carousel Controls -->
-                                    <button class="btn btn-primary add-to-cart-btn" 
-                                            data-product-id="<%= product._id%>" 
-                                            id="cart-btn"
-                                            <%= product.quantity === 0 ? 'disabled' : '' %>>
-                                        <%= product.quantity === 0 ? 'Out of Stock' : 'Add to Cart' %>
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-id="<%= product._id%>"
+                                        id="cart-btn" <%=product.quantity===0 ? 'disabled' : '' %>>
+                                        <%= product.quantity===0 ? 'Out of Stock' : 'Add to Cart' %>
                                     </button>
-                                    <a href="/user/checkout?id=<%= product._id%>" 
-                                       class="btn btn-outline-primary <%= product.quantity === 0 ? 'disabled' : '' %>"
-                                       id="buy-btn"
-                                       <%= product.quantity === 0 ? 'aria-disabled="true" tabindex="-1"' : '' %>>
+                                    <a href="/user/checkout?id=<%= product._id%>"
+                                        class="btn btn-outline-primary <%= product.quantity === 0 ? 'disabled' : '' %>"
+                                        id="buy-btn" <%=product.quantity===0 ? 'aria-disabled="true" tabindex="-1"' : ''
+                                        %>>
                                         Buy Now
                                     </a>
 
@@ -261,38 +363,40 @@
                     <p>Stock:
                         <% if (product.quantity> 0) { %>
                             In Stock
-                        <% } else { %>
-                            Out of Stock
-                        <% } %>
+                            <% } else { %>
+                                Out of Stock
+                                <% } %>
                     </p>
-                    <p>Available Quantity: <span id="maxQuantityDisplay"><%= product.quantity %></span></p>
-                    
+                    <p>Available Quantity: <span id="maxQuantityDisplay">
+                            <%= product.quantity %>
+                        </span></p>
+
                     <%if(product.salePrice==product.regularPrice){%>
-                        <p>Price: ₹ <%=product.salePrice%></p>
-                    <% } else { %>
-                        <p>Price: ₹ <%=product.salePrice%> <del id="orginal-price">₹<%= product.regularPrice %></del></p>
-                    <%}%>
+                        <p>Price: ₹ <%=product.salePrice%>
+                        </p>
+                        <% } else { %>
+                            <p>Price: ₹ <%=product.salePrice%> <del id="orginal-price">₹<%= product.regularPrice %>
+                                    </del></p>
+                            <%}%>
 
-                    <!-- Quantity Input with Maximum Limit -->
-                    <div class="input-group product-qty" style="width: 120px;">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary btn-sm" type="button" id="decrease" 
-                                    <%= product.quantity === 0 ? 'disabled' : '' %>>-</button>
-                        </div>
-                        <input type="text" class="quantity-input form-control form-control-sm text-center" 
-                               id="quantity" 
-                               value="<%= product.quantity === 0 ? '0' : '1' %>"
-                               data-product-id="<%= product._id %>"
-                               data-max-quantity="<%= product.quantity %>"
-                               <%= product.quantity === 0 ? 'disabled' : '' %>>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary btn-sm" type="button" id="increase"
-                                    <%= product.quantity === 0 ? 'disabled' : '' %>>+</button>
-                        </div>
-                    </div>
-                    <div id="quantityMessage" class="max-quantity-message"></div>
+                                <!-- Quantity Input with Maximum Limit -->
+                                <div class="input-group product-qty" style="width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button" id="decrease"
+                                            <%=product.quantity===0 ? 'disabled' : '' %>>-</button>
+                                    </div>
+                                    <input type="text" class="quantity-input form-control form-control-sm text-center"
+                                        id="quantity" value="<%= product.quantity === 0 ? '0' : '1' %>"
+                                        data-product-id="<%= product._id %>" data-max-quantity="<%= product.quantity %>"
+                                        <%=product.quantity===0 ? 'disabled' : '' %>>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button" id="increase"
+                                            <%=product.quantity===0 ? 'disabled' : '' %>>+</button>
+                                    </div>
+                                </div>
+                                <div id="quantityMessage" class="max-quantity-message"></div>
 
-                    <br>
+                                <br>
                 </div>
             </div>
         </div>
@@ -300,9 +404,9 @@
 
     <!-- Add to Cart Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('Product detail page loaded');
-            
+
             // Get DOM elements
             const addToCartButton = document.getElementById('cart-btn');
             const quantityInput = document.getElementById('quantity');
@@ -310,31 +414,31 @@
             const decreaseBtn = document.getElementById('decrease');
             const quantityMessage = document.getElementById('quantityMessage');
             const maxQuantityDisplay = document.getElementById('maxQuantityDisplay');
-            
+
             // Get product data from EJS
             const productId = addToCartButton.getAttribute('data-product-id');
             const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity')) || 0;
-            
+
             console.log('Product ID:', productId, 'Max Quantity:', maxQuantity);
-            
+
             // If product is out of stock, disable everything
             if (maxQuantity === 0) {
                 console.log('Product is out of stock');
                 return;
             }
-            
+
             // Setup quantity controls
             setupQuantityControls();
-            
+
             // Setup add to cart functionality
             setupAddToCart();
-            
+
             function setupQuantityControls() {
                 // Update quantity function
                 function updateQuantity(change) {
                     let currentVal = parseInt(quantityInput.value) || 0;
                     const newValue = currentVal + change;
-                    
+
                     // Validate minimum (1) and maximum (product.quantity)
                     if (newValue < 1) {
                         quantityInput.value = 1;
@@ -348,10 +452,10 @@
                         quantityMessage.textContent = "";
                         increaseBtn.disabled = false;
                     }
-                    
+
                     // Enable/disable decrease button based on value
                     decreaseBtn.disabled = quantityInput.value <= 1;
-                    
+
                     // Enable/disable increase button
                     increaseBtn.disabled = quantityInput.value >= maxQuantity;
                 }
@@ -366,9 +470,9 @@
                 });
 
                 // Validate manual input
-                quantityInput.addEventListener('change', function() {
+                quantityInput.addEventListener('change', function () {
                     let value = parseInt(this.value) || 0;
-                    
+
                     if (value < 1) {
                         this.value = 1;
                         quantityMessage.textContent = "";
@@ -378,7 +482,7 @@
                     } else {
                         quantityMessage.textContent = "";
                     }
-                    
+
                     // Update button states
                     increaseBtn.disabled = this.value >= maxQuantity;
                     decreaseBtn.disabled = this.value <= 1;
@@ -388,28 +492,28 @@
                 decreaseBtn.disabled = quantityInput.value <= 1;
                 increaseBtn.disabled = quantityInput.value >= maxQuantity;
             }
-            
+
             function setupAddToCart() {
-                addToCartButton.addEventListener('click', async function(e) {
+                addToCartButton.addEventListener('click', async function (e) {
                     e.preventDefault();
-                    
+
                     const quantity = parseInt(quantityInput.value) || 1;
-                    
+
                     console.log('Adding to cart - Product ID:', productId, 'Quantity:', quantity);
-                    
+
                     await addToCart(productId, quantity, this);
                 });
             }
-            
+
             async function addToCart(productId, quantity, buttonElement) {
                 try {
                     // Show loading state
                     const originalHTML = buttonElement.innerHTML;
                     buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Adding...';
                     buttonElement.disabled = true;
-                    
+
                     console.log('Sending add-to-cart request for product:', productId);
-                    
+
                     const response = await fetch('/user/add-to-cart', {
                         method: 'POST',
                         headers: {
@@ -421,15 +525,15 @@
                             quantity: quantity
                         })
                     });
-                    
+
                     const data = await response.json();
                     console.log('Add to cart response:', data);
-                    
+
                     if (data.success) {
                         // Show success message
                         showNotification('Product added to cart successfully!', 'success');
                         updateCartCount(quantity);
-                        
+
                         // Update product quantity in UI
                         updateProductQuantity(quantity);
                     } else {
@@ -448,17 +552,17 @@
                     buttonElement.disabled = false;
                 }
             }
-            
+
             // Update product quantity after adding to cart
             function updateProductQuantity(quantityAdded) {
                 const newQuantity = maxQuantity - quantityAdded;
-                
+
                 // Update the quantity display
                 maxQuantityDisplay.textContent = newQuantity;
-                
+
                 // Update max quantity attribute
                 quantityInput.setAttribute('data-max-quantity', newQuantity);
-                
+
                 // If out of stock, disable everything
                 if (newQuantity === 0) {
                     quantityInput.value = 0;
@@ -467,20 +571,20 @@
                     decreaseBtn.disabled = true;
                     addToCartButton.disabled = true;
                     addToCartButton.innerHTML = 'Out of Stock';
-                    
+
                     // Disable buy now button
                     const buyBtn = document.getElementById('buy-btn');
                     buyBtn.classList.add('disabled');
                     buyBtn.setAttribute('aria-disabled', 'true');
                     buyBtn.setAttribute('tabindex', '-1');
-                    
+
                     quantityMessage.textContent = "Product is out of stock";
                 } else {
                     // Update button states
                     const currentQuantity = parseInt(quantityInput.value) || 0;
                     increaseBtn.disabled = currentQuantity >= newQuantity;
                     decreaseBtn.disabled = currentQuantity <= 1;
-                    
+
                     // If current quantity exceeds new max, adjust it
                     if (currentQuantity > newQuantity) {
                         quantityInput.value = newQuantity;
@@ -488,7 +592,7 @@
                     }
                 }
             }
-            
+
             // Update cart count in navbar
             function updateCartCount(quantity = 1) {
                 const cartCountElement = document.getElementById('cart-count');
@@ -496,7 +600,7 @@
                     const currentCount = parseInt(cartCountElement.textContent) || 0;
                     cartCountElement.textContent = currentCount + quantity;
                     console.log('Cart count updated to:', cartCountElement.textContent);
-                    
+
                     // Add animation effect
                     cartCountElement.classList.add('cart-updated');
                     setTimeout(() => {
@@ -504,7 +608,7 @@
                     }, 500);
                 }
             }
-            
+
             // Show notification function (better than alert)
             function showNotification(message, type = 'info') {
                 // Create notification element
@@ -517,15 +621,15 @@
                         <span>&times;</span>
                     </button>
                 `;
-                
+
                 // Add to body
                 document.body.appendChild(notification);
-                
+
                 // Auto remove after 3 seconds
                 setTimeout(() => {
                     notification.remove();
                 }, 3000);
-                
+
                 // Close button functionality
                 notification.querySelector('.close').addEventListener('click', () => {
                     notification.remove();
@@ -534,31 +638,677 @@
         });
     </script>
 
-    <!-- Remove the duplicate scripts below - they're causing conflicts -->
-    <!-- 
-    <script>
-        document.addEventListener('DOMContentLoaded',function(){
-            // ... your old broken script ...
-        })
-    </script>
-    -->
+    <!-- Add to wishlist -->
+   <!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('=== WISHLIST DEBUG ===');
+        
+        // Get the product ID from the page
+        const productId = '<%= product._id %>';
+        console.log('Current Product ID:', productId);
+        
+        // Get wishlist data from server
+        const wishlistProductIds = <%- JSON.stringify(wishlistProductIds || []) %>;
+        console.log('Wishlist IDs from server:', wishlistProductIds);
+        
+        // Check if current product is in wishlist
+        const isInWishlist = wishlistProductIds.includes(productId);
+        console.log('Is product in wishlist?', isInWishlist);
+        
+        // Find the wishlist button
+        const wishlistBtn = document.querySelector('.add-to-wishlist');
+        console.log('Wishlist button found:', !!wishlistBtn);
+        console.log('Button classes:', wishlistBtn?.className);
+        
+        // If product is in wishlist, ensure button has active class
+        if (isInWishlist && wishlistBtn) {
+            wishlistBtn.classList.add('active');
+            console.log('Added active class to button');
+        }
+        
+        // Setup click functionality
+        setupWishlistFunctionality();
+    });
+
+    function setupWishlistFunctionality() {
+        document.addEventListener('click', async function(e) {
+            const wishlistBtn = e.target.closest('.add-to-wishlist');
+            if (!wishlistBtn) return;
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Add debug info to button
+            wishlistBtn.setAttribute('title', 'Clicked at: ' + new Date().toLocaleTimeString());
+            
+            // Prevent multiple rapid clicks
+            if (wishlistBtn.classList.contains('processing')) {
+                console.log('Button is already processing, skipping click');
+                return;
+            }
+            
+            console.log('Wishlist button clicked');
+            
+            wishlistBtn.classList.add('processing');
+            
+            const productId = wishlistBtn.getAttribute('data-product-id');
+            const isActive = wishlistBtn.classList.contains('active');
+            
+            console.log('Product ID:', productId, 'Is active:', isActive);
+            
+            try {
+                if (isActive) {
+                    console.log('Removing from wishlist...');
+                    await removeFromWishlist(productId, wishlistBtn);
+                } else {
+                    console.log('Adding to wishlist...');
+                    await addToWishlist(productId, wishlistBtn);
+                }
+            } catch (error) {
+                console.error('Error in wishlist operation:', error);
+                showNotification('Error updating wishlist. Please try again.', 'error');
+            } finally {
+                setTimeout(() => {
+                    wishlistBtn.classList.remove('processing');
+                    console.log('Processing removed from button');
+                }, 300);
+            }
+        });
+    }
+
+    async function addToWishlist(productId, button) {
+        try {
+            console.log('Making API call to add to wishlist...');
+            
+            const response = await fetch('/user/add-to-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    productId: productId
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Add to wishlist response:', data);
+            
+            if (data.success) {
+                button.classList.add('active');
+                console.log('Button class after adding active:', button.className);
+                showNotification('Added to wishlist!', 'success');
+                
+                updateWishlistCount(1);
+            } else {
+                console.error('Add to wishlist failed:', data.message);
+                if (data.message === 'User not authenticated') {
+                    window.location.href = '/user/login';
+                } else {
+                    showNotification(data.message || 'Error adding to wishlist', 'error');
+                }
+            }
+        } catch (error) {
+            console.error('Error adding to wishlist:', error);
+            throw error;
+        }
+    }
+
+    async function removeFromWishlist(productId, button) {
+        try {
+            console.log('Making API call to check wishlist item...');
+            
+            const checkResponse = await fetch(`/user/get-wishlist-item/${productId}`, {
+                credentials: 'include'
+            });
+            
+            console.log('Check response status:', checkResponse.status);
+            
+            if (!checkResponse.ok) {
+                throw new Error('Failed to fetch wishlist item');
+            }
+            
+            const checkData = await checkResponse.json();
+            console.log('Wishlist item check data:', checkData);
+            
+            if (!checkData.itemId) {
+                console.log('No item ID found, just updating UI');
+                button.classList.remove('active');
+                showNotification('Item not found in wishlist', 'info');
+                return;
+            }
+            
+            console.log('Making API call to remove from wishlist...');
+            
+            const response = await fetch('/user/remove-from-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    itemId: checkData.itemId
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Remove from wishlist response:', data);
+            
+            if (data.success) {
+                button.classList.remove('active');
+                console.log('Button class after removing active:', button.className);
+                showNotification('Removed from wishlist', 'success');
+                
+                updateWishlistCount(-1);
+            } else {
+                console.error('Remove from wishlist failed:', data.message);
+                showNotification(data.message || 'Error removing from wishlist', 'error');
+            }
+        } catch (error) {
+            console.error('Error removing from wishlist:', error);
+            throw error;
+        }
+    }
+
+    function updateWishlistCount(change) {
+        const wishlistCountElement = document.getElementById('wishlist-count');
+        if (wishlistCountElement) {
+            const currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            const newCount = Math.max(0, currentCount + change);
+            wishlistCountElement.textContent = newCount;
+            
+            if (newCount > 0 && wishlistCountElement.style.display === 'none') {
+                wishlistCountElement.style.display = 'block';
+            } else if (newCount === 0) {
+                wishlistCountElement.style.display = 'none';
+            }
+            
+            wishlistCountElement.classList.add('updated');
+            setTimeout(() => {
+                wishlistCountElement.classList.remove('updated');
+            }, 300);
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+        
+        notification.querySelector('.close').addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+</script> -->
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('=== WISHLIST INITIALIZATION ===');
+        
+        // Get the wishlist button
+        const wishlistBtn = document.querySelector('.add-to-wishlist');
+        
+        if (!wishlistBtn) {
+            console.error('Wishlist button not found!');
+            return;
+        }
+        
+        const productId = wishlistBtn.getAttribute('data-product-id');
+        console.log('Product ID:', productId);
+        console.log('Button initial classes:', wishlistBtn.className);
+        
+        // Setup click handler
+        wishlistBtn.addEventListener('click', handleWishlistClick);
+    });
+
+    async function handleWishlistClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const button = this;
+        const productId = button.getAttribute('data-product-id');
+        
+        console.log('Wishlist clicked for product:', productId);
+        console.log('Button has active class:', button.classList.contains('active'));
+        
+        // Prevent multiple rapid clicks
+        if (button.classList.contains('processing')) {
+            console.log('Already processing, skipping');
+            return;
+        }
+        
+        button.classList.add('processing');
+        
+        try {
+            const isActive = button.classList.contains('active');
+            
+            if (isActive) {
+                console.log('Attempting to remove from wishlist');
+                await removeFromWishlist(productId, button);
+            } else {
+                console.log('Attempting to add to wishlist');
+                await addToWishlist(productId, button);
+            }
+        } catch (error) {
+            console.error('Error in wishlist operation:', error);
+            showNotification('Error updating wishlist. Please try again.', 'error');
+        } finally {
+            setTimeout(() => {
+                button.classList.remove('processing');
+            }, 500);
+        }
+    }
+
+    async function addToWishlist(productId, button) {
+        try {
+            const response = await fetch('/user/add-to-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    productId: productId
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Add response:', data);
+            
+            if (data.success) {
+                button.classList.add('active');
+                showNotification('Added to wishlist!', 'success');
+                updateWishlistCount(1);
+            } else {
+                if (data.message === 'User not authenticated' || data.message === 'User not logged in') {
+                    window.location.href = '/user/login';
+                } else {
+                    showNotification(data.message || 'Error adding to wishlist', 'error');
+                }
+            }
+        } catch (error) {
+            console.error('Error adding to wishlist:', error);
+            throw error;
+        }
+    }
+
+    async function removeFromWishlist(productId, button) {
+        try {
+            // First get the wishlist item ID
+            const checkResponse = await fetch(`/user/get-wishlist-item/${productId}`, {
+                credentials: 'include'
+            });
+            
+            const checkData = await checkResponse.json();
+            console.log('Check data:', checkData);
+            
+            if (checkData.success && checkData.itemId) {
+                // Remove using itemId
+                const response = await fetch('/user/remove-from-wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        itemId: checkData.itemId
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Remove response:', data);
+                
+                if (data.success) {
+                    button.classList.remove('active');
+                    showNotification('Removed from wishlist', 'success');
+                    updateWishlistCount(-1);
+                } else {
+                    showNotification(data.message || 'Error removing from wishlist', 'error');
+                }
+            } else {
+                // Try removing by productId as fallback
+                console.log('Trying fallback removal by productId');
+                const fallbackResponse = await fetch('/user/remove-from-wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        productId: productId
+                    })
+                });
+                
+                const fallbackData = await fallbackResponse.json();
+                
+                if (fallbackData.success) {
+                    button.classList.remove('active');
+                    showNotification('Removed from wishlist', 'success');
+                    updateWishlistCount(-1);
+                } else {
+                    // Just update UI if server says it's not in wishlist
+                    button.classList.remove('active');
+                    showNotification('Item removed from wishlist', 'info');
+                }
+            }
+        } catch (error) {
+            console.error('Error removing from wishlist:', error);
+            throw error;
+        }
+    }
+
+    function updateWishlistCount(change) {
+        const wishlistCountElement = document.getElementById('wishlist-count');
+        if (wishlistCountElement) {
+            const currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            const newCount = Math.max(0, currentCount + change);
+            wishlistCountElement.textContent = newCount;
+            
+            if (newCount > 0) {
+                wishlistCountElement.style.display = 'block';
+            } else {
+                wishlistCountElement.style.display = 'none';
+            }
+            
+            // Add animation
+            wishlistCountElement.classList.add('updated');
+            setTimeout(() => {
+                wishlistCountElement.classList.remove('updated');
+            }, 300);
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+        
+        notification.querySelector('.close').addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('=== PRODUCT DETAIL WISHLIST DEBUG ===');
+        
+        // Setup wishlist functionality
+        setupWishlistFunctionality();
+        
+        // Initialize the wishlist button state
+        initializeWishlistButton();
+    });
+
+    async function initializeWishlistButton() {
+        try {
+            const wishlistBtn = document.querySelector('.add-to-wishlist');
+            if (!wishlistBtn) {
+                console.error('Wishlist button not found');
+                return;
+            }
+            
+            const productId = wishlistBtn.getAttribute('data-product-id');
+            console.log('Checking wishlist status for product:', productId);
+            
+            // Check if product is in wishlist
+            const response = await fetch(`/user/check-wishlist/${productId}`, {
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Wishlist check response:', data);
+                
+                if (data.inWishlist) {
+                    wishlistBtn.classList.add('active');
+                    console.log('Product is in wishlist - added active class');
+                    
+                    // If we have wishlist item ID, store it
+                    if (data.itemId) {
+                        wishlistBtn.setAttribute('data-wishlist-id', data.itemId);
+                    }
+                } else {
+                    wishlistBtn.classList.remove('active');
+                    console.log('Product is NOT in wishlist');
+                }
+            }
+        } catch (error) {
+            console.error('Error initializing wishlist button:', error);
+        }
+    }
+
+    function setupWishlistFunctionality() {
+        // Use event delegation for wishlist button
+        document.addEventListener('click', async function(e) {
+            const wishlistBtn = e.target.closest('.add-to-wishlist');
+            if (!wishlistBtn) return;
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Prevent multiple rapid clicks
+            if (wishlistBtn.classList.contains('processing')) {
+                return;
+            }
+            
+            wishlistBtn.classList.add('processing');
+            
+            const productId = wishlistBtn.getAttribute('data-product-id');
+            const isActive = wishlistBtn.classList.contains('active');
+            
+            try {
+                if (isActive) {
+                    // Remove from wishlist
+                    await removeFromWishlist(productId, wishlistBtn);
+                } else {
+                    // Add to wishlist
+                    await addToWishlist(productId, wishlistBtn);
+                }
+            } catch (error) {
+                console.error('Error in wishlist operation:', error);
+                showNotification('Error updating wishlist. Please try again.', 'error');
+            } finally {
+                // Remove processing class after delay
+                setTimeout(() => {
+                    wishlistBtn.classList.remove('processing');
+                }, 300);
+            }
+        });
+    }
+
+    async function addToWishlist(productId, button) {
+        try {
+            console.log('Adding to wishlist:', productId);
+            
+            const response = await fetch('/user/add-to-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    productId: productId
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Add to wishlist response:', data);
+            
+            if (data.success) {
+                button.classList.add('active');
+                console.log('Successfully added to wishlist');
+                
+                // If the response includes wishlistItemId, store it
+                if (data.wishlistItemId) {
+                    button.setAttribute('data-wishlist-id', data.wishlistItemId);
+                }
+                
+                showNotification('Added to wishlist!', 'success');
+                updateWishlistCount(1);
+            } else {
+                console.error('Add to wishlist failed:', data.message);
+                
+                if (data.message === 'User not authenticated' || data.redirect === '/user/login') {
+                    window.location.href = '/user/login';
+                } else {
+                    showNotification(data.message || 'Error adding to wishlist', 'error');
+                }
+            }
+        } catch (error) {
+            console.error('Error adding to wishlist:', error);
+            showNotification('Network error. Please try again.', 'error');
+        }
+    }
+
+    async function removeFromWishlist(productId, button) {
+        try {
+            console.log('Removing from wishlist:', productId);
+            
+            // Check if we already have the wishlist item ID
+            let wishlistItemId = button.getAttribute('data-wishlist-id');
+            
+            if (!wishlistItemId) {
+                // Get the wishlist item ID first
+                console.log('Getting wishlist item ID...');
+                const checkResponse = await fetch(`/user/get-wishlist-item/${productId}`, {
+                    credentials: 'include'
+                });
+                
+                if (!checkResponse.ok) {
+                    throw new Error('Failed to fetch wishlist item');
+                }
+                
+                const checkData = await checkResponse.json();
+                console.log('Wishlist item check:', checkData);
+                
+                if (checkData.success && checkData.itemId) {
+                    wishlistItemId = checkData.itemId;
+                } else {
+                    // If no item ID found, just update UI
+                    console.log('No wishlist item found, updating UI');
+                    button.classList.remove('active');
+                    button.removeAttribute('data-wishlist-id');
+                    showNotification('Item not found in wishlist', 'info');
+                    updateWishlistCount(-1);
+                    return;
+                }
+            }
+            
+            console.log('Removing with itemId:', wishlistItemId);
+            
+            // Remove from wishlist using itemId
+            const response = await fetch('/user/remove-from-wishlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    itemId: wishlistItemId
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Remove from wishlist response:', data);
+            
+            if (data.success) {
+                button.classList.remove('active');
+                button.removeAttribute('data-wishlist-id');
+                console.log('Successfully removed from wishlist');
+                
+                showNotification('Removed from wishlist', 'success');
+                updateWishlistCount(-1);
+            } else {
+                console.error('Remove from wishlist failed:', data.message);
+                showNotification(data.message || 'Error removing from wishlist', 'error');
+            }
+        } catch (error) {
+            console.error('Error removing from wishlist:', error);
+            showNotification('Network error. Please try again.', 'error');
+        }
+    }
+
+    function updateWishlistCount(change) {
+        const wishlistCountElement = document.getElementById('wishlist-count');
+        if (wishlistCountElement) {
+            const currentCount = parseInt(wishlistCountElement.textContent) || 0;
+            const newCount = Math.max(0, currentCount + change);
+            wishlistCountElement.textContent = newCount;
+            
+            // Show/hide the badge
+            if (newCount > 0 && wishlistCountElement.style.display === 'none') {
+                wishlistCountElement.style.display = 'block';
+            } else if (newCount === 0) {
+                wishlistCountElement.style.display = 'none';
+            }
+            
+            // Add animation
+            wishlistCountElement.classList.add('updated');
+            setTimeout(() => {
+                wishlistCountElement.classList.remove('updated');
+            }, 300);
+            
+            console.log('Updated wishlist count:', newCount);
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        // Remove any existing notifications
+        document.querySelectorAll('.alert-notification').forEach(el => el.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-notification alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+        
+        notification.querySelector('.close').addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.ez-plus.min.js"></script>
     <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
 
-    <!-- Image zoom script (keep this separate) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize image zoom if needed
-            if (typeof $ !== 'undefined' && $.fn.elevateZoom) {
-                $('.zoom-img').elevateZoom({
-                    zoomType: "inner",
-                    cursor: "crosshair"
-                });
-            }
-        });
-    </script>
+
 </body>
+
 </html>
