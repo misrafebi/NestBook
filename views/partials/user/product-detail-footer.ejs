@@ -17,9 +17,107 @@
         .suggested-img {
             height: 249px;
             width: 171px;
+            object-fit: cover;
         }
 
-        /**/
+        .product-cart-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .add-to-cart-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .add-to-cart-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Animation for cart count */
+        .cart-updated {
+            animation: cartBounce 0.5s ease;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        @keyframes cartBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        .btn-wishlist {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-wishlist:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-wishlist svg {
+            width: 20px;
+            height: 20px;
+            fill: #ccc;
+            stroke: #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .btn-wishlist.active {
+            border: 2px solid #e74c3c !important;
+        }
+
+        .btn-wishlist.active svg {
+            fill: #e74c3c !important;
+            stroke: #e74c3c !important;
+        }
+
+        .btn-wishlist:hover svg {
+            fill: #e74c3c;
+            stroke: #e74c3c;
+        }
+
+        .book-title {
+            min-height: 40px;
+            font-size: 14px;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
     </style>
 </head>
 
@@ -30,22 +128,24 @@
             <div class="row">
                 <div class="col-md-12">
                     <h4 class="mt-5">You might also like</h4>
-                    <div class="row">
+                    <div class="row" id="suggested-products-container">
                         <% for (let i=0; i < suggestedProducts.length; i++) { %>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-30">
                                 <div class="product-cart-wrap">
                                     <div class="product-img-action-wrap">
-                                        <div class="product-img ">
-
+                                        <div class="product-img">
                                             <a href="/user/productDetail?id=<%= suggestedProducts[i]._id %>">
                                                 <img class="default-img suggested-img"
                                                     src="/<%= suggestedProducts[i].image[0] %>"
                                                     alt="<%= suggestedProducts[i].productName %>">
                                             </a>
-                                            <a href="/user/wishlist?id=<%=suggestedProducts[i]._id%>"
-                                                class="wishlist-btn">
-                                                <i class="fas fa-heart" style="color: #ddd;"></i>
-                                            </a>
+                                            <button class="btn-wishlist add-to-wishlist-suggested"
+                                                data-product-id="<%= suggestedProducts[i]._id %>"
+                                                id="wishlist-btn-<%= suggestedProducts[i]._id %>">
+                                                <svg width="24" height="24">
+                                                    <use xlink:href="#heart-suggested"></use>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
                                     <br>
@@ -56,8 +156,12 @@
                                         <h6>₹<%= suggestedProducts[i].salePrice %>
                                         </h6>
 
-                                        <a href="/addToCart?id=<%=suggestedProducts[i]._id%>"
-                                            class="btn add-to-cart-btn">Add to cart</a>
+                                        <button class="btn add-to-cart-btn add-to-cart-suggested"
+                                            data-product-id="<%= suggestedProducts[i]._id %>"
+                                            data-product-name="<%= suggestedProducts[i].productName %>"
+                                            <%= suggestedProducts[i].quantity===0 ? 'disabled' : '' %>>
+                                            <%= suggestedProducts[i].quantity===0 ? 'Out of Stock' : 'Add to Cart' %>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -68,13 +172,317 @@
         </div>
         <%}%>
 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="heart-suggested" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </symbol>
+        </svg>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Fixed JavaScript for Suggested Products -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('=== SUGGESTED PRODUCTS SCRIPT LOADED ===');
+                
+                // Initialize suggested products functionality
+                initializeSuggestedProducts();
+                
+                // Setup event listeners for suggested products
+                setupSuggestedEventListeners();
+            });
 
+            async function initializeSuggestedProducts() {
+                try {
+                    // Initialize wishlist buttons for all suggested products
+                    const wishlistButtons = document.querySelectorAll('.add-to-wishlist-suggested');
+                    console.log('Found suggested wishlist buttons:', wishlistButtons.length);
+                    
+                    for (let button of wishlistButtons) {
+                        const productId = button.getAttribute('data-product-id');
+                        console.log('Checking wishlist status for suggested product:', productId);
+                        
+                        // Check if product is in wishlist
+                        const response = await fetch(`/user/check-wishlist/${productId}`, {
+                            credentials: 'include'
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log('Wishlist check response for suggested product:', data);
+                            
+                            if (data.inWishlist) {
+                                button.classList.add('active');
+                                console.log('Suggested product is in wishlist - added active class');
+                                
+                                if (data.itemId) {
+                                    button.setAttribute('data-wishlist-id', data.itemId);
+                                }
+                            } else {
+                                button.classList.remove('active');
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error initializing suggested products:', error);
+                }
+            }
 
-            <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+            function setupSuggestedEventListeners() {
+                // Wishlist functionality for suggested products
+                document.addEventListener('click', async function (e) {
+                    // Handle wishlist buttons for suggested products
+                    const wishlistBtn = e.target.closest('.add-to-wishlist-suggested');
+                    if (wishlistBtn) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (wishlistBtn.classList.contains('processing')) {
+                            return;
+                        }
+                        
+                        wishlistBtn.classList.add('processing');
+                        
+                        const productId = wishlistBtn.getAttribute('data-product-id');
+                        const isActive = wishlistBtn.classList.contains('active');
+                        
+                        try {
+                            if (isActive) {
+                                await removeFromWishlist(productId, wishlistBtn);
+                            } else {
+                                await addToWishlist(productId, wishlistBtn);
+                            }
+                        } catch (error) {
+                            console.error('Error in wishlist operation:', error);
+                            showNotification('Error updating wishlist. Please try again.', 'error');
+                        } finally {
+                            setTimeout(() => {
+                                wishlistBtn.classList.remove('processing');
+                            }, 300);
+                        }
+                    }
+                    
+                    // Handle add to cart buttons for suggested products
+                    const cartBtn = e.target.closest('.add-to-cart-suggested');
+                    if (cartBtn && !cartBtn.disabled) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const productId = cartBtn.getAttribute('data-product-id');
+                        const productName = cartBtn.getAttribute('data-product-name');
+                        
+                        addToCartSuggested(productId, cartBtn, productName);
+                    }
+                });
+            }
+
+            async function addToWishlist(productId, button) {
+                try {
+                    console.log('Adding suggested product to wishlist:', productId);
+                    
+                    const response = await fetch('/user/add-to-wishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({ productId: productId })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Add to wishlist response:', data);
+                    
+                    if (data.success) {
+                        button.classList.add('active');
+                        console.log('Successfully added suggested product to wishlist');
+                        
+                        if (data.wishlistItemId) {
+                            button.setAttribute('data-wishlist-id', data.wishlistItemId);
+                        }
+                        
+                        showNotification('Added to wishlist!', 'success');
+                        updateWishlistCount(1);
+                    } else {
+                        if (data.message === 'User not authenticated' || data.redirect === '/user/login') {
+                            window.location.href = '/user/login';
+                        } else {
+                            showNotification(data.message || 'Error adding to wishlist', 'error');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error adding to wishlist:', error);
+                    showNotification('Network error. Please try again.', 'error');
+                }
+            }
+
+            async function removeFromWishlist(productId, button) {
+                try {
+                    console.log('Removing suggested product from wishlist:', productId);
+                    
+                    let wishlistItemId = button.getAttribute('data-wishlist-id');
+                    
+                    if (!wishlistItemId) {
+                        const checkResponse = await fetch(`/user/get-wishlist-item/${productId}`, {
+                            credentials: 'include'
+                        });
+                        
+                        if (!checkResponse.ok) {
+                            throw new Error('Failed to fetch wishlist item');
+                        }
+                        
+                        const checkData = await checkResponse.json();
+                        console.log('Wishlist item check:', checkData);
+                        
+                        if (checkData.success && checkData.itemId) {
+                            wishlistItemId = checkData.itemId;
+                        } else {
+                            button.classList.remove('active');
+                            button.removeAttribute('data-wishlist-id');
+                            showNotification('Item not found in wishlist', 'info');
+                            updateWishlistCount(-1);
+                            return;
+                        }
+                    }
+                    
+                    const response = await fetch('/user/remove-from-wishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({ itemId: wishlistItemId })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Remove from wishlist response:', data);
+                    
+                    if (data.success) {
+                        button.classList.remove('active');
+                        button.removeAttribute('data-wishlist-id');
+                        console.log('Successfully removed suggested product from wishlist');
+                        
+                        showNotification('Removed from wishlist', 'success');
+                        updateWishlistCount(-1);
+                    } else {
+                        showNotification(data.message || 'Error removing from wishlist', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error removing from wishlist:', error);
+                    showNotification('Network error. Please try again.', 'error');
+                }
+            }
+
+            async function addToCartSuggested(productId, buttonElement, productName) {
+                try {
+                    console.log('Adding suggested product to cart:', productId);
+                    
+                    // Show loading state
+                    const originalHTML = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Adding...';
+                    buttonElement.disabled = true;
+                    
+                    const response = await fetch('/user/add-to-cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            productId: productId,
+                            quantity: 1  // Suggested products add 1 by default
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Add to cart response for suggested product:', data);
+                    
+                    if (data.success) {
+                        showNotification(`"${productName}" added to cart successfully!`, 'success');
+                        updateCartCount(1);
+                    } else {
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                        } else {
+                            showNotification('Error: ' + data.message, 'error');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error adding suggested product to cart:', error);
+                    showNotification('Error adding product to cart. Please try again.', 'error');
+                } finally {
+                    // Reset button state
+                    buttonElement.innerHTML = 'Add to Cart';
+                    buttonElement.disabled = false;
+                }
+            }
+
+            function updateCartCount(quantity = 1) {
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    const currentCount = parseInt(cartCountElement.textContent) || 0;
+                    cartCountElement.textContent = currentCount + quantity;
+                    console.log('Cart count updated to:', cartCountElement.textContent);
+                    
+                    // Add animation effect
+                    cartCountElement.classList.add('cart-updated');
+                    setTimeout(() => {
+                        cartCountElement.classList.remove('cart-updated');
+                    }, 500);
+                }
+            }
+
+            function updateWishlistCount(change) {
+                const wishlistCountElement = document.getElementById('wishlist-count');
+                if (wishlistCountElement) {
+                    const currentCount = parseInt(wishlistCountElement.textContent) || 0;
+                    const newCount = Math.max(0, currentCount + change);
+                    wishlistCountElement.textContent = newCount;
+                    
+                    // Show/hide the badge
+                    if (newCount > 0 && wishlistCountElement.style.display === 'none') {
+                        wishlistCountElement.style.display = 'block';
+                    } else if (newCount === 0) {
+                        wishlistCountElement.style.display = 'none';
+                    }
+                    
+                    // Add animation
+                    wishlistCountElement.classList.add('updated');
+                    setTimeout(() => {
+                        wishlistCountElement.classList.remove('updated');
+                    }, 300);
+                    
+                    console.log('Updated wishlist count:', newCount);
+                }
+            }
+
+            function showNotification(message, type = 'info') {
+                // Remove any existing notifications
+                document.querySelectorAll('.alert-notification').forEach(el => el.remove());
+                
+                const notification = document.createElement('div');
+                notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-notification alert-dismissible fade show position-fixed`;
+                notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                notification.innerHTML = `
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span>&times;</span>
+                    </button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+                
+                notification.querySelector('.close').addEventListener('click', () => {
+                    notification.remove();
+                });
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

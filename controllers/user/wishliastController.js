@@ -2,8 +2,6 @@ const Category = require('../../models/categorySchema')
 const User = require('../../models/userScehma')
 const Wishlist = require('../../models/wishlistSchema')
 const Product = require('../../models/productSchema')
-// const Review = require('../../models/reviewModel')
-
 
 const loadWishlist = async (req, res) => {
     try {
@@ -33,23 +31,23 @@ const loadWishlist = async (req, res) => {
                 select: 'productName image salePrice regularPrice productOffer quantity status authorName'
             });
 
-        // Transform wishlist items to products array
+       
         let products = [];
         if (wishlist && wishlist.items.length > 0) {
             products = wishlist.items.map(item => {
-                // Check if ProductId exists and is populated
+               
                 if (!item.ProductId) {
-                    return null; // Skip if product not found
+                    return null; 
                 }
                 
                 return {
                     ...item.ProductId.toObject(),
                     wishlistItemId: item._id,
-                    // Set default values for EJS template
+                   
                     avgRating: '0.0',
                     totalReviews: 0
                 };
-            }).filter(product => product !== null); // Remove null entries
+            }).filter(product => product !== null);
         }
 
         res.render('user/wishlist', {
@@ -208,35 +206,6 @@ const removeFromWishlist = async (req, res) => {
     }
 };
 
-// Check if product is in wishlist (for showing red heart)
-// const checkWishlistStatus = async (req, res) => {
-//     try {
-//         const { productId } = req.params;
-//         const userEmail = req.session.userData?.email;
-
-//         if (!userEmail) {
-//             return res.json({ inWishlist: false });
-//         }
-
-//         const user = await User.findOne({ email: userEmail });
-//         if (!user) {
-//             return res.json({ inWishlist: false });
-//         }
-
-//         const wishlist = await Wishlist.findOne({
-//             userId: user._id,
-//             'items.ProductId': productId
-//         });
-
-//         return res.json({ 
-//             inWishlist: !!wishlist 
-//         });
-
-//     } catch (error) {
-//         console.error('Error checking wishlist status:', error);
-//         return res.json({ inWishlist: false });
-//     }
-// };
 
 const checkWishlistStatus = async (req, res) => {
     try {

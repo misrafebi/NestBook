@@ -5,31 +5,175 @@ const Product = require('../../models/productSchema')
 const { use } = require('passport')
 
 
+// const loadProfile = async (req, res) => {
+//     try {
+
+//         const categories = await Category.find({});
+
+//        const email = req.session.userData?.email;
+//         if (!email) {
+//             return res.render('user/login', {
+//                 message: 'User not logged in',
+//                 categories: await Category.find({})
+//             });
+//         }
+
+//         const user = await User.findOne({ email }).populate('cart');
+//         if (!user) {
+//             return res.render('user/login', {
+//                 message: 'User not found',
+//                 categories: await Category.find({})
+//             });
+//         }
+
+
+//         res.render('user/profile', { categories, message: '', user })
+//     } catch (error) {
+//         console.error('Error to load contact us', error);
+//         res.render('user/pageNotFound',
+//             { message: 'Something went wrong while loading the profile page. Please try again shortly.' })
+//     } 
+// }
+// const updateProfile=async(req,res)=>{
+//     try {
+//         const email = req.session.userData?.email;
+//         if (!email) {
+//             return res.render('user/login', {
+//                 message: 'User not logged in',
+//                 categories: await Category.find({})
+//             });
+//         }
+
+//         const user = await User.findOne({ email }).populate('cart');
+//         if (!user) {
+//             return res.render('user/login', {
+//                 message: 'User not found',
+//                 categories: await Category.find({})
+//             });
+//         }
+//   const categories = await Category.find({});
+
+//   const {name, phone}=req.body
+
+//   const newName=name
+//   const newPhone=phone
+
+//   await updateMany({})
+//     } catch (error) {
+//         console.error('Error to load contact us', error);
+//         res.render('user/pageNotFound',
+//             { message: 'Something went wrong while editing the profile page. Please try again shortly.' })
+//     }
+// }
+
+
 const loadProfile = async (req, res) => {
     try {
-
         const categories = await Category.find({});
-
-        const userEmail = req.session.userData;
-        if (!userEmail) {
-            return res.redirect('/login');
-        }
-
-        const user = await User.findOne({ email: userEmail })
-        if (!user) {
-            return res.render('user/profile', {
-                categories,
-                message: 'User not found'
+        const email = req.session.userData?.email;
+        
+        if (!email) {
+            return res.render('user/login', {
+                message: 'User not logged in',
+                categories: await Category.find({})
             });
         }
 
-        res.render('user/profile', { categories, message: '', user })
+        const user = await User.findOne({ email }).populate('cart');
+        if (!user) {
+            return res.render('user/login', {
+                message: 'User not found',
+                categories: await Category.find({})
+            });
+        }
+
+        res.render('user/profile', { 
+            categories, 
+            message: '', 
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone || '',
+                createdAt: user.createdAt
+            }
+        });
     } catch (error) {
-        console.error('Error to load contact us', error);
-        res.render('user/pageNotFound',
-            { message: 'Something went wrong while loading the profile page. Please try again shortly.' })
+        console.error('Error to load profile', error);
+        res.render('user/pageNotFound', {
+            message: 'Something went wrong while loading the profile page. Please try again shortly.'
+        });
     }
-}
+};
+
+const updateProfile = async (req, res) => {
+    try {
+        const email = req.session.userData?.email;
+        
+        if (!email) {
+            return res.json({
+                success: false,
+                message: 'User not logged in',
+                redirect: '/user/login'
+            });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({
+                success: false,
+                message: 'User not found',
+                redirect: '/user/login'
+            });
+        }
+
+        const { name, phone } = req.body;
+        
+        // Validate name
+        if (name && name.trim()) {
+            user.name = name.trim();
+        }
+        
+        // Validate phone (optional)
+        if (phone !== undefined) {
+            if (phone.trim() === '') {
+                user.phone = null; // Clear phone if empty
+            } else if (/^[0-9]{10}$/.test(phone.trim())) {
+                user.phone = phone.trim();
+            } else {
+                return res.json({
+                    success: false,
+                    message: 'Please enter a valid 10-digit phone number'
+                });
+            }
+        }
+        
+       
+        await user.save();
+        
+        
+        if (name) {
+            req.session.userData.name = user.name;
+        }
+        
+        return res.json({
+            success: true,
+            message: 'Profile updated successfully!',
+            user: {
+                name: user.name,
+                phone: user.phone || ''
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        return res.json({
+            success: false,
+            message: 'Something went wrong while updating your profile. Please try again.'
+        });
+    }
+};
+
 
 const loadEditAddress = async (req, res) => {
     try {
@@ -307,5 +451,6 @@ module.exports = {
     loadCheckOut,
     loadOrders,
     addAddress,
-    editAddress
+    editAddress,
+    updateProfile
 }

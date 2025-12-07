@@ -80,7 +80,8 @@ router.get('/productDetail', productController.productDetails)
 router.get('/productReview', productController.loadReview)
 router.post('/submitReview', productController.postReview)
 
-router.get('/profile', profileController.loadProfile)
+router.get('/profile', profileController.loadProfile) 
+router.post('/update-profile', profileController.updateProfile);
 
 router.get('/editAddress', profileController.loadEditAddress)
 router.post('/editAddress', profileController.editAddress)

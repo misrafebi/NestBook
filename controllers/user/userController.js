@@ -142,7 +142,7 @@ const loadHome = async (req, res) => {
             user, 
             categories, 
             newArrivals: newArrivalsWithWishlistStatus,
-            wishlistProductIds // Still pass for any other use
+            wishlistProductIds 
         });
     } catch (error) {
         console.error('Error in loadHome:', error);
@@ -524,7 +524,7 @@ const loadContactUs = async (req, res) => {
         res.render('user/pageNotFound',
             { message: 'Something went wrong while loading the contact us page. Please try again shortly.' })
     }
-}
+} 
 
 const postContactUsForm = async (req, res) => {
     try {
